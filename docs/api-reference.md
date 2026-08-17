@@ -26,8 +26,9 @@ Package: `elephant` · version `0.1.0` · numpy-only core.
 | `JokeLandingDial` | `dials` | Collective laugh/boo, `[-1, +1]` |
 | `PanicDial` | `dials` | Stampede sense, `[0, 1]` |
 | `PresenceDial` | `dials` | Pheromone/occupancy trace, `[0, 1]` |
-| `DEFAULT_DIALS` | `dials` | The standard 7-dial bank |
-| `DIAL_NAMES` | `field` | Canonical 7-dial ordering |
+| `ModelVsCodeDial` | `dials` | Model prose vs code executing, `[-1, +1]` |
+| `DEFAULT_DIALS` | `dials` | The standard 8-dial bank |
+| `DIAL_NAMES` | `field` | Canonical 7-dial field-vector ordering |
 | `RoomField` | `field` | The ensemble reading — the room's temperature vector |
 | `read_field` | `field` | Run a dial bank over a room → `RoomField` |
 | `acclimation_curve` | `field` | Agent relaxing toward the room field (exponential) |
@@ -176,7 +177,7 @@ bank.readings(room)   # {'mood': ...}
 
 ---
 
-## `elephant.dials` — the seven dials
+## `elephant.dials` — the eight dials
 
 Each dial is a `Dial` subclass reading a `Room`. Empty rooms rest at each
 dial's neutral value. **Adding/removing words from the module-level lexicons
@@ -191,6 +192,7 @@ is the primary tuning surface** (see the tuning guide).
 | `JokeLandingDial` | `joke_landing` | `[-1, +1]` | `0.0` | `JOKE_MARKERS`, `LAUGH`, `BOO` |
 | `PanicDial` | `panic` | `[0, 1]` | `0.0` | `ALARM`, `URGENCY` |
 | `PresenceDial` | `presence` | `[0, 1]` | `0.0` | (author occupancy) |
+| `ModelVsCodeDial` | `model_vs_code` | `[-1, +1]` | `0.0` | `MODEL_WORDS`/`MODEL_PHRASES`, `CODE_WORDS`/`CODE_PHRASES`, `CODE_SYMBOLS` |
 
 ### `MoodDial` — `read(room) -> float`
 Counts hits of `POSITIVE` vs `NEGATIVE` word sets over all messages;
@@ -223,6 +225,18 @@ alarm-triggering message.
 `0.45·distinct_authors/5 + 0.25·recency + 0.20·longevity + 0.10·activity`,
 clamped to `[0,1]`.
 
+### `ModelVsCodeDial` — `read(room) -> float`
+The signal-chain thesis made flesh: a room's signal is shaped by *who or what*
+generates it. Scores each message by whether it smells like model output
+(hedges, reflection, first-person, prose — `MODEL_WORDS`/`MODEL_PHRASES`) or
+code output (keywords, diffs, errors, commits, symbol density —
+`CODE_WORDS`/`CODE_PHRASES`/`CODE_SYMBOLS`), maps the balance to `[-1, +1]`,
+and averages over the room. `-1` = pure code room (commits, patches, error
+logs); `+1` = pure model room (prose, hedges, reflection); `0.0` = empty/neutral.
+It reads as the 8th member of `DEFAULT_DIALS` (present in `read_field`'s
+`readings`) but is not yet in `DIAL_NAMES` — wiring it into the field vector
+(κ / distance) is the next step, coordinated with the learned-dials subagent.
+
 ```python
 from elephant.room import Message, Room
 from elephant.dials import DEFAULT_DIALS
@@ -236,8 +250,8 @@ for d in DEFAULT_DIALS:
 
 ### `DEFAULT_DIALS`
 `List[Dial]` — the standard bank: `MoodDial(), VolumeDial(), EarnestnessDial(),
-CynicismDial(), JokeLandingDial(), PanicDial(), PresenceDial()` (in that
-order).
+CynicismDial(), JokeLandingDial(), PanicDial(), PresenceDial(),
+ModelVsCodeDial()` (in that order).
 
 ---
 

@@ -88,7 +88,7 @@ Two social forces close the loop, in both directions:
                  └───────────────┬───────────────┘
                                  ▼
                  ┌───────────────────────────────┐
-                 │         DialBank (7 dials)    │  one JEPA per dimension
+                 │         DialBank (8 dials)    │  one JEPA per dimension
                  └───────────────┬───────────────┘
                                  ▼
                  ┌───────────────────────────────┐
@@ -119,7 +119,7 @@ space-specific lives behind a thin adapter.
 | `elephant/room.py` | `Room` / `Message` — rooms as message streams with **gravity**, **reverberation**, **ripple**, and windowed **density** (the room's pulse). |
 | `elephant/dial.py` | `Dial` (abstract JEPA sense) + `DialBank` (the perceiving ensemble, one scalar per dimension). |
 | `elephant/field.py` | `RoomField` — the temperature vector: `warmth()`, `concentration()` (κ), `distance()`, `sauna_plunge_gap()`, plus `acclimation_curve()` and `charisma_pull()`. |
-| `elephant/dials/__init__.py` | `DEFAULT_DIALS` — the seven-dial bank that ships out of the box. |
+| `elephant/dials/__init__.py` | `DEFAULT_DIALS` — the eight-dial bank that ships out of the box. |
 | `elephant/dials/mood.py` | `MoodDial` — warm/cold valence, `[-1 cold, +1 warm]`. |
 | `elephant/dials/volume.py` | `VolumeDial` — how loud the room is talking, `[0 quiet, 1 shouting]`. |
 | `elephant/dials/earnestness.py` | `EarnestnessDial` — how much the room means it, `[0 ironic, 1 sincere]`. |
@@ -127,6 +127,7 @@ space-specific lives behind a thin adapter.
 | `elephant/dials/joke_landing.py` | `JokeLandingDial` — the *collective* laugh or boo of the audience, `[-1 booed, +1 roared]`. |
 | `elephant/dials/panic.py` | `PanicDial` — stampede sense (fire in the room), `[0 calm, 1 trampling]`. |
 | `elephant/dials/presence.py` | `PresenceDial` — the pheromone trace of who's been here, `[0 empty, 1 thrumming]`. |
+| `elephant/dials/model_vs_code.py` | `ModelVsCodeDial` — who's generating the room's signal: model prose vs code executing, `[-1 code, +1 model]`. |
 | `elephant/sensors.py` | `SignalRoom` / `SensorFrame` + the sea-leg dials: `RadarCoherenceDial`, `SounderBiomassDial`, `FishingDayDial`. |
 | `elephant/nudge.py` | `nudge_prior()` / `apply_nudge()` — dial numbers become an attention prior over modalities. The elephant *nudges, it doesn't drive*. |
 | `elephant/fleetmath.py` | The numeric spine: `three_reading_kinematics()`, `fleet_concentration()` (vMF κ), `biomass_anchor()` / `biomass_deviation()` (inductive biomass). |
@@ -199,7 +200,7 @@ python3 examples/fleet_harness_demo.py   # one harness, 30 days, the good-day an
 
 ## The dials
 
-Seven JEPAs, one dimension each. More are cheap — a room can carry as
+Eight JEPAs, one dimension each. More are cheap — a room can carry as
 many dials as it has dimensions worth feeling.
 
 | Dial | What it feels | Range |
@@ -211,6 +212,7 @@ many dials as it has dimensions worth feeling.
 | `joke_landing` | did the joke land — the **collective** laugh or boo | `[-1 booed, +1 roared]` |
 | `panic` | stampede sense (fire in the room) | `[0 calm, 1 trampling]` |
 | `presence` | pheromone trace (who's been here) | `[0 empty, 1 thrumming]` |
+| `model_vs_code` | who's generating the signal — model prose vs code executing | `[-1 code, +1 model]` |
 
 The v0 dials are **hand-crafted** keyword/model-free readers — the fleet
 pattern: hand-crafted first, learned second. They are naive on purpose:

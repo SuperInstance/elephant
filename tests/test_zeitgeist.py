@@ -7,6 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
 
+from elephant.dials import DEFAULT_DIALS
 from elephant.field import DIAL_NAMES, RoomField
 from elephant.mud import classify, tint_description
 from elephant.presets import PRESETS, PersonalElephant, RoomElephant
@@ -39,8 +40,8 @@ def test_room_elephant_is_stable_and_objective():
     assert fa.readings == fb.readings
     # Stable identity: reading twice does not drift.
     assert a.read(room).readings == fa.readings
-    # Objective: it is a full, real field with all 7 dials.
-    assert set(fa.readings) == set(DIAL_NAMES)
+    # Objective: it is a full, real field with all dials.
+    assert set(fa.readings) == {d.name for d in DEFAULT_DIALS}
     assert isinstance(fa.warmth(), float)
     # First-class neutral default: an empty room rests at presence 0.5, volume 0.
     empty = RoomElephant().read(Room("empty"))
