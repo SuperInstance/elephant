@@ -83,16 +83,16 @@ def _cast():
 # the laugh, the heart, the sneer. They feed joke_landing and felt engagement.
 WORKS = {
     "writer": [
-        ("She found the house warm, and the walls kind — every room held a story it was glad to tell.", {"❤️": 2}),
-        ("We built the shed together, and by noon we were laughing — honest and happy.", {"😂": 2, "❤️": 1}),
-        ("Not a joke, exactly — the kind of true thing that makes a whole table go haha at once.", {"😂": 3}),
-        ("The mornings are soft and gentle here; the light glows and the coffee says good morning back.", {"❤️": 2}),
-        ("The sea held the boat the way this room holds us — easy, and alive.", {"❤️": 2, "👍": 1}),
+        ("The old house stays warm, and its walls stay kind — every room keeps a story it's glad to tell.", {"❤️": 2}),
+        ("A shed gone up in a day, and by noon the whole yard was laughing, happy as a joke that lands.", {"😂": 2, "❤️": 1}),
+        ("Some true things land like a punchline — the whole table goes haha at once, and no one planned it.", {"😂": 3}),
+        ("The light comes soft and gentle, and the coffee smells like a good morning kept warm.", {"❤️": 2}),
+        ("The sea holds a boat the way a good room holds a good night — easy, and alive.", {"❤️": 2, "👍": 1}),
     ],
     "poet": [
-        ("Cold water, warm light — the room hums between them like a held breath.", {"❤️": 1}),
-        ("We came in loud and the room went soft! A wave, a hush, a door left open.", {"👏": 2}),
-        ("I remember the lamplight; it remembered us. Bright and good and gone.", {"❤️": 2}),
+        ("Cold water, warm light — the room hums between them like a caught breath.", {"❤️": 1}),
+        ("Loud at the door, then a hush! A wave rolls in and the whole room leans.", {"👏": 2}),
+        ("The lamplight keeps nothing; it just glows. Bright and good and gone.", {"❤️": 2}),
         ("Quiet — the room is full, thrumming like a struck string.", {"❤️": 1, "👏": 1}),
     ],
     "essayist": [
@@ -103,7 +103,7 @@ WORKS = {
     ],
     "engineer": [
         ("Right. The numbers add up, obviously — the seam fits, sure, if you stop pretending.", {"😂": 2}),
-        ("It works. Not pretty, but it stays put — honestly, that's the part I trust.", {"👍": 2}),
+        ("It holds. Not pretty, but the seam is true — honestly, that's the part I trust.", {"👍": 2}),
         ("Clearly we overbuilt it. Sure thing, ship it and watch it drift.", {"😂": 2}),
         ("The spec was wrong. I mean that sincerely — we built the wrong thing.", {"👍": 1}),
     ],

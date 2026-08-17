@@ -22,10 +22,13 @@ Reading the room is a relationship to the room, not a readout:
   (the room warms to them).
 - *Across cycles*, each participant's `dial_weights` self-fine-tune toward the
   dials where their *felt engagement* was highest. The engagement signal is
-  anchored to the agent's own distinctive voice vs the room-without-them (so
-  charisma can't capture the loop), signed (so direction matters, not raw
-  extremity), and selected with a softmax temperature (so tastes diverge into
-  multiple stable attractors instead of collapsing to one loud dial).
+  anchored to the participant's own desire (`vibe`) measured against the cast's
+  average desire (peer-relative, so it's robust to the v0 dials' tendency to
+  saturate), amplified by the crowd's hands on the dial each reaction
+  expresses, and selected by a ReLU-normalized target (so weight only ever
+  moves toward the dials a participant is genuinely distinctive on — tastes
+  diverge into multiple stable attractors instead of collapsing to the room's
+  loudest dial).
 
 numpy-only. Mirrors the `BoatHarness` pattern (rolling room + dial bank +
 field), but for people reading each other's work.
@@ -274,26 +277,27 @@ class TapNightSession:
         """Per-dial felt engagement this session (signed).
 
         Anchored to the participant's STABLE native style (`vibe` — the desire
-        they bring) measured against the room-WITHOUT-them, and amplified by
-        the crowd's hands on the dial each reaction expresses:
+        they bring) measured against the CAST's average desire, and amplified
+        by the crowd's hands on the dial each reaction expresses:
 
-        - baseline = field of everyone ELSE's lines, so pulling the room toward
-          yourself (charisma) is never rewarded in your own signal;
-        - `delta = vibe - baseline` is signed: an agent engages the dials where
-          their distinctive taste *differs* from the room — a warm writer leans
-          mood, a sneering critic leans cynicism, each on their own dial;
+        - `delta = vibe - cast_mean_vibe` is peer-relative: an agent feels
+          engaged on the dials they care about *more than the rest of the
+          table* — a warm writer leans mood, a sneering critic leans cynicism.
+          This is what makes tastes diverge (different guitarists) instead of
+          collapse to the room's loudest dial, and it is robust to the v0
+          dials' tendency to saturate;
         - reaction heat is attributed per-dial (😂 -> joke_landing, ❤️ -> mood,
           🙄 -> cynicism, ...) so the crowd's hands reinforce the dial that
           actually landed, not a single shared dial.
+
+        The room field still governs the relationship (acclimation warms the
+        participant toward it, charisma pulls it toward them); the self-tuning
+        signal is what the participant themselves is distinctive on.
         """
         p = self.participants[name]
-        others = [m for m in self.room.messages if m.author != name]
-        if others:
-            baseline = read_field(Room(f"{name}/others", others),
-                                  self.bank).vector()
-        else:
-            baseline = np.full(len(DIAL_NAMES), 0.5)
-        delta = p.vibe - baseline
+        cast = np.mean(np.stack([q.vibe for q in self.participants.values()],
+                                axis=0), axis=0)
+        delta = p.vibe - cast
         rxn = np.zeros(len(DIAL_NAMES))
         for m in self.room.messages:
             if m.author != name:
