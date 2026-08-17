@@ -11,7 +11,9 @@ sentence — a game where:
   each has its own temperature.
 - **The PLAYERS are avatars** — round characters carrying a
   PersonalElephant (vibe + dial_weights + charisma, the tapnight
-  `Participant` anatomy), a pulse, and a voice.
+  `Participant` anatomy), a pulse, and a voice. When a learned
+  `Avatar` (elephant/avatar.py — the Tap's round characters) is
+  attached, it speaks and monologues for the player.
 - **The PERCEPTION CHECK is the roll**: a player entering a room reads
   the room's direction/rate of change over its recent history (the
   `pulse.perception_check` math — two numbers show direction, three
@@ -52,9 +54,9 @@ Design notes (from the Seed-2.0-pro critique, folded in):
   different fog than a comedian does).
 
 numpy-only, deterministic given a seed, scenarios as data. The seam to
-avatar.py: when round-character avatars land, `RPGPlayer` wraps them;
-today the round character is a tapnight `Participant` (vibe +
-dial_weights + charisma) — the same anatomy as the Tap's regulars.
+avatar.py is live: pass a learned `Avatar` to `RPGPlayer` and it
+speaks and monologues for the player; without one, the archetype
+presets (the flat characters) play.
 """
 from __future__ import annotations
 
@@ -801,7 +803,7 @@ class RPGPlayer:
                  world: Optional[RPGWorld] = None,
                  start: Optional[str] = None, goal: str = "",
                  elephant: Optional[PersonalElephant] = None,
-                 period: float = 1.0, seed: int = 0):
+                 avatar=None, period: float = 1.0, seed: int = 0):
         self.name = name
         self.archetype = archetype
         self.world = world
@@ -811,6 +813,24 @@ class RPGPlayer:
         self.position: Optional[str] = start
         preset = ARCHETYPES.get(archetype, ARCHETYPES["traveler"])
         self.title = preset["title"]
+        # The avatar seam: a learned round character (elephant/avatar.py)
+        # speaks and monologues for the player; the game mechanics
+        # (ripple, personal read) run on a PersonalElephant built from
+        # the avatar's own vibe and dial weights. Without an avatar,
+        # the archetype preset IS the flat character.
+        self.avatar = avatar
+        if avatar is not None:
+            vibe = getattr(avatar, "_vibe", None)
+            vibe_dict = None
+            if vibe is not None:
+                arr = np.asarray(vibe, dtype=float).reshape(-1)
+                vibe_dict = {n: float(v) for n, v in zip(DIAL_NAMES, arr)}
+            weights = dict(getattr(avatar, "dial_weights", None) or {}) or None
+            elephant = PersonalElephant(
+                name, vibe=vibe_dict, dial_weights=weights,
+                acclimation_rate=0.2, charisma=0.2, title=self.title)
+            self.title = (f"{avatar.persona.split('.')[0].strip()} — "
+                          f"{preset['title']}")
         self.character = elephant or PersonalElephant(
             name, vibe=preset.get("vibe"), dial_weights=preset.get("dial_weights"),
             acclimation_rate=preset.get("acclimation_rate", 0.25),
@@ -892,7 +912,11 @@ class RPGPlayer:
     def perceive(self) -> str:
         """The pulse monologue of what it feels — the silent thinking.
         (The personal read — what THIS character notices first — is
-        printed separately by the engine alongside the roll.)"""
+        printed separately by the engine alongside the roll.) With an
+        avatar, the round character's own monologue speaks."""
+        if self.avatar is not None:
+            room = self.world.rooms[self.position] if self.world else None
+            return self.avatar.monologue(room=room)
         if self.last_report is None:
             self.read_room()
         return self.pulse.internal_monologue()
@@ -901,8 +925,14 @@ class RPGPlayer:
     # Acting                                                             #
     # ------------------------------------------------------------------ #
     def _voice(self, verb: str, target: Optional[str]) -> str:
-        """The archetype-voiced line for an act, round-robin over the
-        bank (deterministic)."""
+        """The line for an act, round-robin over the archetype bank
+        (deterministic) — or, with an avatar, the round character's own
+        composed voice, given the act as context."""
+        if self.avatar is not None:
+            room = self.world.rooms[self.position].name if self.world else ""
+            ctx = (f"the party {verb} toward {target or 'the room'}"
+                   + (f" in {room}" if room else ""))
+            return self.avatar.speak(prompt_context=ctx)
         preset = ARCHETYPES.get(self.archetype, ARCHETYPES["traveler"])
         bank = preset["lines"].get(verb) or preset["lines"].get("wait") \
             or ARCHETYPES["traveler"]["lines"]["wait"]
@@ -961,7 +991,7 @@ class RPGPlayer:
     # The character sheet                                                #
     # ------------------------------------------------------------------ #
     def character_sheet(self) -> dict:
-        return {
+        sheet = {
             "name": self.name,
             "title": self.title,
             "archetype": self.archetype,
@@ -974,6 +1004,13 @@ class RPGPlayer:
             "last_perception": (report_words(self.last_report) if self.last_report
                                 else "no roll yet"),
         }
+        if self.avatar is not None:
+            sheet["avatar"] = {
+                "through_line": self.avatar.through_line,
+                "persona": self.avatar.persona,
+                "nights_at_the_tap": len(self.avatar.nights),
+            }
+        return sheet
 
     def __repr__(self) -> str:
         return (f"<RPGPlayer {self.name!r} ({self.archetype}) at "

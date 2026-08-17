@@ -327,3 +327,33 @@ def test_archetype_presets_exist_for_the_demo_cast():
         for verb in ("joke", "investigate", "comfort", "fight",
                      "wait", "resolve", "banter"):
             assert ARCHETYPES[key]["lines"].get(verb), (key, verb)
+
+
+def test_player_wraps_a_learned_avatar():
+    """The avatar seam: a Tap-raised round character (elephant/avatar.py)
+    speaks and monologues for the player; the game mechanics (the
+    perception roll, the ripple) keep running on its personal elephant."""
+    from elephant.avatar import Avatar
+
+    world = _warming_tavern()
+    avatar = Avatar(
+        "Marnie",
+        "I am Marnie, and I laugh at funerals, meaning it as a kindness.",
+        preset="comedian")
+    player = RPGPlayer("Marnie", archetype="comedian", world=world,
+                       start="The Yard", goal="find the warmth", avatar=avatar)
+
+    report = player.enter("The Tap")
+    assert report.warmth_direction > 0      # mechanics still roll
+
+    line = player.act("joke")
+    assert "Marnie" in line                 # the round character's own voice
+    assert player.character.top_dial() == "joke_landing" or \
+        player.character.top_dial() in avatar.dial_weights
+
+    monologue = player.perceive()
+    assert "Marnie" in monologue or "ear" in monologue
+
+    sheet = player.character_sheet()
+    assert sheet["avatar"]["nights_at_the_tap"] == 0
+    assert "through_line" in sheet["avatar"]
