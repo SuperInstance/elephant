@@ -178,7 +178,7 @@ systematically distinctive on which dial — is what survives.
    rise, and each participant's argmax dial should settle onto a different (or
    at most lightly shared) dial. That's the captain's guitarist principle made
    visible: writer → mood/joke_landing, poet → volume, essayist → earnestness,
-   engineer → cynicism/earnestness, critic → cynicism, captain → presence.
+   engineer → cynicism/earnestness, critic → cynicism, captain → mood/presence.
 2. **Room stabilization.** As the regulars establish the vibe, κ should settle
    (warm room = lower, stable κ) and warmth should stop swinging night to
    night. The regulars *are* the field; newcomers warm to it at a rate = their

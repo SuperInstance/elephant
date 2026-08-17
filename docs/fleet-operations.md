@@ -168,7 +168,7 @@ Both are dynamics, and both are visible:
   `room_field()` (effective, charisma-displaced) and `raw_field()` (dial-only):
   that gap is the sum of the room's strong presences bending the field toward
   themselves. In the Tap the captain (charisma 0.30) is the one whose dial
-  "pulled the field" on 12 of 14 nights.
+  "pulled the field" on all 14 nights.
 
 ### The chemistry of agents — why two agents get along one day and not the next
 

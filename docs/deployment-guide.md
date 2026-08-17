@@ -99,6 +99,13 @@ nearest-neighbour association (gate 2 km). It returns
 `{"objects", "fleet_mean_speed", "spread_rate"}` where `spread_rate`
 positive = scattering, negative = bunching.
 
+> **v0 unit caveat.** The shipped demos feed radar positions in **km** at
+> **hour** timestamps, so `radar_kinematics()`'s `speed_kts` is km/h
+> mislabeled as knots (`×1.94384` rather than the km/h→knots `×0.53996`).
+> Treat the raw `fleet_mean_speed` as a *relative* signal, not real knots,
+> until the v1 unit pass. `fleetmath.three_reading_kinematics` (metres +
+> seconds) is the reference implementation with correct units.
+
 ### The LOCAL-ONLY rule
 
 > **Conversation JEPA stays on the boat. Only numbers leave.**
@@ -151,8 +158,9 @@ trope (`harness.py` → `day_features`, `day_memory`, `inductive_signal`):
 **A week of good fishing = the anchor; spotty days = felt deviation.** In the
 single-boat demo (`examples/fleet_harness_demo.py`, seed 7) the good hour
 sits `total=0.032` from its anchor (biomass channel `0.031`), the spotty
-hour sits `total=1.314` (biomass `0.568`) — a >40× jump in the biomass
-channel, with **no** label saying "fishing got bad." The harness feels the
+hour sits `total=1.314` (biomass `0.568`) — an ~18× jump in the biomass
+channel (~41× on total deviation), with **no** label saying "fishing got
+bad." The harness feels the
 difference from the shape of the field alone.
 
 ---

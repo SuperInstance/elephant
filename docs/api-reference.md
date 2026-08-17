@@ -260,7 +260,9 @@ class RoomField:
 ```
 The ensemble reading — the room's temperature vector. `vector()` returns the
 7 readings in `DIAL_NAMES` order (missing dials read `0.0`). `warmth()` is the
-felt temperature; `concentration()` is κ (tight = cold). `distance()` is the
+felt temperature; `concentration()` is κ — how far the field sits from
+neutral (the v3 spec reads this as *tightness*, cold = high κ; v0's proxy
+measures extremity, not yet temperature). `distance()` is the
 normalized-vector gap between two rooms; `sauna_plunge_gap()` is the **signed**
 warmth contrast (`this − other`).
 
@@ -289,7 +291,7 @@ Exponential relaxation of an agent's embedding toward the room field:
 import numpy as np
 from elephant.field import acclimation_curve
 agent = np.zeros(7); room = np.full(7, 0.5)
-acclimation_curve(agent, room, rate=0.5, t=1.0)   # halfway toward room
+acclimation_curve(agent, room, rate=0.5, t=1.0)   # ~39% of the way toward room
 ```
 
 ### `acclimation_rate_from`

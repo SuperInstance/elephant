@@ -115,6 +115,7 @@ space-specific lives behind a thin adapter.
 
 | Module | One-line engineering description |
 |--------|----------------------------------|
+| `elephant/__init__.py` | Package entry — re-exports `Message`, `Room`, `RoomField`, `acclimation_curve`, `charisma_pull`. |
 | `elephant/room.py` | `Room` / `Message` — rooms as message streams with **gravity**, **reverberation**, **ripple**, and windowed **density** (the room's pulse). |
 | `elephant/dial.py` | `Dial` (abstract JEPA sense) + `DialBank` (the perceiving ensemble, one scalar per dimension). |
 | `elephant/field.py` | `RoomField` — the temperature vector: `warmth()`, `concentration()` (κ), `distance()`, `sauna_plunge_gap()`, plus `acclimation_curve()` and `charisma_pull()`. |
@@ -175,10 +176,13 @@ print(f_tap.sauna_plunge_gap(f_wheel))    # +0.34 — walk in and it's warmer
 ```
 
 `warmth()` is the felt temperature (~`[-1, +1]`). `concentration()` (κ)
-is how *tight* the room is: **cold room = high κ (one way to be), warm
-room = low κ (many ways to be)**. `distance()` is the elephant gap — the
-training signal is **contrast between rooms, never ordering within a
-stream**.
+is how *far the field sits from neutral*. In the v3 design this becomes
+tightness — **cold room = high κ (one way to be), warm room = low κ (many
+ways to be)** — but v0's `norm(vector − 0.5)·2` proxy measures extremity,
+not yet temperature: a warm laughing room can read a higher κ than a cold
+clipped one (see the quickstart numbers below). `distance()` is the
+elephant gap — the training signal is **contrast between rooms, never
+ordering within a stream**.
 
 ### Run the demos
 
@@ -345,7 +349,7 @@ participant's `dial_weights` **self-tune** toward the dials where their
 cast's average desire) so tastes **diverge** into multiple stable attractors
 instead of collapsing to the room's loudest dial. After 14 nights the demo
 shows it: writer → mood, poet → volume, essayist → earnestness, engineer →
-cynicism, captain → presence. Mean pairwise weight distance goes `0.389 →
+cynicism, captain → mood (presence close behind). Mean pairwise weight distance goes `0.389 →
 0.859`. The engineers are the first practitioners; the settings are
 *discovered*, not designed.
 
