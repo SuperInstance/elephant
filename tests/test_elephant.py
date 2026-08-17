@@ -66,6 +66,31 @@ def test_acclimation_rate_inversion():
     assert abs(inferred - 0.12) < 0.02
 
 
+def test_acclimation_rate_overshoot_is_finite():
+    # An agent that has already overshot the room (projection <= 0) must
+    # yield a large *finite* rate, never inf.
+    room = np.array([1.0, 0.5, -0.2])
+    agent = np.array([-1.0, 0.0, 0.5])
+    overshot = room + (agent - room) * -0.5   # past the room, on the far side
+    rate = acclimation_rate_from(agent, overshot, room, t=10)
+    assert math.isfinite(rate), rate
+    assert rate > 0.5
+
+
+def test_density_is_windowed():
+    # A stale message far in the past must not dilute a recent burst.
+    room = Room("mixed", [
+        Message("a", "stale", ts=0),
+        Message("a", "now1", ts=1000),
+        Message("b", "now2", ts=1010),
+        Message("c", "now3", ts=1020),
+    ])
+    d30 = room.density(window=30.0)     # only the 3 recent messages
+    dall = room.density(window=2000.0)  # everything
+    assert d30 > dall, (d30, dall)
+    assert room.density(window=0.5) == 0.0  # no two messages within 0.5s
+
+
 def test_charisma_pulls_room():
     room = np.array([0.0, 0.0, 0.0])
     agent = np.array([1.0, 1.0, 1.0])
@@ -87,7 +112,8 @@ def test_concentration_cold_tighter():
 
 if __name__ == "__main__":
     for fn in [test_dials_read, test_elephant_gap, test_acclimation_converges,
-               test_acclimation_rate_inversion, test_charisma_pulls_room,
+               test_acclimation_rate_inversion, test_acclimation_rate_overshoot_is_finite,
+               test_charisma_pulls_room, test_density_is_windowed,
                test_concentration_cold_tighter]:
         fn()
         print(f"PASS {fn.__name__}")

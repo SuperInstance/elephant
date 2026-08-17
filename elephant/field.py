@@ -61,8 +61,8 @@ class RoomField:
             0.30 * r.get("mood", 0.0)
             + 0.15 * r.get("joke_landing", 0.0)
             + 0.10 * (r.get("earnestness", 0.5) - 0.5) * 2
-            + 0.10 * (r.get("presence", 0.0) - 0.5) * 2
-            + 0.10 * (r.get("volume", 0.0) - 0.5) * 2
+            + 0.10 * (r.get("presence", 0.5) - 0.5) * 2
+            + 0.10 * (r.get("volume", 0.5) - 0.5) * 2
             - 0.15 * r.get("cynicism", 0.5)
             - 0.10 * r.get("panic", 0.0)
         )  # ~[-1, +1]
@@ -134,9 +134,13 @@ def acclimation_rate_from(
     dn = float(np.linalg.norm(delta))
     if dn < 1e-9 or t <= 0:
         return 0.0
-    ratio = max(0.0, min(1.0, float(np.dot(remain, delta)) / (dn * dn)))
-    if ratio <= 0:
-        return float("inf")
+    # Projection of remain onto delta, in units of |delta|. For an exact
+    # exponential relaxation remain == delta·e^(-rate·t), so this ratio is
+    # e^(-rate·t). Clamp to a small floor so an agent that has already
+    # overshot the room (ratio <= 0) yields a large *finite* rate instead
+    # of inf, which would otherwise poison downstream averages/training.
+    ratio = float(np.dot(remain, delta)) / (dn * dn)
+    ratio = min(1.0, max(1e-9, ratio))
     return -math.log(ratio) / t
 
 

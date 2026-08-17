@@ -104,15 +104,24 @@ class Room:
         return [self.ripple(m, depth) for m in self.messages]
 
     # ------------------------------------------------------------------ #
-    # Density — the room's pulse (messages per second)                   #
+    # Density — the room's pulse (messages per minute)                    #
     # ------------------------------------------------------------------ #
     def density(self, window: float = 300.0) -> float:
-        """How fast the room is talking. The pulse that panic speeds up
-        and the sauna slows down."""
-        if len(self.messages) < 2:
+        """How fast the room is talking, in messages per minute.
+
+        Measures over the trailing `window` seconds — the room's recent
+        pulse (the sauna slows it down, panic speeds it up). Older
+        messages beyond `window` are excluded from both the count and the
+        span, so a long-quiet room with a fresh burst reads the burst.
+        """
+        if not self.messages:
             return 0.0
-        span = max(self.messages[-1].ts - self.messages[0].ts, 1e-9)
-        return len(self.messages) / span * 60.0  # msgs per minute
+        latest = self.messages[-1].ts
+        recent = [m for m in self.messages if latest - m.ts <= window]
+        if len(recent) < 2:
+            return 0.0
+        span = max(recent[-1].ts - recent[0].ts, 1e-9)
+        return len(recent) / span * 60.0  # msgs per minute
 
     def __len__(self) -> int:
         return len(self.messages)
