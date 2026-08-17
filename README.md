@@ -1,5 +1,7 @@
 # 🐘 elephant — the inter-model temperature
 
+<p align="center"><img src="assets/images/hero.png" alt="The elephant — the room-temperature sense" width="720"></p>
+
 > **JEPA is the elephant.** You don't notice it until you go to a
 > different room — and then it's a very different elephant.
 
@@ -74,6 +76,22 @@ Two social forces close the loop, in both directions:
 ---
 
 ## Architecture
+
+<p align="center">
+
+```mermaid
+graph TD
+    S[SPACE — any medium<br/>MUD · chat · X · Discord · email · sensor bus] -->|adapter| R[Room / SignalRoom<br/>gravity · reverberation · ripple]
+    R -->|reads| D[DialBank — many JEPAs<br/>mood · volume · earnestness · cynicism<br/>joke_landing · panic · presence · model_vs_code]
+    D -->|ensemble| F[RoomField<br/>warmth · κ · elephant gap · sauna/plunge]
+    F --> P[Presets<br/>Room-Elephant / Personal-Elephant]
+    P -->|tint| M[MUD description · chat topic · status line]
+    P -->|nudge| N[Vision model — what to compare]
+    M --> S
+    N --> S
+```
+
+</p>
 
 ```
                  ┌───────────────────────────────────────────────┐
