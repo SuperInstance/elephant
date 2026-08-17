@@ -25,8 +25,8 @@ newcomers warmed to it, or pulled it toward themselves; and nobody
 noticed any of it until they walked into a different room and felt the
 cold. That is the whole thing, told as a fable.
 
-*(The crew keeps promising to write the full just-so story down. When it
-lands, it gets its own page.)*
+*The full just-so — how the Elephant got its seven dials, one small creature
+at a time — lives in [`docs/just-so.md`](docs/just-so.md).*
 
 ---
 
@@ -366,6 +366,8 @@ is the worked example.
 | [`docs/communication-spaces-2026-08-17.md`](docs/communication-spaces-2026-08-17.md) | The `Space` abstraction — the elephant decoupled from the MUD, one sense many rooms. |
 | [`docs/tap-night-operations.md`](docs/tap-night-operations.md) | Running the elephant at The Tap — feeding conversation, persisting settings, the many-cycles loop. |
 | [`docs/fleet-simulation-notes.md`](docs/fleet-simulation-notes.md) | The fleet sim — what it demonstrates, the numbers, the 30-day arc, the review fixes. |
+| [`docs/deployment-guide.md`](docs/deployment-guide.md) | Putting the elephant to work — running it as a library, on a boat, in a space, across a fleet. |
+| [`docs/fleet-operations.md`](docs/fleet-operations.md) | Running and reading the elephant at scale — the fleet sim numbers and the Tap tuning loop, interpreted. |
 | [`docs/reviews-elephant-sense-v3.md`](docs/reviews-elephant-sense-v3.md) | The four wider-view reviewer transcripts (deepseek_pro, hermes405, seed2pro, qwen36) on the v3 design. |
 | [`docs/reviews-wide-view-2026-08-17.md`](docs/reviews-wide-view-2026-08-17.md) | The v0 code critique sweep — five models, the P0/P1/P2 fix list and what was applied. |
 
