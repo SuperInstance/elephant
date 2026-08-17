@@ -26,6 +26,7 @@ from .joke_landing import JokeLandingDial
 from .panic import PanicDial
 from .presence import PresenceDial
 from .model_vs_code import ModelVsCodeDial
+from .vision import VisionDial
 
 DEFAULT_DIALS = [
     MoodDial(),
@@ -36,10 +37,12 @@ DEFAULT_DIALS = [
     PanicDial(),
     PresenceDial(),
     ModelVsCodeDial(),
+    VisionDial(),
 ]
 
 __all__ = [
     "MoodDial", "VolumeDial", "EarnestnessDial", "CynicismDial",
     "JokeLandingDial", "PanicDial", "PresenceDial", "ModelVsCodeDial",
+    "VisionDial",
     "DEFAULT_DIALS",
 ]

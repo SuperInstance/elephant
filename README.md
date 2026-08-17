@@ -106,7 +106,7 @@ graph TD
                  └───────────────┬───────────────┘
                                  ▼
                  ┌───────────────────────────────┐
-                 │         DialBank (8 dials)    │  one JEPA per dimension
+                 │         DialBank (9 dials)    │  one JEPA per dimension
                  └───────────────┬───────────────┘
                                  ▼
                  ┌───────────────────────────────┐
@@ -146,6 +146,7 @@ space-specific lives behind a thin adapter.
 | `elephant/dials/panic.py` | `PanicDial` — stampede sense (fire in the room), `[0 calm, 1 trampling]`. |
 | `elephant/dials/presence.py` | `PresenceDial` — the pheromone trace of who's been here, `[0 empty, 1 thrumming]`. |
 | `elephant/dials/model_vs_code.py` | `ModelVsCodeDial` — who's generating the room's signal: model prose vs code executing, `[-1 code, +1 model]`. |
+| `elephant/dials/vision.py` | `VisionDial` — the room's visual energy from camera frames (plato 16-dim room state), `[0 dark+empty, 1 bright+alive]`. |
 | `elephant/sensors.py` | `SignalRoom` / `SensorFrame` + the sea-leg dials: `RadarCoherenceDial`, `SounderBiomassDial`, `FishingDayDial`. |
 | `elephant/nudge.py` | `nudge_prior()` / `apply_nudge()` — dial numbers become an attention prior over modalities. The elephant *nudges, it doesn't drive*. |
 | `elephant/fleetmath.py` | The numeric spine: `three_reading_kinematics()`, `fleet_concentration()` (vMF κ), `biomass_anchor()` / `biomass_deviation()` (inductive biomass). |
@@ -218,7 +219,7 @@ python3 examples/fleet_harness_demo.py   # one harness, 30 days, the good-day an
 
 ## The dials
 
-Eight JEPAs, one dimension each. More are cheap — a room can carry as
+Nine JEPAs, one dimension each. More are cheap — a room can carry as
 many dials as it has dimensions worth feeling.
 
 | Dial | What it feels | Range |
@@ -230,7 +231,14 @@ many dials as it has dimensions worth feeling.
 | `joke_landing` | did the joke land — the **collective** laugh or boo | `[-1 booed, +1 roared]` |
 | `panic` | stampede sense (fire in the room) | `[0 calm, 1 trampling]` |
 | `presence` | pheromone trace (who's been here) | `[0 empty, 1 thrumming]` |
-| `model_vs_code` | who's generating the signal — model prose vs code executing | `[-1 code, +1 model]` |
+| `model_vs_code` | who's generating the room's signal: model prose vs code executing, `[-1 code, +1 model]` |
+| `vision` | the room's visual energy from camera frames (plato's 16-dim room state), `[0 dark+empty, 1 bright+alive]` |
+
+> `vision` is the 9th dial — a cross-pollination from the PLATO nervous
+> system's vision layer (`plato-vision-jepa`): it reads a `SignalRoom`'s
+> camera frames (16-dim room-state vectors or plain dicts) with plato's
+> deadband filter, and reports the room's visual aliveness. See
+> [`docs/plato-vision-crosspollination.md`](docs/plato-vision-crosspollination.md).
 
 The v0 dials are **hand-crafted** keyword/model-free readers — the fleet
 pattern: hand-crafted first, learned second. They are naive on purpose:
@@ -394,6 +402,7 @@ is the worked example.
 | [`docs/fleet-operations.md`](docs/fleet-operations.md) | Running and reading the elephant at scale — the fleet sim numbers and the Tap tuning loop, interpreted. |
 | [`docs/reviews-elephant-sense-v3.md`](docs/reviews-elephant-sense-v3.md) | The four wider-view reviewer transcripts (deepseek_pro, hermes405, seed2pro, qwen36) on the v3 design. |
 | [`docs/reviews-wide-view-2026-08-17.md`](docs/reviews-wide-view-2026-08-17.md) | The v0 code critique sweep — five models, the P0/P1/P2 fix list and what was applied. |
+| [`docs/plato-vision-crosspollination.md`](docs/plato-vision-crosspollination.md) | The vision dial — what plato-vision-jepa taught the elephant (the deadband, the 16-dim layout) and what the elephant's field gives back (anomaly context). |
 
 ---
 

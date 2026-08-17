@@ -55,9 +55,8 @@ def test_reading_is_bounded():
 
 
 def test_registered_as_eighth_dial_and_satisfies_abc():
-    assert len(DEFAULT_DIALS) == 8, [d.name for d in DEFAULT_DIALS]
+    assert len(DEFAULT_DIALS) == 9, [d.name for d in DEFAULT_DIALS]  # + vision (9th)
     names = [d.name for d in DEFAULT_DIALS]
-    assert names[-1] == "model_vs_code"
     assert names.index("model_vs_code") == 7
     mv = [d for d in DEFAULT_DIALS if d.name == "model_vs_code"][0]
     assert isinstance(mv, Dial)

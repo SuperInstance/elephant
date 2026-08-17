@@ -27,7 +27,8 @@ Package: `elephant` · version `0.1.0` · numpy-only core.
 | `PanicDial` | `dials` | Stampede sense, `[0, 1]` |
 | `PresenceDial` | `dials` | Pheromone/occupancy trace, `[0, 1]` |
 | `ModelVsCodeDial` | `dials` | Model prose vs code executing, `[-1, +1]` |
-| `DEFAULT_DIALS` | `dials` | The standard 8-dial bank |
+| `VisionDial` | `dials` | The room's visual energy from camera frames, `[0, 1]` |
+| `DEFAULT_DIALS` | `dials` | The standard 9-dial bank |
 | `DIAL_NAMES` | `field` | Canonical 7-dial field-vector ordering |
 | `RoomField` | `field` | The ensemble reading — the room's temperature vector |
 | `read_field` | `field` | Run a dial bank over a room → `RoomField` |
@@ -177,7 +178,7 @@ bank.readings(room)   # {'mood': ...}
 
 ---
 
-## `elephant.dials` — the eight dials
+## `elephant.dials` — the nine dials
 
 Each dial is a `Dial` subclass reading a `Room`. Empty rooms rest at each
 dial's neutral value. **Adding/removing words from the module-level lexicons
@@ -193,6 +194,7 @@ is the primary tuning surface** (see the tuning guide).
 | `PanicDial` | `panic` | `[0, 1]` | `0.0` | `ALARM`, `URGENCY` |
 | `PresenceDial` | `presence` | `[0, 1]` | `0.0` | (author occupancy) |
 | `ModelVsCodeDial` | `model_vs_code` | `[-1, +1]` | `0.0` | `MODEL_WORDS`/`MODEL_PHRASES`, `CODE_WORDS`/`CODE_PHRASES`, `CODE_SYMBOLS` |
+| `VisionDial` | `vision` | `[0, 1]` | `0.5` | (signal-room camera frames; plato 16-dim layout) |
 
 ### `MoodDial` — `read(room) -> float`
 Counts hits of `POSITIVE` vs `NEGATIVE` word sets over all messages;
@@ -237,6 +239,30 @@ It reads as the 8th member of `DEFAULT_DIALS` (present in `read_field`'s
 `readings`) but is not yet in `DIAL_NAMES` — wiring it into the field vector
 (κ / distance) is the next step, coordinated with the learned-dials subagent.
 
+### `VisionDial` — `read(room) -> float`, `__init__(deadband=0.05)`
+Cross-pollinated from `plato-vision-jepa`. Reads a `SignalRoom`'s camera frames
+(`SensorFrame` with `sensor="camera"`; `data` is either a full **16-dim plato
+room-state vector** — indices 0–3 brightness/motion/occupancy/anomaly — or a
+dict `{brightness, motion, occupancy, anomaly}`, plato's spellings
+`motion_level`/`anomaly_score` accepted). Produces the room's visual
+energy/aliveness: `0.40·brightness + 0.35·motion + 0.25·occupancy`, plus an
+anomaly bonus spike `0.5·anomaly·(1−base)`, clamped to `[0,1]`. `deadband`
+(default `0.05`, matching plato) is the `VisionDeadband` threshold: a frame
+whose state differs from the previous by less than that is skipped, so
+redundant frames can't dominate. No camera frames (or a plain text `Room`)
+→ `0.5` — no visual opinion. Reads as the 9th member of `DEFAULT_DIALS`; not
+yet in `DIAL_NAMES`. See `docs/plato-vision-crosspollination.md`.
+
+```python
+from elephant.dials import VisionDial
+from elephant.sensors import SensorFrame, SignalRoom
+
+v = [0.0] * 16; v[0], v[1], v[2], v[3] = 0.9, 0.7, 0.8, 0.1   # plato 16-dim
+sig = SignalRoom("bridge", [SensorFrame(ts=0.0, sensor="camera", data=v)])
+VisionDial().read(sig)         # ~0.81 — bright, active, occupied
+VisionDial().read(SignalRoom("empty"))    # 0.5 — no visual opinion
+```
+
 ```python
 from elephant.room import Message, Room
 from elephant.dials import DEFAULT_DIALS
@@ -251,7 +277,7 @@ for d in DEFAULT_DIALS:
 ### `DEFAULT_DIALS`
 `List[Dial]` — the standard bank: `MoodDial(), VolumeDial(), EarnestnessDial(),
 CynicismDial(), JokeLandingDial(), PanicDial(), PresenceDial(),
-ModelVsCodeDial()` (in that order).
+ModelVsCodeDial(), VisionDial()` (in that order).
 
 ---
 
