@@ -70,9 +70,12 @@ def test_ring_rearms_on_fall(tmp_path):
 
 
 def test_http_endpoints(tmp_path):
+    import socket
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        port = s.getsockname()[1]           # a free ephemeral port, no collision
     d = RoomDaemon(map_path=None, inbox=str(tmp_path))
     _ingest(d, WARM)
-    port = 4799  # tests use an ephemeral-ish fixed port; CI-friendly
     t = threading.Thread(target=serve, args=(d, port), daemon=True)
     t.start()
     for _ in range(50):
@@ -104,3 +107,15 @@ def test_packet_atomic_and_valid(tmp_path):
     write_atomic(tmp_path / "pkt.json", p)
     assert json.loads((tmp_path / "pkt.json").read_text()) == p
     assert not list(tmp_path.glob("*.tmp"))
+
+
+def test_zeitgeist_description():
+    """The room's words change with its field (plan §3.7)."""
+    d = RoomDaemon()
+    _ingest(d, WARM)
+    warm_desc = d.tinted_description("galley")
+    _ingest(d, PANIC)
+    panic_desc = d.tinted_description("galley")
+    assert warm_desc and panic_desc
+    assert warm_desc != panic_desc  # the field authors the words
+    assert "drenched" in panic_desc or "rain" in panic_desc.lower() or panic_desc != warm_desc

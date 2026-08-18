@@ -31,6 +31,7 @@ from .dials import DEFAULT_DIALS
 from .field import read_field
 from .room import Message, Room
 from .terrain import Deadband, Terrain
+from .mud import tint_description
 
 __all__ = ["RoomDaemon", "build_uscp_packet", "main"]
 
@@ -86,6 +87,7 @@ class RoomDaemon:
         self.rings_fired: set = set()          # rising-edge memory
         self.ring_log: List[Dict] = []           # observability: every ring, bounded
         self.inbox = Path(inbox) if inbox else None
+        self.descriptions: Dict[str, str] = {}   # base text per room (zeitgeist)
         self.map_temperature: Optional[float] = None
         if map_path:
             self.load_map(map_path)
@@ -97,13 +99,16 @@ class RoomDaemon:
         for r in rooms:
             name = r.get("name") or r.get("id")
             if name:
-                self.ensure_room(name)
+                self.ensure_room(name, description=r.get("description", ""))
 
-    def ensure_room(self, name: str) -> Room:
+    def ensure_room(self, name: str, description: str = "") -> Room:
         if name not in self.rooms:
             self.rooms[name] = Room(name)
             self.terrains[name] = Terrain(space_id=name)
             self.deadbands[name] = Deadband()
+            # zeitgeist: the room's own words, tinted by its field
+            self.descriptions[name] = description or (
+                "A low-ceilinged room, warm wood and a long counter.")
         return self.rooms[name]
 
     # -- ingest ---------------------------------------------------------#
@@ -167,6 +172,22 @@ class RoomDaemon:
         self.check_rings(fields)
         return payload
 
+    # -- zeitgeist -------------------------------------------------------#
+    def tinted_description(self, name: str) -> Optional[str]:
+        """The room's own words, tinted by its live field (plan §3.7).
+
+        The zeitgeist authors the room text: the description IS the room's
+        body language. Deterministic per field (tint_description seeds
+        from it), so the same field always speaks the same words.
+        """
+        room = self.rooms.get(name)
+        base = self.descriptions.get(name)
+        if room is None or base is None or not room.messages:
+            return base
+        field = read_field(room, self.bank)
+        hour = time.localtime().tm_hour + time.localtime().tm_min / 60.0
+        return tint_description(field, base, hour=hour)
+
     # -- deadband -------------------------------------------------------#
     def check_rings(self, fields) -> None:
         for name, f in fields.items():
@@ -215,6 +236,12 @@ class _Handler(BaseHTTPRequestHandler):
             name = self.path[len("/rooms/"):-len("/field")]
             f = d.room_field(name)
             return self._json(f if f is not None else {"error": "unknown or empty room"}, 200 if f else 404)
+        if self.path.startswith("/rooms/") and self.path.endswith("/description"):
+            name = self.path[len("/rooms/"):-len("/description")]
+            if name in d.rooms:
+                return self._json({"room": name,
+                                   "description": d.tinted_description(name)})
+            return self._json({"error": "unknown room"}, 404)
         if self.path == "/health":
             return self._json({"ok": True, "rooms": list(d.rooms)})
         if self.path == "/rings":
@@ -237,7 +264,7 @@ class _Handler(BaseHTTPRequestHandler):
 def serve(daemon: RoomDaemon, port: int = DEFAULT_PORT) -> None:
     _Handler.daemon_ref = daemon
     httpd = ThreadingHTTPServer(("127.0.0.1", port), _Handler)
-    print(f"roomd: serving /field on 127.0.0.1:{port} "
+    print(f"roomd: serving /field on 127.0.0.1:{httpd.server_address[1]} "
           f"({len(daemon.rooms)} rooms, inbox={daemon.inbox})", flush=True)
     httpd.serve_forever()
 
