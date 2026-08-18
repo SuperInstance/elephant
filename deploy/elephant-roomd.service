@@ -8,7 +8,7 @@ StartLimitIntervalSec=60
 Type=simple
 WorkingDirectory=/home/eileen/projects/elephant
 Environment=PYTHONPATH=/home/eileen/projects/elephant
-ExecStart=/usr/bin/python3 -m elephant.roomd --map /home/eileen/projects/fleet-rooms/demo/map.json --port 4073 --inbox /home/eileen/.hermes/cns_inbox
+ExecStart=/usr/bin/python3 -m elephant.roomd --map /home/eileen/projects/fleet-rooms/demo/map.json --port 4073 --inbox /home/eileen/.hermes/cns_inbox --field-log /home/eileen/projects/elephant/data/roomd-field-log.jsonl
 Restart=always
 RestartSec=3
 MemoryMax=256M
