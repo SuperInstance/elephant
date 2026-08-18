@@ -1,0 +1,247 @@
+#!/usr/bin/env python3
+"""roomd — the field truth-holder.
+
+The elephant's daemon (plan §1.1, fleet-next-level-plan.md). Loads an
+eisenstein ``map.json`` export and an events JSONL file, runs the real
+``DialBank(DEFAULT_DIALS)`` over each room, serves the field over HTTP,
+and rings the deadband as a USCP-v1 STATUS_REPORT packet written
+atomically into the CNS inbox — one packet per rising edge.
+
+One truth-holder per quantity: the elephant owns the field. Everything
+served here is the truth; terrain's POSTed deltas are its shadow.
+
+Usage:
+    python3 -m elephant.roomd --map map.json --events events.jsonl \
+        [--port 4073] [--inbox ~/.hermes/cns_inbox]
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+import tempfile
+import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from typing import Dict, List, Optional
+
+from .dial import DialBank
+from .dials import DEFAULT_DIALS
+from .field import read_field
+from .room import Message, Room
+from .terrain import Deadband, Terrain
+
+__all__ = ["RoomDaemon", "build_uscp_packet", "main"]
+
+DEFAULT_PORT = 4073
+WARMTH_RING_HIGH = 0.45   # |Δwarmth| that counts as a real swing
+PANIC_RING_LEVEL = 0.55   # panic reading that counts as a stampede
+
+
+def build_uscp_packet(ring_kind: str, severity: str, payload: Dict, now: Optional[float] = None) -> Dict:
+    """A minimal USCP-v1 STATUS_REPORT packet (mirrors cns-echo's shape)."""
+    ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now if now is not None else time.time()))
+    return {
+        "header": {
+            "type": "USCP-v1",
+            "origin_id": "elephant-roomd",
+            "timestamp": ts,
+            "priority": "HIGH" if severity == "high" else "MEDIUM",
+            "intent": "STATUS_REPORT",
+        },
+        "body": {
+            "subject": f"deadband ring: {ring_kind}",
+            "source": "elephant-roomd",
+            "content": json.dumps(payload),
+            "sections": payload,
+        },
+    }
+
+
+def write_atomic(path: Path, packet: Dict) -> None:
+    """temp + rename — a packet is never half-visible (cns-echo pattern)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w") as fh:
+            json.dump(packet, fh)
+        os.replace(tmp, path)
+    finally:
+        if os.path.exists(tmp):
+            try:
+                os.unlink(tmp)
+            except OSError:
+                pass
+
+
+class RoomDaemon:
+    """Holds rooms, ingests events, serves the field, rings the deadband."""
+
+    def __init__(self, map_path: Optional[str] = None, inbox: Optional[str] = None):
+        self.bank = DialBank(DEFAULT_DIALS)
+        self.rooms: Dict[str, Room] = {}
+        self.terrains: Dict[str, Terrain] = {}
+        self.deadbands: Dict[str, Deadband] = {}
+        self.rings_fired: set = set()          # rising-edge memory
+        self.inbox = Path(inbox) if inbox else None
+        self.map_temperature: Optional[float] = None
+        if map_path:
+            self.load_map(map_path)
+
+    # -- map ----------------------------------------------------------- #
+    def load_map(self, map_path: str) -> None:
+        data = json.loads(Path(map_path).read_text())
+        rooms = data.get("rooms", data if isinstance(data, list) else [])
+        for r in rooms:
+            name = r.get("name") or r.get("id")
+            if name:
+                self.ensure_room(name)
+
+    def ensure_room(self, name: str) -> Room:
+        if name not in self.rooms:
+            self.rooms[name] = Room(name)
+            self.terrains[name] = Terrain(space_id=name)
+            self.deadbands[name] = Deadband()
+        return self.rooms[name]
+
+    # -- ingest ---------------------------------------------------------#
+    def ingest(self, event: Dict) -> None:
+        room = self.ensure_room(str(event.get("room", "default")))
+        room.messages.append(Message(
+            author=str(event.get("author", "anon")),
+            text=str(event.get("text", "")),
+            ts=float(event.get("ts", time.time())),
+        ))
+        # keep rooms bounded — the elephant's windows are bounded by law
+        if len(room.messages) > 512:
+            del room.messages[: len(room.messages) - 512]
+
+    def ingest_file(self, path: str) -> int:
+        n = 0
+        with open(path) as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    self.ingest(json.loads(line))
+                    n += 1
+                except json.JSONDecodeError:
+                    continue
+        return n
+
+    # -- field ----------------------------------------------------------#
+    def room_field(self, name: str) -> Optional[Dict]:
+        room = self.rooms.get(name)
+        if room is None or not room.messages:
+            return None
+        field = read_field(room, self.bank)
+        return {
+            "room": name,
+            "warmth": round(field.warmth(), 4),
+            "kappa": round(field.concentration(), 4),
+            "dials": {k: round(v, 4) for k, v in field.readings.items()},
+            "messages": len(room.messages),
+        }
+
+    def recompute(self) -> Dict:
+        """Recompute every room + the map temperature; ring on crossings."""
+        fields = {}
+        for name, room in self.rooms.items():
+            if room.messages:
+                f = read_field(room, self.bank)
+                fields[name] = f
+        if fields:
+            warmth = sum(f.warmth() for f in fields.values()) / len(fields)
+            self.map_temperature = round(warmth, 4)
+        payload = {
+            "warmth": self.map_temperature,
+            "kappa": None,
+            "dials": {},
+            "rooms": {n: self.room_field(n) for n in fields},
+            "map_temperature": self.map_temperature,
+            "ts": time.time(),
+        }
+        self.check_rings(fields)
+        return payload
+
+    # -- deadband -------------------------------------------------------#
+    def check_rings(self, fields) -> None:
+        for name, f in fields.items():
+            panic = f.readings.get("panic", 0.0)
+            warmth = f.warmth()
+            self._ring(name, "panic", panic >= PANIC_RING_LEVEL, "high",
+                       {"room": name, "panic": round(panic, 4)})
+            self._ring(name, "warmth_swing", abs(warmth) >= WARMTH_RING_HIGH, "medium",
+                       {"room": name, "warmth": round(warmth, 4)})
+
+    def _ring(self, key: str, kind: str, condition: bool, severity: str, extra: Dict) -> None:
+        edge = f"{key}:{kind}"
+        if condition and edge not in self.rings_fired:      # rising edge only
+            self.rings_fired.add(edge)
+            if self.inbox:
+                packet = build_uscp_packet(kind, severity, extra)
+                fname = f"{int(time.time() * 1000)}-elephant-roomd-{kind}.json"
+                write_atomic(self.inbox / fname, packet)
+        elif not condition and edge in self.rings_fired:    # re-arm on fall
+            self.rings_fired.discard(edge)
+
+
+class _Handler(BaseHTTPRequestHandler):
+    daemon_ref: RoomDaemon = None  # injected by serve()
+
+    def log_message(self, *args):  # quiet
+        pass
+
+    def _json(self, obj, code=200):
+        body = json.dumps(obj).encode()
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        d = self.daemon_ref
+        if self.path in ("/field", "/"):
+            return self._json(d.recompute())
+        if self.path.startswith("/rooms/") and self.path.endswith("/field"):
+            name = self.path[len("/rooms/"):-len("/field")]
+            f = d.room_field(name)
+            return self._json(f if f is not None else {"error": "unknown or empty room"}, 200 if f else 404)
+        if self.path == "/health":
+            return self._json({"ok": True, "rooms": list(d.rooms)})
+        return self._json({"error": "not found"}, 404)
+
+
+def serve(daemon: RoomDaemon, port: int = DEFAULT_PORT) -> None:
+    _Handler.daemon_ref = daemon
+    httpd = ThreadingHTTPServer(("127.0.0.1", port), _Handler)
+    print(f"roomd: serving /field on 127.0.0.1:{port} "
+          f"({len(daemon.rooms)} rooms, inbox={daemon.inbox})", flush=True)
+    httpd.serve_forever()
+
+
+def main(argv: Optional[List[str]] = None) -> int:
+    ap = argparse.ArgumentParser(prog="roomd", description="the field truth-holder")
+    ap.add_argument("--map", help="eisenstein map.json export (rooms list)")
+    ap.add_argument("--events", help="events.jsonl to ingest at startup")
+    ap.add_argument("--port", type=int, default=DEFAULT_PORT)
+    ap.add_argument("--inbox", default=os.path.expanduser("~/.hermes/cns_inbox"),
+                    help="USCP inbox for deadband rings (empty string disables)")
+    args = ap.parse_args(argv)
+
+    daemon = RoomDaemon(map_path=args.map,
+                        inbox=args.inbox or None)
+    if args.events:
+        n = daemon.ingest_file(args.events)
+        print(f"roomd: ingested {n} events", flush=True)
+    if not args.map and not args.events:
+        daemon.ensure_room("default")
+    serve(daemon, args.port)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
