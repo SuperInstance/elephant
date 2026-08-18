@@ -399,14 +399,14 @@ class ImprovTheme(Theme):
         ("flash",
          "Yes, and — I'm already on stage. I've got nothing yet, but I'm "
          "smiling so big the suggestion can't miss.",
-         {"😂": 1, "❤️": 1}),
+         {"😂": 4, "❤️": 2}),
         ("wesley",
          "Ooh! Ooh! Can I go first? I promise I'll be funny, I'm SO ready!",
-         {"😄": 1}),
+         {"😄": 3, "😂": 2}),
         ("mc",
          "That's the energy. One rule: the room laughs TOGETHER or not at "
          "all. Suggestion, please!",
-         {"👏": 1}),
+         {"👏": 3, "😂": 2}),
     ]
 
     prompts: Dict[str, str] = {
@@ -512,7 +512,7 @@ class SpeedDatingTheme(Theme):
         ("pro",
          "Three questions. I've been thinking about my answers since "
          "yesterday.",
-         {"👏": 1}),
+         {"👏": 3, "😂": 2}),
         ("mc",
          "Perfect. Round one, first pair — the timer starts now.",
          {}),

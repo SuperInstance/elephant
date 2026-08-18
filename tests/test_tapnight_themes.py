@@ -36,7 +36,7 @@ def _raw_profile(theme: Theme) -> dict:
 # Registry + cast                                                        #
 # ---------------------------------------------------------------------- #
 def test_theme_registry_has_four_rooms():
-    assert set(THEMES) == {"improv", "trivia", "ttrpg", "singles"}
+    assert set(THEMES) == {"improv", "open_mic", "singles", "speed_dating", "trivia", "ttrpg"}
     for key, theme in THEMES.items():
         assert isinstance(theme, Theme)
         assert theme.key == key
