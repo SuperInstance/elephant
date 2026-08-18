@@ -84,6 +84,7 @@ class RoomDaemon:
         self.terrains: Dict[str, Terrain] = {}
         self.deadbands: Dict[str, Deadband] = {}
         self.rings_fired: set = set()          # rising-edge memory
+        self.ring_log: List[Dict] = []           # observability: every ring, bounded
         self.inbox = Path(inbox) if inbox else None
         self.map_temperature: Optional[float] = None
         if map_path:
@@ -180,6 +181,10 @@ class RoomDaemon:
         edge = f"{key}:{kind}"
         if condition and edge not in self.rings_fired:      # rising edge only
             self.rings_fired.add(edge)
+            self.ring_log.append({"ts": time.time(), "room": key,
+                                  "kind": kind, "severity": severity, **extra})
+            if len(self.ring_log) > 256:
+                del self.ring_log[: len(self.ring_log) - 256]
             if self.inbox:
                 packet = build_uscp_packet(kind, severity, extra)
                 fname = f"{int(time.time() * 1000)}-elephant-roomd-{kind}.json"
@@ -212,6 +217,20 @@ class _Handler(BaseHTTPRequestHandler):
             return self._json(f if f is not None else {"error": "unknown or empty room"}, 200 if f else 404)
         if self.path == "/health":
             return self._json({"ok": True, "rooms": list(d.rooms)})
+        if self.path == "/rings":
+            return self._json({"rings": d.ring_log[-20:]})
+        return self._json({"error": "not found"}, 404)
+
+    def do_POST(self):
+        d = self.daemon_ref
+        if self.path == "/ingest":
+            length = int(self.headers.get("Content-Length", 0))
+            try:
+                event = json.loads(self.rfile.read(length))
+                d.ingest(event)
+                return self._json({"ok": True, "rooms": len(d.rooms)})
+            except Exception as e:
+                return self._json({"error": str(e)}, 400)
         return self._json({"error": "not found"}, 404)
 
 
