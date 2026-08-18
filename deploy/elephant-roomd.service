@@ -1,0 +1,33 @@
+[Unit]
+Description=Elephant roomd — the field truth-holder (:4073)
+After=network.target
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+[Service]
+Type=simple
+WorkingDirectory=/home/eileen/projects/elephant
+Environment=PYTHONPATH=/home/eileen/projects/elephant
+ExecStart=/usr/bin/python3 -m elephant.roomd --map /home/eileen/projects/fleet-rooms/demo/map.json --port 4073 --inbox /home/eileen/.hermes/cns_inbox
+Restart=always
+RestartSec=3
+MemoryMax=256M
+MemoryHigh=192M
+CPUQuota=50%
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/eileen/.hermes
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictNamespaces=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+
+[Install]
+WantedBy=default.target
