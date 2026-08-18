@@ -229,15 +229,16 @@ class _Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self):
+        from urllib.parse import unquote
         d = self.daemon_ref
         if self.path in ("/field", "/"):
             return self._json(d.recompute())
         if self.path.startswith("/rooms/") and self.path.endswith("/field"):
-            name = self.path[len("/rooms/"):-len("/field")]
+            name = unquote(self.path[len("/rooms/"):-len("/field")])
             f = d.room_field(name)
             return self._json(f if f is not None else {"error": "unknown or empty room"}, 200 if f else 404)
         if self.path.startswith("/rooms/") and self.path.endswith("/description"):
-            name = self.path[len("/rooms/"):-len("/description")]
+            name = unquote(self.path[len("/rooms/"):-len("/description")])
             if name in d.rooms:
                 return self._json({"room": name,
                                    "description": d.tinted_description(name)})
