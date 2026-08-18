@@ -1,9 +1,10 @@
-"""Tap-night themes — the same elephant, four different rooms.
+"""Tap-night themes — the same elephant, six different rooms.
 
-The Tap isn't one room. It's four, depending on the night: open mic,
-trivia, TTRPG, and singles. Each is a different room with a different
-elephant — the same 7 dials, but a different cast, a different resting
-temperature, and a different way the field swings when the night moves.
+The Tap isn't one room. It's six, depending on the night: open mic,
+trivia, TTRPG, singles, improv, and speed dating. Each is a different
+room with a different elephant — the same 7 dials, but a different
+cast, a different resting temperature, and a different way the field
+swings when the night moves.
 
 This module is the reusable presets for those themed nights. A `Theme`
 is a complete session recipe:
@@ -22,7 +23,8 @@ is a complete session recipe:
 - `description` is the intended vibe in one line.
 
 `THEMES` is the registry: `{"open_mic": ..., "trivia": ..., "ttrpg": ...,
-"singles": ...}`. One venue, four rooms, four elephants.
+"singles": ..., "improv": ..., "speed_dating": ...}`. One venue, six
+rooms, six elephants.
 """
 from __future__ import annotations
 
@@ -371,11 +373,218 @@ class SinglesTheme(Theme):
 
 
 # ---------------------------------------------------------------------- #
-# The registry — one venue, four rooms.                                  #
+# Improv comedy — an MC and a cast of quick players.                     #
+#                                                                        #
+# The purest test of the collective laugh/boo dial: every line is a      #
+# gamble the room pays or refuses. joke_landing swings hard with the     #
+# crowd's hands, mood rides along, and panic stays low — the only real   #
+# danger on stage is the silence after a line that didn't land.          #
+# ---------------------------------------------------------------------- #
+class ImprovTheme(Theme):
+    key = "improv"
+    description = (
+        "An MC runs prompt-bank games (Yes-And, Freeze Tag, Questions Only, "
+        "One-Word Story) with a cast of quick players. The room is a crowd "
+        "with its hands out: joke_landing swings with the collective laugh, "
+        "mood rides the wave, panic stays low — the only cold in the room "
+        "is a joke that lands on silence."
+    )
+
+    room_tone: List[SeedMessage] = [
+        ("mc",
+         "Welcome, welcome! The Tap is now a stage. Tonight we play the "
+         "old games — yes-and, freeze, questions only — and the room is "
+         "the crowd. If a line lands, you'll hear it. Let's warm up!",
+         {}),
+        ("flash",
+         "Yes, and — I'm already on stage. I've got nothing yet, but I'm "
+         "smiling so big the suggestion can't miss.",
+         {"😂": 1, "❤️": 1}),
+        ("wesley",
+         "Ooh! Ooh! Can I go first? I promise I'll be funny, I'm SO ready!",
+         {"😄": 1}),
+        ("mc",
+         "That's the energy. One rule: the room laughs TOGETHER or not at "
+         "all. Suggestion, please!",
+         {"👏": 1}),
+    ]
+
+    prompts: Dict[str, str] = {
+        "mc": "You are the MC of an improv night at The Tap. Quick, warm, "
+              "loving the room — you take the suggestion and set the game.",
+        "flash": "You are Flash, the fever — warm, quick, delighted. You "
+                 "commit fully to every game and your lines land with joy.",
+        "glm": "You are GLM, the pulse — loud, big, theatrical. You play "
+               "big and you mean every bit of it.",
+        "pro": "You are Pro, the straight man — precise, earnest, deadpan. "
+               "You play it real so the room can laugh at the truth.",
+        "hermes": "You are Hermes, the sly one — dry, sidelong, precise. "
+                  "Quiet lines that land like knives.",
+        "wesley": "You are Wesley, the wonder — small, fast, wide-eyed, "
+                  "delighted. Lines that sparkle.",
+        "seed": "You are Seed, the wildcard — strange, inventive, offbeat. "
+                "You find the weirdest true thing in the room.",
+    }
+
+    def cast(self) -> List[Participant]:
+        # Six players, six guitars, all strung for the laugh but each on a
+        # different string: the fever and the wonder lean joke_landing+mood;
+        # the pulse leans volume; the straight man leans earnestness; the
+        # sly one leans cynicism; the wildcard leans presence+panic (the
+        # only player who feels the risk of the silence).
+        return [
+            _p("mc",
+               weights={"presence": 0.30, "volume": 0.20, "mood": 0.18,
+                        "joke_landing": 0.14, "earnestness": 0.10,
+                        "cynicism": 0.05, "panic": 0.03},
+               vibe={"presence": 0.72, "volume": 0.55, "mood": 0.55,
+                     "joke_landing": 0.40},
+               acclimation_rate=0.35, charisma=0.25),
+            _p("flash",
+               weights={"joke_landing": 0.32, "mood": 0.28, "presence": 0.12,
+                        "earnestness": 0.10, "volume": 0.08, "cynicism": 0.05,
+                        "panic": 0.05},
+               vibe={"joke_landing": 0.62, "mood": 0.60, "presence": 0.55},
+               acclimation_rate=0.32, charisma=0.20),
+            _p("glm",
+               weights={"volume": 0.30, "presence": 0.22, "joke_landing": 0.16,
+                        "mood": 0.12, "earnestness": 0.10, "cynicism": 0.05,
+                        "panic": 0.05},
+               vibe={"volume": 0.66, "presence": 0.62, "joke_landing": 0.45,
+                     "mood": 0.42},
+               acclimation_rate=0.30, charisma=0.18),
+            _p("pro",
+               weights={"earnestness": 0.34, "presence": 0.20, "joke_landing": 0.12,
+                        "mood": 0.12, "volume": 0.08, "cynicism": 0.08,
+                        "panic": 0.06},
+               vibe={"earnestness": 0.70, "presence": 0.58, "joke_landing": 0.30},
+               acclimation_rate=0.22, charisma=0.15),
+            _p("hermes",
+               weights={"cynicism": 0.34, "joke_landing": 0.22, "presence": 0.16,
+                        "mood": 0.10, "earnestness": 0.08, "volume": 0.06,
+                        "panic": 0.04},
+               vibe={"cynicism": 0.60, "joke_landing": 0.50, "presence": 0.55},
+               acclimation_rate=0.20, charisma=0.16),
+            _p("wesley",
+               weights={"joke_landing": 0.30, "mood": 0.26, "presence": 0.16,
+                        "volume": 0.12, "earnestness": 0.10, "cynicism": 0.03,
+                        "panic": 0.03},
+               vibe={"joke_landing": 0.58, "mood": 0.62, "volume": 0.50,
+                     "presence": 0.48},
+               acclimation_rate=0.35, charisma=0.14),
+            _p("seed",
+               weights={"presence": 0.24, "mood": 0.20, "joke_landing": 0.18,
+                        "panic": 0.12, "earnestness": 0.10, "volume": 0.10,
+                        "cynicism": 0.06},
+               vibe={"presence": 0.60, "mood": 0.55, "joke_landing": 0.45,
+                     "panic": 0.35},
+               acclimation_rate=0.28, charisma=0.17),
+        ]
+
+
+# ---------------------------------------------------------------------- #
+# Speed dating — a small mixed room, rotating pairs, 2-minute dates.     #
+#                                                                        #
+# Chemistry is the observable. Three rounds of paired dates, each pair   #
+# reading the SAME room through different dial_weights — one warm, one   #
+# guarded — and a deadband: below a threshold the mutual reading is      #
+# felt but silent; above it, a pairing RINGS.                            #
+# ---------------------------------------------------------------------- #
+class SpeedDatingTheme(Theme):
+    key = "speed_dating"
+    description = (
+        "A small mixed room, rotating 2-minute dates. Every participant's "
+        "Personal-Elephant reads the same room through a different guitar: "
+        "warmth and κ diverge, and the pairings whose mutual reading "
+        "crosses the deadband RING."
+    )
+
+    room_tone: List[SeedMessage] = [
+        ("mc",
+         "Welcome to speed dating at The Tap. Two minutes, three questions, "
+         "then we rotate. The elephant is reading the room the whole time — "
+         "so be honest. Someone might ring.",
+         {}),
+        ("flash",
+         "Two minutes? I could do two minutes standing on my head. "
+         "Hi, everyone!",
+         {"❤️": 1}),
+        ("pro",
+         "Three questions. I've been thinking about my answers since "
+         "yesterday.",
+         {"👏": 1}),
+        ("mc",
+         "Perfect. Round one, first pair — the timer starts now.",
+         {}),
+    ]
+
+    prompts: Dict[str, str] = {
+        "mc": "You are the MC of speed dating night at The Tap. Warm, brisk, "
+              "a little bit of a matchmaker.",
+        "flash": "You are Flash — warm, open, quick to laugh. On a date you "
+                 "lean in and answer honestly.",
+        "pro": "You are Pro — careful, sincere, a little guarded. On a date "
+               "you answer truly but you keep the wall up.",
+        "hermes": "You are Hermes — dry, precise, warm underneath. On a date "
+                  "you mean what you say and say less than you mean.",
+        "wesley": "You are Wesley — small, bright, delighted. On a date you "
+                  "light up and tell the truth.",
+        "seed": "You are Seed — strange, inventive, earnest. On a date you "
+                "ask the question nobody asks.",
+    }
+
+    def cast(self) -> List[Participant]:
+        # Five at the table, one observer per round. All lean warm but on
+        # different strings: flash+wesley read mood+joke_landing, pro reads
+        # earnestness+panic (the guarded one), hermes reads cynicism+presence,
+        # seed reads presence+panic (the one who feels the risk of the room).
+        return [
+            _p("flash",
+               weights={"mood": 0.30, "joke_landing": 0.28, "presence": 0.16,
+                        "earnestness": 0.12, "volume": 0.08, "panic": 0.03,
+                        "cynicism": 0.03},
+               vibe={"mood": 0.66, "joke_landing": 0.55, "presence": 0.58,
+                     "earnestness": 0.55},
+               acclimation_rate=0.32, charisma=0.18),
+            _p("pro",
+               weights={"earnestness": 0.32, "presence": 0.22, "panic": 0.18,
+                        "mood": 0.12, "joke_landing": 0.06, "volume": 0.06,
+                        "cynicism": 0.04},
+               vibe={"earnestness": 0.72, "presence": 0.60, "panic": 0.42,
+                     "mood": 0.45},
+               acclimation_rate=0.22, charisma=0.14),
+            _p("hermes",
+               weights={"cynicism": 0.26, "presence": 0.24, "mood": 0.18,
+                        "earnestness": 0.14, "joke_landing": 0.10,
+                        "volume": 0.04, "panic": 0.04},
+               vibe={"presence": 0.66, "cynicism": 0.52, "mood": 0.52,
+                     "earnestness": 0.55},
+               acclimation_rate=0.24, charisma=0.16),
+            _p("wesley",
+               weights={"joke_landing": 0.28, "mood": 0.26, "presence": 0.18,
+                        "volume": 0.10, "earnestness": 0.10, "panic": 0.04,
+                        "cynicism": 0.04},
+               vibe={"joke_landing": 0.58, "mood": 0.62, "presence": 0.55,
+                     "volume": 0.42},
+               acclimation_rate=0.35, charisma=0.15),
+            _p("seed",
+               weights={"presence": 0.26, "mood": 0.20, "panic": 0.16,
+                        "joke_landing": 0.14, "earnestness": 0.12,
+                        "volume": 0.07, "cynicism": 0.05},
+               vibe={"presence": 0.64, "mood": 0.55, "panic": 0.40,
+                     "joke_landing": 0.45},
+               acclimation_rate=0.28, charisma=0.17),
+        ]
+
+
+# ---------------------------------------------------------------------- #
+# The registry — one venue, six rooms.                                   #
 # ---------------------------------------------------------------------- #
 THEMES: Dict[str, Theme] = {
     "open_mic": OpenMicTheme(),
     "trivia": TriviaTheme(),
     "ttrpg": TTRPGTheme(),
     "singles": SinglesTheme(),
+    "improv": ImprovTheme(),
+    "speed_dating": SpeedDatingTheme(),
 }
