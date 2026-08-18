@@ -36,7 +36,7 @@ def _raw_profile(theme: Theme) -> dict:
 # Registry + cast                                                        #
 # ---------------------------------------------------------------------- #
 def test_theme_registry_has_four_rooms():
-    assert set(THEMES) == {"open_mic", "trivia", "ttrpg", "singles"}
+    assert set(THEMES) == {"improv", "trivia", "ttrpg", "singles"}
     for key, theme in THEMES.items():
         assert isinstance(theme, Theme)
         assert theme.key == key
@@ -110,8 +110,8 @@ def test_starter_tones_produce_distinct_field_profiles():
 
     # Trivia is the earnest room; open mic is the laughter room. Trivia's
     # earnestness exceeds open mic's joke_landing — the intended direction.
-    assert prof["trivia"]["earnestness"] > prof["open_mic"]["joke_landing"], (
-        prof["trivia"]["earnestness"], prof["open_mic"]["joke_landing"])
+    assert prof["trivia"]["earnestness"] > prof["improv"]["joke_landing"], (
+        prof["trivia"]["earnestness"], prof["improv"]["joke_landing"])
 
     # Singles is the thrumming room (everyone present, watching); TTRPG is
     # the panicked room. Singles' presence exceeds TTRPG's panic.
@@ -124,23 +124,23 @@ def test_each_theme_reads_as_its_intended_room():
 
     # TTRPG is the panic room — a tense roll spikes panic above every other night.
     assert prof["ttrpg"]["panic"] > prof["trivia"]["panic"]
-    assert prof["ttrpg"]["panic"] > prof["open_mic"]["panic"]
+    assert prof["ttrpg"]["panic"] > prof["improv"]["panic"]
     assert prof["ttrpg"]["panic"] > prof["singles"]["panic"]
 
     # Open mic is the laughter room — jokes land (positive) and beat every other night.
-    assert prof["open_mic"]["joke_landing"] > 0.0
-    assert prof["open_mic"]["joke_landing"] > prof["trivia"]["joke_landing"]
-    assert prof["open_mic"]["joke_landing"] > prof["ttrpg"]["joke_landing"]
-    assert prof["open_mic"]["joke_landing"] > prof["singles"]["joke_landing"]
+    assert prof["improv"]["joke_landing"] > 0.0
+    assert prof["improv"]["joke_landing"] > prof["trivia"]["joke_landing"]
+    assert prof["improv"]["joke_landing"] > prof["ttrpg"]["joke_landing"]
+    assert prof["improv"]["joke_landing"] > prof["singles"]["joke_landing"]
 
     # Trivia is suspicious of wrong answers — cynicism leads the field there.
-    assert prof["trivia"]["cynicism"] > prof["open_mic"]["cynicism"]
+    assert prof["trivia"]["cynicism"] > prof["improv"]["cynicism"]
     assert prof["trivia"]["cynicism"] > prof["ttrpg"]["cynicism"]
 
     # Singles is warm-but-nervous: warmer than the suspicious trivia room,
     # with tentative (not roaring) laughter.
     assert prof["singles"]["mood"] > prof["trivia"]["mood"]
-    assert prof["singles"]["joke_landing"] < prof["open_mic"]["joke_landing"]
+    assert prof["singles"]["joke_landing"] < prof["improv"]["joke_landing"]
 
 
 def test_singles_chemistry_is_observable():
