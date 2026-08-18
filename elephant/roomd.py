@@ -79,7 +79,8 @@ def write_atomic(path: Path, packet: Dict) -> None:
 class RoomDaemon:
     """Holds rooms, ingests events, serves the field, rings the deadband."""
 
-    def __init__(self, map_path: Optional[str] = None, inbox: Optional[str] = None):
+    def __init__(self, map_path: Optional[str] = None, inbox: Optional[str] = None,
+                 field_log: Optional[str] = None):
         self.bank = DialBank(DEFAULT_DIALS)
         self.rooms: Dict[str, Room] = {}
         self.terrains: Dict[str, Terrain] = {}
@@ -88,6 +89,8 @@ class RoomDaemon:
         self.ring_log: List[Dict] = []           # observability: every ring, bounded
         self.inbox = Path(inbox) if inbox else None
         self.descriptions: Dict[str, str] = {}   # base text per room (zeitgeist)
+        self.field_log_path = Path(field_log) if field_log else None
+        self.field_log_lines = 0                    # bounded rotation counter
         self.map_temperature: Optional[float] = None
         if map_path:
             self.load_map(map_path)
@@ -169,8 +172,43 @@ class RoomDaemon:
             "map_temperature": self.map_temperature,
             "ts": time.time(),
         }
+        self._log_field(payload)
         self.check_rings(fields)
         return payload
+
+    # -- field log (the training corpus, plan §3.1) ---------------------#
+    MAX_FIELD_LOG_LINES = 10000
+
+    def _log_field(self, payload: Dict) -> None:
+        """Append one snapshot per recompute — the v3 contrast corpus.
+
+        Bounded: at MAX lines, rotate (keep newest half). O(1) amortized,
+        one jsonl line per recompute.
+        """
+        if not self.field_log_path:
+            return
+        try:
+            self.field_log_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.field_log_path, "a") as fh:
+                fh.write(json.dumps({"ts": payload["ts"],
+                                     "map_temperature": payload["map_temperature"],
+                                     "rooms": payload["rooms"]}) + "\n")
+            self.field_log_lines += 1
+            if self.field_log_lines >= self.MAX_FIELD_LOG_LINES:
+                self._rotate_field_log()
+        except OSError:
+            pass  # a full disk must never kill the truth-holder
+
+    def _rotate_field_log(self) -> None:
+        try:
+            lines = self.field_log_path.read_text().splitlines()
+            keep = lines[len(lines) // 2:]
+            tmp = self.field_log_path.with_suffix(".tmp")
+            tmp.write_text("\n".join(keep) + "\n")
+            tmp.replace(self.field_log_path)
+            self.field_log_lines = len(keep)
+        except OSError:
+            pass
 
     # -- zeitgeist -------------------------------------------------------#
     def tinted_description(self, name: str) -> Optional[str]:
@@ -277,10 +315,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--port", type=int, default=DEFAULT_PORT)
     ap.add_argument("--inbox", default=os.path.expanduser("~/.hermes/cns_inbox"),
                     help="USCP inbox for deadband rings (empty string disables)")
+    ap.add_argument("--field-log", default=None,
+                    help="append field snapshots to this jsonl (the v3 training corpus)")
     args = ap.parse_args(argv)
 
     daemon = RoomDaemon(map_path=args.map,
-                        inbox=args.inbox or None)
+                        inbox=args.inbox or None,
+                        field_log=args.field_log or None)
     if args.events:
         n = daemon.ingest_file(args.events)
         print(f"roomd: ingested {n} events", flush=True)

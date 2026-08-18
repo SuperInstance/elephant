@@ -119,3 +119,21 @@ def test_zeitgeist_description():
     assert warm_desc and panic_desc
     assert warm_desc != panic_desc  # the field authors the words
     assert "drenched" in panic_desc or "rain" in panic_desc.lower() or panic_desc != warm_desc
+
+
+def test_field_log_writes_and_bounded(tmp_path):
+    """The v3 contrast corpus: snapshots append, rotation keeps newest half."""
+    import json as _json
+    d = RoomDaemon(field_log=str(tmp_path / "field.jsonl"))
+    _ingest(d, WARM)
+    for _ in range(8):
+        d.recompute()
+    lines = (tmp_path / "field.jsonl").read_text().splitlines()
+    assert len(lines) == 8
+    first = _json.loads(lines[0])
+    assert "map_temperature" in first and "rooms" in first
+    # force rotation
+    d.field_log_lines = d.MAX_FIELD_LOG_LINES
+    d._log_field({"ts": 1, "map_temperature": 0.0, "rooms": {}})
+    lines = (tmp_path / "field.jsonl").read_text().splitlines()
+    assert len(lines) <= 5  # newest half kept
