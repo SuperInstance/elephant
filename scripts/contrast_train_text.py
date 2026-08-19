@@ -25,6 +25,11 @@ import os
 import random
 import sys
 
+# CPU-only hardening (2026-08-19): the box has a GPU-pinning bug that crashed
+# three prior dispatches; this run is registered CPU-only. Must be set before
+# the first torch import (elephant.contrast imports torch at module level).
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
@@ -153,8 +158,18 @@ def main() -> int:
           f"disc={base_report['room_discrimination']:.3f} "
           f"heldout={base_report['room_discrimination_speaker_heldout']:.3f} "
           f"mean_spread={base_report['mean_spread']:.3f}")
-    with open(os.path.join(OUT, "text_frozen_baseline.json"), "w") as f:
-        json.dump(base_report, f, indent=2, default=float)
+    # frozen baseline: committed at 77b8aa4 — NEVER regenerated/overwritten
+    fb = os.path.join(OUT, "text_frozen_baseline.json")
+    if os.path.exists(fb):
+        committed = json.load(open(fb))
+        gap_c = committed["separability"]["gap"]
+        gap_n = base_report["separability"]["gap"]
+        print(f"[text] frozen baseline COMMITTED (kept): gap={gap_c:.4f}; "
+              f"recomputed check gap={gap_n:.4f} "
+              f"(delta {abs(gap_n - gap_c):.2e})")
+    else:
+        with open(fb, "w") as f:
+            json.dump(base_report, f, indent=2, default=float)
 
     # ---- ids tensor once ------------------------------------------------ #
     ids_list = [vocab.encode(t, max_len=MAX_LEN) for t in tokens_all]
@@ -197,6 +212,9 @@ def main() -> int:
         }
         torch.save(model.state_dict(),
                    os.path.join(OUT, f"text_contrast_seed{seed}.pt"))
+        # crash-safe: flush per-seed results as each seed lands
+        with open(os.path.join(OUT, "text_contrast_results.json"), "w") as f:
+            json.dump(results, f, indent=2, default=float)
         print(f"[text] seed={seed}: fine gap={rep['separability']['gap']:.4f} "
               f"disc={rep['room_discrimination']:.3f} "
               f"heldout={rep['room_discrimination_speaker_heldout']:.3f} "

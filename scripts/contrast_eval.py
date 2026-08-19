@@ -21,6 +21,9 @@ import json
 import os
 import sys
 
+# CPU-only hardening (2026-08-19): registered CPU-only run.
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 ELEPHANT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ELEPHANT)
 sys.path.insert(0, "/home/eileen/projects/fleet-jepa-midi")
@@ -51,7 +54,7 @@ def eval_audio() -> dict:
     import librosa
     import elephant_sense_probe as probe
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
     rooms = ca.build_rooms()
     encoder0, cfg = probe.load_encoder(
         "/home/eileen/projects/fleet-jepa-midi/checkpoints/audio_jepa_v2.pt",

@@ -24,6 +24,10 @@ import os
 import random
 import sys
 
+# CPU-only hardening (2026-08-19): the box has a GPU-pinning bug that crashed
+# three prior dispatches; this run is registered CPU-only.
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 ELEPHANT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ELEPHANT)
 sys.path.insert(0, "/home/eileen/projects/fleet-jepa-midi")
@@ -118,7 +122,7 @@ def main() -> int:
     import librosa
 
     os.makedirs(OUT, exist_ok=True)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
     print(f"[audio] device={device}")
 
     rooms = build_rooms()
@@ -163,8 +167,16 @@ def main() -> int:
     music_rooms = [r for r in set(room_names) if r.startswith("music-")]
     rep0_full = probe_report(z0, clips, coarse_b_rooms=music_rooms)
     base_spread = contrast.room_spread(z0, room_names)
-    with open(os.path.join(OUT, "audio_frozen_baseline.json"), "w") as f:
-        json.dump(rep0_full, f, indent=2, default=float)
+    # frozen baseline: committed at 77b8aa4 — NEVER regenerated/overwritten
+    fb = os.path.join(OUT, "audio_frozen_baseline.json")
+    if os.path.exists(fb):
+        committed = json.load(open(fb))
+        print(f"[audio] frozen baseline COMMITTED (kept): coarse "
+              f"gap={committed['coarse']['gap']:.4f}; recomputed check "
+              f"coarse={rep0_full['coarse']['gap']:.4f}")
+    else:
+        with open(fb, "w") as f:
+            json.dump(rep0_full, f, indent=2, default=float)
     print(f"[audio] FROZEN coarse gap (speech vs music): "
           f"{rep0_full['coarse']['gap']:.4f} (probe-era scale: 0.271)")
 
@@ -180,8 +192,12 @@ def main() -> int:
             wins = [mel[:, s:s + WINDOW] for s in starts]
         win_cache.append(torch.stack(wins))   # [n_win, 64, WINDOW]
 
+    seeds = SEEDS
+    if len(sys.argv) > 1:   # e.g. --seeds 0  (per-seed process, identical math)
+        assert sys.argv[1] == "--seeds", "usage: contrast_audio.py [--seeds 0,1,2]"
+        seeds = tuple(int(s) for s in sys.argv[2].split(","))
     results = {}
-    for seed in SEEDS:
+    for seed in seeds:
         torch.manual_seed(seed)
         np.random.seed(seed)
         rng = random.Random(seed)
@@ -237,6 +253,9 @@ def main() -> int:
                           "lr": LR, "window": WINDOW, "hop": HOP,
                           "max_train_windows": MAX_TRAIN_WINDOWS},
         }, os.path.join(OUT, f"audio_contrast_seed{seed}.pt"))
+        # crash-safe: flush per-seed results as each seed lands
+        with open(os.path.join(OUT, f"audio_contrast_results_seed{seed}.json"), "w") as f:
+            json.dump(results, f, indent=2, default=float)
         print(f"[audio] seed={seed}: fine gap={rep1_tap['separability']['gap']:.4f} "
               f"disc={rep1_tap['room_discrimination']:.3f} "
               f"heldout={rep1_tap['room_discrimination_speaker_heldout']:.3f} "
