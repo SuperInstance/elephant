@@ -1,0 +1,268 @@
+{
+  "summary": {
+    "text": {
+      "tier": "text",
+      "fine_gap_mean": 0.4783903956413269,
+      "fine_gap_min": 0.4359298050403595,
+      "fine_gap_all_seeds": [
+        0.4359,
+        0.5187,
+        0.4806
+      ],
+      "fine_ge_0.10_all_seeds": true,
+      "heldout_mean": 0.9880952380952381,
+      "heldout_ge_0.50": true,
+      "n_seeds": 3
+    },
+    "text_frozen": {
+      "fine": 0.014792263507843018,
+      "disc": 0.7533632286995515,
+      "heldout": 0.6206278026905829,
+      "mean_spread": 0.03985267024683325
+    },
+    "text_frozen_tap": {
+      "fine": 0.01911109685897827,
+      "disc": 0.5714285714285714,
+      "heldout": 0.5357142857142857
+    }
+  },
+  "text": {
+    "frozen": {
+      "n_clips": 1115,
+      "n_rooms": 19,
+      "room_discrimination": 0.7533632286995515,
+      "room_discrimination_speaker_heldout": 0.6206278026905829,
+      "separability": {
+        "same_room_mean": 0.9766743779182434,
+        "cross_room_mean": 0.9618821144104004,
+        "gap": 0.014792263507843018,
+        "cross_sigma": 0.027554256841540337,
+        "n_same": 350244,
+        "n_cross": 270811
+      },
+      "spread": {
+        "channel-42-dawn": 0.03092418983578682,
+        "compass-01": 0.02098708413541317,
+        "compass-02": 0.030591731891036034,
+        "compass-03": 0.040384046733379364,
+        "compass-04": 0.017602209001779556,
+        "compass-05": 0.04828644543886185,
+        "compass-06": 0.05941149592399597,
+        "compass-07": 0.029942240566015244,
+        "dogs-fell-in-love": 0.02236243523657322,
+        "fleet-radio-004": 0.015204133465886116,
+        "fleet-radio-005": 0.04343729466199875,
+        "speeches": 0.0507369190454483,
+        "tap-night-1": 0.1442234367132187,
+        "tap-night-2": 0.0574774295091629,
+        "tap-night-3": 0.01600116305053234,
+        "tap-night-4": 0.020675087347626686,
+        "tap-open-mic": 0.029041290283203125,
+        "tavern-night": 0.05728833004832268,
+        "wesley-stream": 0.02262377180159092
+      },
+      "mean_spread": 0.03985267024683325
+    },
+    "frozen_tap": {
+      "n_clips": 28,
+      "n_rooms": 4,
+      "room_discrimination": 0.5714285714285714,
+      "room_discrimination_speaker_heldout": 0.5357142857142857,
+      "separability": {
+        "same_room_mean": 0.9723701477050781,
+        "cross_room_mean": 0.9532590508460999,
+        "gap": 0.01911109685897827,
+        "cross_sigma": 0.042850103229284286,
+        "n_same": 112,
+        "n_cross": 266
+      },
+      "spread": {
+        "tap-night-1": 0.1442234367132187,
+        "tap-night-2": 0.0574774295091629,
+        "tap-night-3": 0.01600116305053234,
+        "tap-night-4": 0.020675087347626686
+      },
+      "mean_spread": 0.059594279155135155
+    },
+    "seeds": {
+      "0": {
+        "full": {
+          "n_clips": 1115,
+          "n_rooms": 19,
+          "room_discrimination": 0.9623318385650225,
+          "room_discrimination_speaker_heldout": 0.8681614349775785,
+          "separability": {
+            "same_room_mean": 0.8914290070533752,
+            "cross_room_mean": 0.3564194142818451,
+            "gap": 0.5350096225738525,
+            "cross_sigma": 0.44379696249961853,
+            "n_same": 350244,
+            "n_cross": 270811
+          },
+          "spread": {
+            "channel-42-dawn": 0.07583890110254288,
+            "compass-01": 0.033687349408864975,
+            "compass-02": 0.03243030235171318,
+            "compass-03": 0.05970991402864456,
+            "compass-04": 0.06428306549787521,
+            "compass-05": 0.05660810321569443,
+            "compass-06": 0.061000630259513855,
+            "compass-07": 0.07810989767313004,
+            "dogs-fell-in-love": 0.1254296451807022,
+            "fleet-radio-004": 0.11099199950695038,
+            "fleet-radio-005": 0.06531058251857758,
+            "speeches": 0.1626158207654953,
+            "tap-night-1": 0.12552756071090698,
+            "tap-night-2": 0.05023997277021408,
+            "tap-night-3": 0.0710182934999466,
+            "tap-night-4": 0.06167624145746231,
+            "tap-open-mic": 0.12387264519929886,
+            "tavern-night": 0.07431071251630783,
+            "wesley-stream": 0.10725551098585129
+          },
+          "mean_spread": 0.08104827098156277
+        },
+        "tap": {
+          "n_clips": 28,
+          "n_rooms": 4,
+          "room_discrimination": 0.9642857142857143,
+          "room_discrimination_speaker_heldout": 0.9642857142857143,
+          "separability": {
+            "same_room_mean": 0.9322516322135925,
+            "cross_room_mean": 0.49632182717323303,
+            "gap": 0.4359298050403595,
+            "cross_sigma": 0.25745734572410583,
+            "n_same": 112,
+            "n_cross": 266
+          },
+          "spread": {
+            "tap-night-1": 0.12552756071090698,
+            "tap-night-2": 0.05023997277021408,
+            "tap-night-3": 0.0710182934999466,
+            "tap-night-4": 0.06167624145746231
+          },
+          "mean_spread": 0.07711551710963249
+        }
+      },
+      "1": {
+        "full": {
+          "n_clips": 1115,
+          "n_rooms": 19,
+          "room_discrimination": 0.957847533632287,
+          "room_discrimination_speaker_heldout": 0.8600896860986547,
+          "separability": {
+            "same_room_mean": 0.8889800906181335,
+            "cross_room_mean": 0.39063867926597595,
+            "gap": 0.4983414113521576,
+            "cross_sigma": 0.4251544177532196,
+            "n_same": 350244,
+            "n_cross": 270811
+          },
+          "spread": {
+            "channel-42-dawn": 0.09859216958284378,
+            "compass-01": 0.0415671169757843,
+            "compass-02": 0.05780593678355217,
+            "compass-03": 0.055996935814619064,
+            "compass-04": 0.08828815072774887,
+            "compass-05": 0.06107692793011665,
+            "compass-06": 0.08710351586341858,
+            "compass-07": 0.09316390007734299,
+            "dogs-fell-in-love": 0.10565557330846786,
+            "fleet-radio-004": 0.08185610920190811,
+            "fleet-radio-005": 0.07641096413135529,
+            "speeches": 0.1389947235584259,
+            "tap-night-1": 0.12407815456390381,
+            "tap-night-2": 0.05604414641857147,
+            "tap-night-3": 0.07116993516683578,
+            "tap-night-4": 0.05596166104078293,
+            "tap-open-mic": 0.12180481851100922,
+            "tavern-night": 0.06512317061424255,
+            "wesley-stream": 0.11037618666887283
+          },
+          "mean_spread": 0.08374053141788433
+        },
+        "tap": {
+          "n_clips": 28,
+          "n_rooms": 4,
+          "room_discrimination": 1.0,
+          "room_discrimination_speaker_heldout": 1.0,
+          "separability": {
+            "same_room_mean": 0.9316068291664124,
+            "cross_room_mean": 0.4129178524017334,
+            "gap": 0.518688976764679,
+            "cross_sigma": 0.29396772384643555,
+            "n_same": 112,
+            "n_cross": 266
+          },
+          "spread": {
+            "tap-night-1": 0.12407815456390381,
+            "tap-night-2": 0.05604414641857147,
+            "tap-night-3": 0.07116993516683578,
+            "tap-night-4": 0.05596166104078293
+          },
+          "mean_spread": 0.0768134742975235
+        }
+      },
+      "2": {
+        "full": {
+          "n_clips": 1115,
+          "n_rooms": 19,
+          "room_discrimination": 0.9390134529147982,
+          "room_discrimination_speaker_heldout": 0.8600896860986547,
+          "separability": {
+            "same_room_mean": 0.8943923711776733,
+            "cross_room_mean": 0.4357073903083801,
+            "gap": 0.4586849808692932,
+            "cross_sigma": 0.4514874219894409,
+            "n_same": 350244,
+            "n_cross": 270811
+          },
+          "spread": {
+            "channel-42-dawn": 0.08829854428768158,
+            "compass-01": 0.028934111818671227,
+            "compass-02": 0.05201379209756851,
+            "compass-03": 0.06413159519433975,
+            "compass-04": 0.08892286568880081,
+            "compass-05": 0.061199020594358444,
+            "compass-06": 0.08765896409749985,
+            "compass-07": 0.08277374505996704,
+            "dogs-fell-in-love": 0.10330556333065033,
+            "fleet-radio-004": 0.11550737917423248,
+            "fleet-radio-005": 0.05228106305003166,
+            "speeches": 0.14791254699230194,
+            "tap-night-1": 0.12486261129379272,
+            "tap-night-2": 0.056483156979084015,
+            "tap-night-3": 0.08300790935754776,
+            "tap-night-4": 0.07856302708387375,
+            "tap-open-mic": 0.11943501234054565,
+            "tavern-night": 0.07424388825893402,
+            "wesley-stream": 0.10459186136722565
+          },
+          "mean_spread": 0.0849540346351109
+        },
+        "tap": {
+          "n_clips": 28,
+          "n_rooms": 4,
+          "room_discrimination": 1.0,
+          "room_discrimination_speaker_heldout": 1.0,
+          "separability": {
+            "same_room_mean": 0.9212412238121033,
+            "cross_room_mean": 0.440688818693161,
+            "gap": 0.48055240511894226,
+            "cross_sigma": 0.17123562097549438,
+            "n_same": 112,
+            "n_cross": 266
+          },
+          "spread": {
+            "tap-night-1": 0.12486261129379272,
+            "tap-night-2": 0.056483156979084015,
+            "tap-night-3": 0.08300790935754776,
+            "tap-night-4": 0.07856302708387375
+          },
+          "mean_spread": 0.08572917617857456
+        }
+      }
+    },
+    "n_clips": 1115
+  }
+}

@@ -177,8 +177,12 @@ def main() -> int:
     for i, x in enumerate(ids_list):
         Xt[i, : len(x)] = torch.tensor(x)
 
+    seeds = SEEDS
+    if len(sys.argv) > 1:   # per-seed process, identical math (see 4ea7892)
+        assert sys.argv[1] == "--seeds", "usage: contrast_train_text.py [--seeds 0,1,2]"
+        seeds = tuple(int(s) for s in sys.argv[2].split(","))
     results = {}
-    for seed in SEEDS:
+    for seed in seeds:
         torch.manual_seed(seed)
         np.random.seed(seed)
         rng = random.Random(seed)
