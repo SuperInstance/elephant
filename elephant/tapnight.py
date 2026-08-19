@@ -35,7 +35,11 @@ field), but for people reading each other's work.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 import math
+import os
+import uuid
 from dataclasses import dataclass, field as dc_field
 from typing import Dict, Iterable, List, Optional, Sequence, Union
 
@@ -45,6 +49,7 @@ from elephant.dial import DialBank
 from elephant.dials import DEFAULT_DIALS
 from elephant.field import DIAL_NAMES, RoomField, read_field
 from elephant.room import Message, Room
+from elephant.vmf import edge as vmf_edge, vmf_fit, windowed as vmf_windowed
 
 # Dial value ranges: the room field is clamped to these (charisma saturates,
 # never overshoots). mood & joke_landing are signed [-1,+1]; the rest run [0,1].
@@ -157,7 +162,10 @@ class TapNightSession:
 
     def __init__(self, name: str = "The Tap",
                  participants: Optional[Iterable[Participant]] = None,
-                 bank: Optional[DialBank] = None):
+                 bank: Optional[DialBank] = None,
+                 log_path: Optional[str] = None,
+                 identity: str = "elephant-v0",
+                 W: int = 8):
         self.name = name
         self.participants: Dict[str, Participant] = {}
         for p in (participants or []):
@@ -178,6 +186,14 @@ class TapNightSession:
         self.cycle = 0
         self._log: List[str] = []
 
+        # --- vMF edge log (spec §3, additive) ---
+        self.W = int(W)
+        self._log_path = log_path
+        self._log_file = None
+        self._identity = identity
+        self._session_id: Optional[str] = None
+        self._last_fit: Optional[dict] = None
+
     # ------------------------------------------------------------------ #
     # Lifecycle                                                          #
     # ------------------------------------------------------------------ #
@@ -190,8 +206,11 @@ class TapNightSession:
         self._reaction_heat = {}
         self._clock = 0.0
         self.field = np.zeros(len(DIAL_NAMES))
+        self._last_fit = None
+        self._session_id = uuid.uuid4().hex
         self._log.append(f"--- {self.name} opens: {len(self.participants)} "
                          f"souls at the table ---")
+        self._emit(self._session_open())
         return self
 
     def speak(self, author: str, text: str, ts: Optional[float] = None,
@@ -208,11 +227,13 @@ class TapNightSession:
 
         if author not in self.participants:
             self._register(author)
+        # Capture the entry marker BEFORE the interaction counter increments.
+        first_by_author = author not in self._interactions
         self._interactions[author] = self._interactions.get(author, 0) + 1
         self._reaction_heat[author] = (self._reaction_heat.get(author, 0)
                                        + msg.reaction_heat)
 
-        # Raw dial field.
+        # Raw dial field (persisted now — previously computed-and-discarded).
         raw = read_field(self.room, self.bank).vector()
 
         # Charisma: the room warms to strong presences. For a single agent this
@@ -234,6 +255,8 @@ class TapNightSession:
         for pname, p in self.participants.items():
             alpha = 1.0 - math.exp(-p.acclimation_rate)
             self._vibe[pname] += (self.field - self._vibe[pname]) * alpha
+
+        self._emit(self._speak_event(msg, raw, first_by_author))
         return self
 
     def end_session(self) -> str:
@@ -244,6 +267,8 @@ class TapNightSession:
         line = (f"Night {self.cycle} closed: warmth={f.warmth():+.2f} "
                 f"κ={f.concentration():.2f} | top: {top}")
         self._log.append(line)
+        self._emit(self._session_close(top))
+        self.close()
         return line
 
     # ------------------------------------------------------------------ #
@@ -349,6 +374,107 @@ class TapNightSession:
                 p.charisma = float(d["charisma"])
                 p.vibe = np.asarray(d["vibe"], dtype=float)
         return self
+
+    # ------------------------------------------------------------------ #
+    # Edge log (spec §3 — append-only facts, JSONL)                      #
+    # ------------------------------------------------------------------ #
+    def _log_stream(self):
+        if self._log_path is None:
+            return None
+        if self._log_file is None:
+            d = os.path.dirname(os.path.abspath(self._log_path))
+            if d:
+                os.makedirs(d, exist_ok=True)
+            self._log_file = open(self._log_path, "a", encoding="utf-8")
+        return self._log_file
+
+    def _emit(self, evt: dict) -> None:
+        """Append one JSONL event. Logging must never break the session."""
+        f = self._log_stream()
+        if f is None:
+            return
+        try:
+            f.write(json.dumps(evt, allow_nan=False) + "\n")
+            f.flush()
+        except (TypeError, ValueError):
+            pass  # a broken log line is better than a broken session
+
+    def close(self) -> None:
+        """Flush and close the edge log (idempotent)."""
+        if self._log_file is not None:
+            try:
+                self._log_file.flush()
+                self._log_file.close()
+            finally:
+                self._log_file = None
+
+    def _session_open(self) -> dict:
+        return {
+            "v": 1, "type": "session_open",
+            "session_id": self._session_id,
+            "space_id": self.name,
+            "t_start": self._clock,
+            "clock_mode": "auto60",
+            "reader": {"kind": "RoomElephant", "identity": self._identity,
+                       "bank": [d.__class__.__name__ for d in self.bank.dials]},
+            "params": {"W": self.W, "standardization": "z=2(v-c)/(hi-lo)",
+                       "estimator": "vmf-mle-newton-v1", "kappa_max": 500},
+            "roster": {n: {**p.to_dict(), "vibe_start": self._vibe_start[n].tolist()}
+                       for n, p in self.participants.items()},
+        }
+
+    def _speak_event(self, msg: Message, raw: np.ndarray,
+                     first_by_author: bool) -> dict:
+        fit = vmf_fit(vmf_windowed(self.room, self.bank, W=self.W))
+        edge = None
+        if self._last_fit is not None and fit is not None:
+            edge = vmf_edge(self._last_fit, fit)
+            edge["real"] = None  # floor uncalibrated until measurement nights
+        if fit is not None:
+            self._last_fit = fit
+        trailing = self.room.messages[-self.W:]
+        presence_mask = sorted({m.author for m in trailing})
+        return {
+            "v": 1, "type": "speak",
+            "session_id": self._session_id,
+            "space_id": self.name,
+            "seq": self.room.messages.index(msg),
+            "ts": msg.ts,
+            "author": msg.author,
+            "text_sha256": hashlib.sha256(msg.text.encode("utf-8")).hexdigest(),
+            "len": len(msg.text),
+            "reactions": dict(msg.reactions),
+            "first_by_author": first_by_author,
+            "presence_mask": presence_mask,
+            "field_raw_after": raw.tolist(),
+            "field_eff_after": self.field.tolist(),
+            "interactions_after": dict(self._interactions),
+            "fit": fit,
+            "edge": edge,
+        }
+
+    def _session_close(self, top_dials: List[str]) -> dict:
+        fit = vmf_fit(vmf_windowed(self.room, self.bank, W=self.W))
+        rf = self.raw_field()
+        final = {
+            "readings": rf.readings,  # all 9 raw bank readings
+            "mu_hat": fit["mu_hat"] if fit else None,
+            "kappa": fit["kappa"] if fit else None,
+            "kappa_ci": fit["kappa_ci"] if fit else None,
+            "warmth_v0": rf.warmth(),
+            "warmth_vmf": fit["warmth_vmf"] if fit else None,
+            "top_dials": top_dials,
+        }
+        return {
+            "v": 1, "type": "session_close",
+            "session_id": self._session_id,
+            "space_id": self.name,
+            "t_end": self._clock,
+            "cycle": self.cycle,
+            "final": final,
+            "n_messages": len(self.room.messages),
+            "notes": "",
+        }
 
     # ------------------------------------------------------------------ #
     # Internals                                                          #
