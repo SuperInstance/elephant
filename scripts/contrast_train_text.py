@@ -16,6 +16,16 @@ Gate-3 build (elephant-sense-v3 §2.3 + devils-advocate §3, text tier):
 
 Outputs checkpoints/contrast/text_contrast_seed{k}.pt (+ trunk metrics json).
 Evaluation of the trained heads lives in scripts/contrast_eval.py.
+
+Room-heldout mode (2026-08-19, the honest test): `--holdout room1,room2`
+EXCLUDES those rooms from the training corpus / clips / room_names / spread
+targets entirely, trains on the rest, then evaluates fine gap +
+room-discrimination + speaker-heldout on the EXCLUDED clips (re-embedded
+with the trained model — data the model never trained on). Heldout
+checkpoints/results go to text_contrast_heldout_seed{k}.pt /
+text_contrast_heldout_results.json so the registered (full-corpus)
+artifacts and the frozen baseline are never touched. Without --holdout the
+behavior is identical to the registered training run.
 """
 from __future__ import annotations
 
@@ -53,6 +63,25 @@ EPOCHS = 200          # batches per epoch-schedule unit (see below)
 N_BATCHES = 60        # contrast batches per epoch
 LR = 1e-4
 MAX_LEN = 256
+
+
+def parse_args(argv):
+    """[--seeds 0,1,2] [--holdout room1,room2]; seeds default SEEDS."""
+    seeds = SEEDS
+    holdout = []
+    i = 1
+    while i < len(argv):
+        if argv[i] == "--seeds":
+            seeds = tuple(int(s) for s in argv[i + 1].split(","))
+        elif argv[i] == "--holdout":
+            if i + 1 >= len(argv):
+                raise SystemExit("--holdout needs a comma-separated room list")
+            holdout = [s.strip() for s in argv[i + 1].split(",") if s.strip()]
+        else:
+            raise SystemExit("usage: contrast_train_text.py "
+                             "[--seeds 0,1,2] [--holdout room1,room2]")
+        i += 2
+    return seeds, holdout
 
 
 def build_text_corpus() -> list:
@@ -122,21 +151,53 @@ def main() -> int:
     torch.manual_seed(0)
     rng = random.Random(0)
 
+    seeds, holdout_rooms = parse_args(sys.argv)
+    tag = "text-heldout" if holdout_rooms else "text"
+
     vocab = Vocab.load(os.path.join(CKPT, "learned_vocab.txt"))
 
     # ---- corpus & clips ------------------------------------------------ #
     rooms = build_text_corpus()
-    clips: list = []
-    tokens_all: list = []
-    for name, msgs, *_ in rooms:
-        for clip, toks in text_clips_from_room(name, msgs, window=WINDOW):
-            clips.append(clip)
-            tokens_all.append(toks)
-    room_names = [c.room for c in clips]
-    print(f"[text] rooms={len(rooms)} clips={len(clips)}")
+    known = {name for name, _msgs, *_ in rooms}
+    missing = [r for r in holdout_rooms if r not in known]
+    if missing:
+        raise SystemExit(f"--holdout unknown rooms {missing}; "
+                         f"known rooms: {sorted(known)}")
 
-    def encode_all(encoder):
-        ids = [vocab.encode(t, max_len=MAX_LEN) for t in tokens_all]
+    def clips_for(room_list):
+        cs, ts = [], []
+        for name, msgs, *_ in room_list:
+            for clip, toks in text_clips_from_room(name, msgs, window=WINDOW):
+                cs.append(clip)
+                ts.append(toks)
+        return cs, ts
+
+    train_rooms = [(n, m) for n, m, *_ in rooms if n not in holdout_rooms]
+    held_rooms = [(n, m) for n, m, *_ in rooms if n in holdout_rooms]
+
+    if holdout_rooms:
+        pre_clips, _ = clips_for(rooms)      # count-only before/after check
+        print(f"[{tag}] pre-holdout corpus: rooms={len(rooms)} "
+              f"clips={len(pre_clips)}")
+
+    clips, tokens_all = clips_for(train_rooms)
+    room_names = [c.room for c in clips]
+    print(f"[{tag}] train rooms={len(train_rooms)} clips={len(clips)}"
+          + (f"  (holdout EXCLUDED: {','.join(holdout_rooms)})" if holdout_rooms else ""))
+
+    ho_clips: list = []
+    ho_tokens: list = []
+    if holdout_rooms:
+        ho_clips, ho_tokens = clips_for(held_rooms)
+        ho_found = sorted({c.room for c in ho_clips})
+        if not ho_clips or set(ho_found) != set(holdout_rooms):
+            raise SystemExit("holdout produced no clips for some rooms: "
+                             f"asked={holdout_rooms} got={ho_found}")
+        print(f"[{tag}] heldout (NEVER trained on): rooms={ho_found} "
+              f"clips={len(ho_clips)}")
+
+    def encode_tokens(encoder, tokens):
+        ids = [vocab.encode(t, max_len=MAX_LEN) for t in tokens]
         L = MAX_LEN
         X = torch.zeros((len(ids), L), dtype=torch.long)
         for i, x in enumerate(ids):
@@ -144,6 +205,9 @@ def main() -> int:
         with torch.no_grad():
             z = torch.nn.functional.normalize(encoder(X), dim=-1)
         return z.numpy()
+
+    def encode_all(encoder):
+        return encode_tokens(encoder, tokens_all)
 
     # ---- frozen baseline (the v2 trunk, untouched) ---------------------- #
     base = TextEncoder(len(vocab), d_model=64, d_trunk=64)
@@ -168,8 +232,23 @@ def main() -> int:
               f"recomputed check gap={gap_n:.4f} "
               f"(delta {abs(gap_n - gap_c):.2e})")
     else:
-        with open(fb, "w") as f:
-            json.dump(base_report, f, indent=2, default=float)
+        if not holdout_rooms:   # NEVER write the frozen baseline in
+            with open(fb, "w") as f:   # room-heldout mode
+                json.dump(base_report, f, indent=2, default=float)
+
+    # trunk (frozen v2) reference numbers on the held-out clips — the
+    # honest anchor: what the UNTRAINED head does on unseen nights
+    if holdout_rooms:
+        ho_rooms = [c.room for c in ho_clips]
+        ho_speakers = [c.speaker for c in ho_clips]
+        z0h = encode_tokens(base, ho_tokens)
+        t_fine = contrast.separability(z0h, ho_rooms)
+        t_disc = contrast.room_discrimination(z0h, ho_rooms, ho_speakers)
+        t_disc_sp = contrast.room_discrimination(
+            z0h, ho_rooms, ho_speakers, holdout_speaker=True)
+        print(f"[{tag}] trunk(frozen v2) on heldout clips: fine gap="
+              f"{t_fine['gap']:.4f} disc={t_disc:.3f} "
+              f"speaker-heldout={t_disc_sp:.3f}")
 
     # ---- ids tensor once ------------------------------------------------ #
     ids_list = [vocab.encode(t, max_len=MAX_LEN) for t in tokens_all]
@@ -177,11 +256,9 @@ def main() -> int:
     for i, x in enumerate(ids_list):
         Xt[i, : len(x)] = torch.tensor(x)
 
-    seeds = SEEDS
-    if len(sys.argv) > 1:   # per-seed process, identical math (see 4ea7892)
-        assert sys.argv[1] == "--seeds", "usage: contrast_train_text.py [--seeds 0,1,2]"
-        seeds = tuple(int(s) for s in sys.argv[2].split(","))
     results = {}
+    results_file = ("text_contrast_heldout_results.json" if holdout_rooms
+                    else "text_contrast_results.json")
     for seed in seeds:
         torch.manual_seed(seed)
         np.random.seed(seed)
@@ -215,16 +292,55 @@ def main() -> int:
             "final_batch_loss": float(loss.item()),
         }
         torch.save(model.state_dict(),
-                   os.path.join(OUT, f"text_contrast_seed{seed}.pt"))
+                   os.path.join(OUT,
+                                f"text_contrast_heldout_seed{seed}.pt"
+                                if holdout_rooms
+                                else f"text_contrast_seed{seed}.pt"))
         # crash-safe: flush per-seed results as each seed lands
-        with open(os.path.join(OUT, "text_contrast_results.json"), "w") as f:
+        with open(os.path.join(OUT, results_file), "w") as f:
             json.dump(results, f, indent=2, default=float)
-        print(f"[text] seed={seed}: fine gap={rep['separability']['gap']:.4f} "
+        print(f"[{tag}] seed={seed} TRAIN-corpus: fine gap={rep['separability']['gap']:.4f} "
               f"disc={rep['room_discrimination']:.3f} "
               f"heldout={rep['room_discrimination_speaker_heldout']:.3f} "
               f"mean_spread={rep['mean_spread']:.3f}")
-    with open(os.path.join(OUT, "text_contrast_results.json"), "w") as f:
+        if holdout_rooms:
+            zh = encode_tokens(model, ho_tokens)
+            hf = contrast.separability(zh, ho_rooms)
+            hd = contrast.room_discrimination(zh, ho_rooms, ho_speakers)
+            hsp = contrast.room_discrimination(
+                zh, ho_rooms, ho_speakers, holdout_speaker=True)
+            results[seed]["heldout_eval"] = {
+                "holdout_rooms": sorted(set(ho_rooms)),
+                "n_clips": len(ho_clips),
+                "fine_gap": hf["gap"],
+                "same_room_mean": hf["same_room_mean"],
+                "cross_room_mean": hf["cross_room_mean"],
+                "n_same": hf["n_same"], "n_cross": hf["n_cross"],
+                "room_discrimination": hd,
+                "room_discrimination_speaker_heldout": hsp,
+                "noise_floor": 0.05,
+                "fine_gap_beats_noise_floor": bool(hf["gap"] > 0.05),
+            }
+            with open(os.path.join(OUT, results_file), "w") as f:
+                json.dump(results, f, indent=2, default=float)
+            verdict = "PASS" if hf["gap"] > 0.05 else "FAIL"
+            print(f"[{tag}] seed={seed} HELD-OUT (unseen, n={len(ho_clips)}): "
+                  f"fine gap={hf['gap']:.4f} vs noise floor 0.05 → {verdict}; "
+                  f"disc={hd:.3f} speaker-heldout={hsp:.3f}")
+    with open(os.path.join(OUT, results_file), "w") as f:
         json.dump(results, f, indent=2, default=float)
+    if holdout_rooms:
+        gaps = {s: results[s]["heldout_eval"]["fine_gap"] for s in seeds}
+        all_pass = all(g > 0.05 for g in gaps.values())
+        gap_str = ", ".join(f"seed{s}={gaps[s]:.4f}" for s in seeds)
+        if all_pass:
+            print(f"[{tag}] HELD-OUT VERDICT: fine gaps [{gap_str}] — "
+                  "ALL > 0.05 noise floor: room identity IS recoverable "
+                  "for unseen nights of the same cast")
+        else:
+            print(f"[{tag}] HELD-OUT VERDICT: fine gaps [{gap_str}] — "
+                  "NOT all > 0.05: held-out claim FAILS (room identity not "
+                  "demonstrated on unseen nights)")
     return 0
 
 
