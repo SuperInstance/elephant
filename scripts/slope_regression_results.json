@@ -1,0 +1,363 @@
+{
+ "experiment": "slope regression (H-reader==room)",
+ "date": "2026-08-20",
+ "registered_at": [
+  "research/topic.md v3 (convergence note, advisor 2026-08-19)",
+  "research/prototype/e2-e3-side-by-side.md section 7"
+ ],
+ "corpus": {
+  "S1": {
+   "file": "night-S1.jsonl",
+   "md5": "c0764eff0f87b817b7811a1d579c5ce4",
+   "warmth_mean": 0.6551302411926238,
+   "warmth_final": 0.4356159662827944,
+   "warmth_v0": 0.2529090345794316,
+   "n_fit_events": 31,
+   "n_events": 40
+  },
+  "S2": {
+   "file": "night-S2.jsonl",
+   "md5": "7574128158e715a13df991bc5f027134",
+   "warmth_mean": 0.3186951459108379,
+   "warmth_final": 0.15036175033694416,
+   "warmth_v0": 0.1511448882507528,
+   "n_fit_events": 19,
+   "n_events": 28
+  },
+  "S3": {
+   "file": "night-S3.jsonl",
+   "md5": "ab8af7f1a4f057223ac4404e73b0c44c",
+   "warmth_mean": 0.740871997944221,
+   "warmth_final": 0.6455144234210701,
+   "warmth_v0": 0.2812402508729971,
+   "n_fit_events": 19,
+   "n_events": 28
+  },
+  "S4a": {
+   "file": "night-S4a.jsonl",
+   "md5": "825838f2e694d5b489d9f5416eba4ba3",
+   "warmth_mean": 0.44645419296495215,
+   "warmth_final": 0.23925336794229168,
+   "warmth_v0": 0.21099755814664597,
+   "n_fit_events": 37,
+   "n_events": 46
+  },
+  "S4b": {
+   "file": "night-S4b.jsonl",
+   "md5": "e744819a97dc52b342996bba6e7f1dff",
+   "warmth_mean": 0.6319191263490358,
+   "warmth_final": 0.4108334206413621,
+   "warmth_v0": 0.2565654697036879,
+   "n_fit_events": 36,
+   "n_events": 45
+  },
+  "S5": {
+   "file": "night-S5.jsonl",
+   "md5": "3937b5e64976feb2a4f4ea36071a4a30",
+   "warmth_mean": 0.7589371636088085,
+   "warmth_final": 0.796262847946745,
+   "warmth_v0": 0.422785170807702,
+   "n_fit_events": 11,
+   "n_events": 20
+  },
+  "S6": {
+   "file": "night-S6.jsonl",
+   "md5": "486f95103cfcb3b7558804b79cba9a45",
+   "warmth_mean": 0.3968586311382155,
+   "warmth_final": 0.3023801068026692,
+   "warmth_v0": 0.26774308941348646,
+   "n_fit_events": 31,
+   "n_events": 40
+  },
+  "S7": {
+   "file": "night-S7.jsonl",
+   "md5": "ecc3747f91bfa4fa7af02b89afea8f39",
+   "warmth_mean": 0.22009145685374384,
+   "warmth_final": 0.17983609522803257,
+   "warmth_v0": 0.26774308941348646,
+   "n_fit_events": 31,
+   "n_events": 40
+  }
+ },
+ "warmth_source": "vmf.WARM @ mu_hat (elephant/vmf.py:59,167); per-night mean of logged per-event fit.warmth_vmf; None below NMIN=10 windows excluded (estimator guard)",
+ "reader_baseline_source": "E2 reading CENTER+g*(field_eff_to_reader-CENTER) (e2_instrument.py logged_readings), z-standardized per vmf.zvec, projected on WARM restricted to mood/volume/earnestness/presence (panic excluded by rule), renormalized to unit; per-event mean per night, equal-weight mean over nights",
+ "reliable_subspace": [
+  "mood",
+  "volume",
+  "earnestness",
+  "presence"
+ ],
+ "n_nights_min": 3,
+ "readers_seen": 15,
+ "readers_kept": 12,
+ "readers_dropped": {
+  "cartographer": 2,
+  "tinker": 2,
+  "drifter": 2
+ },
+ "per_reader": [
+  {
+   "reader": "barkeep",
+   "n_nights": 3,
+   "nights": [
+    "S1",
+    "S3",
+    "S6"
+   ],
+   "baseline": 0.4443985627079994,
+   "warmth": 0.5976202900916867
+  },
+  {
+   "reader": "blacksmith",
+   "n_nights": 3,
+   "nights": [
+    "S3",
+    "S4b",
+    "S7"
+   ],
+   "baseline": 0.8715516764603289,
+   "warmth": 0.5309608603823336
+  },
+  {
+   "reader": "captain",
+   "n_nights": 8,
+   "nights": [
+    "S1",
+    "S2",
+    "S3",
+    "S4a",
+    "S4b",
+    "S5",
+    "S6",
+    "S7"
+   ],
+   "baseline": 0.8471229704299118,
+   "warmth": 0.5211197444953047
+  },
+  {
+   "reader": "critic",
+   "n_nights": 8,
+   "nights": [
+    "S1",
+    "S2",
+    "S3",
+    "S4a",
+    "S4b",
+    "S5",
+    "S6",
+    "S7"
+   ],
+   "baseline": 0.4299144775062423,
+   "warmth": 0.5211197444953047
+  },
+  {
+   "reader": "engineer",
+   "n_nights": 8,
+   "nights": [
+    "S1",
+    "S2",
+    "S3",
+    "S4a",
+    "S4b",
+    "S5",
+    "S6",
+    "S7"
+   ],
+   "baseline": 0.5096479092264552,
+   "warmth": 0.5211197444953047
+  },
+  {
+   "reader": "essayist",
+   "n_nights": 8,
+   "nights": [
+    "S1",
+    "S2",
+    "S3",
+    "S4a",
+    "S4b",
+    "S5",
+    "S6",
+    "S7"
+   ],
+   "baseline": 0.6597575471841425,
+   "warmth": 0.5211197444953047
+  },
+  {
+   "reader": "fiddler",
+   "n_nights": 3,
+   "nights": [
+    "S1",
+    "S4a",
+    "S7"
+   ],
+   "baseline": 0.3056619016762327,
+   "warmth": 0.44055863033710657
+  },
+  {
+   "reader": "lamplighter",
+   "n_nights": 3,
+   "nights": [
+    "S2",
+    "S5",
+    "S7"
+   ],
+   "baseline": 0.7440469584522934,
+   "warmth": 0.43257458879113003
+  },
+  {
+   "reader": "poet",
+   "n_nights": 8,
+   "nights": [
+    "S1",
+    "S2",
+    "S3",
+    "S4a",
+    "S4b",
+    "S5",
+    "S6",
+    "S7"
+   ],
+   "baseline": 0.9520095641282406,
+   "warmth": 0.5211197444953047
+  },
+  {
+   "reader": "singer",
+   "n_nights": 3,
+   "nights": [
+    "S2",
+    "S4a",
+    "S6"
+   ],
+   "baseline": 0.2941145915902101,
+   "warmth": 0.3873359900046685
+  },
+  {
+   "reader": "weaver",
+   "n_nights": 3,
+   "nights": [
+    "S3",
+    "S5",
+    "S6"
+   ],
+   "baseline": 0.6677666815371057,
+   "warmth": 0.6322225975637483
+  },
+  {
+   "reader": "writer",
+   "n_nights": 8,
+   "nights": [
+    "S1",
+    "S2",
+    "S3",
+    "S4a",
+    "S4b",
+    "S5",
+    "S6",
+    "S7"
+   ],
+   "baseline": 0.8886266534296844,
+   "warmth": 0.5211197444953047
+  }
+ ],
+ "primary": {
+  "slope": 1.085216686691545,
+  "intercept": 0.07855971760107383,
+  "r": 0.3124937714871509,
+  "ci95": [
+   -1.6696741269549291,
+   3.8132805928017737
+  ],
+  "n": 12,
+  "bootstrap": {
+   "B": 10000,
+   "seed": 20260820,
+   "type": "reader-level pairs, percentile",
+   "draws": 10000,
+   "degenerate_skipped": 0
+  },
+  "bands": {
+   "alignment": [
+    -0.25,
+    0.25
+   ],
+   "collapse": [
+    0.75,
+    1.25
+   ]
+  },
+  "verdict": "INDETERMINATE (lean collapse; CI contains 0, CI contains 1)"
+ },
+ "variants": {
+  "reader_mean_direction": {
+   "slope": 1.3418054221723341,
+   "intercept": -0.035691225198798415,
+   "r": 0.3207383232604102,
+   "ci95": [
+    -2.3197187204183622,
+    4.697614383798835
+   ],
+   "n": 12,
+   "degenerate_skipped": 0,
+   "verdict": "INDETERMINATE (lean collapse; CI contains 0, CI contains 1)"
+  },
+  "reader_final_median": {
+   "slope": 1.6804331878826904,
+   "intercept": -0.19912197828356193,
+   "r": 0.4215125111943934,
+   "ci95": [
+    -1.4933143239962001,
+    4.846605371623055
+   ],
+   "n": 12,
+   "degenerate_skipped": 0,
+   "verdict": "INDETERMINATE (lean collapse; CI contains 0, CI contains 1)"
+  },
+  "pooled_events": {
+   "slope": 1.0617365123283542,
+   "intercept": 0.08839001012453707,
+   "r": 0.30159104794627767,
+   "ci95": [
+    -1.7183907713766267,
+    3.814774282914873
+   ],
+   "n": 12,
+   "degenerate_skipped": 0,
+   "verdict": "INDETERMINATE (lean collapse; CI contains 0, CI contains 1)"
+  },
+  "room_final": {
+   "slope": 1.111656753213561,
+   "intercept": 0.19769696516520807,
+   "r": 0.40367211181513324,
+   "ci95": [
+    -1.9564290507855708,
+    3.6581665821490263
+   ],
+   "n": 12,
+   "degenerate_skipped": 3,
+   "verdict": "INDETERMINATE (lean collapse; CI contains 0, CI contains 1)"
+  },
+  "room_v0": {
+   "slope": 4.048932755139829,
+   "intercept": -0.43756722572956075,
+   "r": 0.4446534117285118,
+   "ci95": [
+    -1.6790847021394826,
+    15.963633527259715
+   ],
+   "n": 12,
+   "degenerate_skipped": 0,
+   "verdict": "INDETERMINATE (lean collapse; CI contains 0, CI contains 1)"
+  },
+  "within_reader_panel": {
+   "slope": 0.13294285811213838,
+   "ci95": [
+    0.023166138866452374,
+    0.25282246360057825
+   ],
+   "n_readers": 12,
+   "n_obs": 66,
+   "bootstrap": "reader-cluster, percentile",
+   "verdict": "INDETERMINATE (lean alignment; CI excludes 0, CI excludes 1)"
+  }
+ }
+}
