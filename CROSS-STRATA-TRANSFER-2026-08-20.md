@@ -84,3 +84,74 @@ With the secondary rider: the propagation is **not room-tracking** — session-g
 - Instrument reuse: `scripts/e2_instrument.py` (registered strata, drift estimator, attendance `FIELD_NIGHTS_EXT`, cold-entry protocol) — imported unmodified; `scripts/premise_measurement.py` machinery superseded by the logged v:2 facts it was built to approximate.
 - This run: `python3 scripts/cross_strata_transfer.py` (numpy-only, CPU, read-only; bootstrap/permutation seeds 20260820/20260821). Field-channel assertion: replay == log on 72/72 (reader, night) channels.
 - Context: `research/topic.md` v3 §open questions #4; `research/prototype/e2-e3-side-by-side.md` (the reader-baseline/drift framing this test consumes).
+
+---
+
+# Addendum A — Registered rerun (2026-08-20, subagent pass)
+
+Script: `scripts/cross_strata_transfer_registered.py` (superset of the filed script; base numbers reproduced bit-for-bit — same instrument, same seeds 20260820/20260821). This addendum records one provenance **correction** and four robustness probes that materially qualify the filed verdict's "ROBUST" characterization. Addenda are registered probes of the primary estimand, not re-specifications.
+
+## A1. Provenance correction: `reader_final` is PRE-LENS (the filed claim was false)
+
+The filed report (§1) claimed M_R(k) — the median of R's lens-applied readings — is "EXACTLY the logged `session_close.reader_final` fact (verified numerically)". **That claim is false, and we say so.** Engine source: `elephant/tapnight.py` `_reader_final()` (line 618) takes the componentwise median of `_reader_hist`, and `_reader_hist` stores the **pre-lens** displaced field `eff = clamp(raw + s·(vibe − raw))` (line 282) — i.e. exactly `field_eff_to_reader`, before any dial-lens application. The lens is affine with constant per-reader gain g, so the two medians are related by
+
+```
+M_R(k) = CENTER + g_R ⊙ (reader_final_R(k) − CENTER)
+```
+
+and coincide **only on dials where g_i = 1** (the max-weight dial). Numerically verified: `med_raw[volume]/g = reader_final[volume]` to 1e-9 on every g ≠ 0 dial (writer/S1). The primary transfer numbers do **not** depend on the false claim (the script computes M_R(k) from its own `night_base`), and the memory-grain definition per the task statement — "componentwise median of R's readings" — is the lens-applied median, which the script correctly uses. Only the provenance identification was wrong. It is corrected here, and the proxy choice is now tested explicitly (A4).
+
+Field-channel integrity re-verified this run: **replay == log on 72/72 (reader, night) channels** (max dev < 1e-9).
+
+## A2. Room-volatility common-cause control (schedule-family composition) — SURVIVES
+
+d_R and p_R are measured on the nights R attended; if readers attended different schedule families with different room forcing, both grains could be elevated by the room, not the reader. Control: per-night room volatility v_k = mean over strata transitions of ‖mean(`field_eff_after` in next cell) − mean(… prev cell)‖ / corpus_sd — a **reader-independent logged fact** — and per reader v_R = mean over attended nights. Per-family v_k: S1 0.105, S2 0.309, S3 0.107, S4a 0.526, S4b 0.331, S5 0.230, S6 0.092, S7 0.100.
+
+```
+corr(d, v_R)   = −0.0965      corr(p, v_R) = −0.3504
+partial corr(d, p | v_R) = +0.8046   CI [+0.3693, +0.9937]   perm p = 0.0016
+```
+
+The transfer **survives** controlling for the volatility of the nights each reader attended (it slightly *strengthens* — attendance composition is not the common cause).
+
+## A3. Mechanical-coupling probe (S5 null drift) — SIGNAL-SPECIFIC
+
+Both grains share one observable series; a pure same-source artifact should appear in ANY movement statistic. On the n = 8 readers who attended S5, the NULL (no-flip) drift d⁰_R — within-night movement in the absence of any room signal — against the same p_R:
+
+```
+corr(d_signal, p) = +0.9658   CI [+0.8834, +0.9972]   (same readers)
+corr(d0_null,  p) = +0.3352   CI [−0.0460, +0.9079]   perm p = 0.3953
+```
+
+Null drift does **not** predict memory plasticity (CI covers 0); signal drift on the same readers predicts it near-perfectly. The shared-series artifact alone does not reproduce the coefficient — the propagation is specific to **signal-strata** movement.
+
+## A4. Memory-proxy robustness, full 2×2 (lensed vs RAW) — THE TRANSFER IS LENSED-SPACE-SPECIFIC
+
+The lens is affine with constant gain, so swapping the memory object to the logged pre-lens `reader_final` is exactly a gain reweighting. All four cells (n = 15; bootstrap seeds 20260822, permutation same):
+
+```
+corr(d_lens, p_lens) = +0.7839   CI [+0.2837, +0.9903]   perm p = 0.0024   ← primary cell
+corr(d_lens, p_raw ) = +0.1379   CI [−0.3446, +0.5878]   perm p = 0.6285   ← dies
+corr(d_raw , p_lens) = +0.5846   CI [+0.1698, +0.8667]   perm p = 0.0195
+corr(d_raw , p_raw ) = +0.5123   CI [+0.0354, +0.8486]   perm p = 0.0590   ← borderline
+corr(p_lens, p_raw)  = +0.4366   (the two memory proxies are only moderately related)
+```
+
+The strong coefficient lives **only** in the lensed × lensed cell. Lensed drift does not predict raw (pre-lens) memory plasticity (+0.14, null). Raw drift predicts both lensed and raw plasticity only moderately (+0.58 / +0.51, the latter p = 0.059). **The transfer is a property of the reader's lensed reading space; the raw room channel does not carry it.**
+
+## A5. Dial-concentration mechanism control — THE CONTROL THE FILED REPORT MISSED; CI COVERS 0
+
+The filed report's mechanism-amplitude partials (gain = mean g, charisma, vibe extremity; §4: +0.79–0.80) controlled the **mean** gain. The right control is the **concentration** of the lens on high-variance dials: var_R = Σ_i g_i² σ_i², the variance of the raw room channel as seen through R's lens (σ² = per-dial corpus variance).
+
+```
+corr(var_R, d) = +0.7887      corr(var_R, p) = +0.6087
+partial corr(d, p | var_R) = +0.6228   CI [−0.1512, +0.9887]   perm p = 0.0148
+```
+
+Lensed drift is almost entirely dial-concentration-driven (r = +0.79 with a reader constant that contains no session behavior at all). Holding the lens's dial concentration fixed, the between-reader transfer **bootstrap CI covers 0** — the filed "robust to mechanism-amplitude controls" claim is **superseded**. Readers whose lenses sit on variable dials read bigger at BOTH grains; that shared mechanical root is not fully removable at N = 15, and the permutation p (0.015) and the bootstrap CI disagree — book the residual transfer as suggestive, not robust.
+
+## A6. Final verdict (this addendum)
+
+**Primary registered estimand, unchanged: ρ = corr(d_R, p_R) = +0.7839, reader bootstrap CI [+0.2927, +0.9911] (10k draws, seed 20260820), permutation p = 0.0032 — TRANSFER under the decision rule (CI excludes 0).** Slope β = +0.4942 corpus-sd per corpus-sd, CI [+0.1411, +0.7756].
+
+**The filed "ROBUST-BUT-EXPLORATORY" characterization is downgraded to: TRANSFER ON THE REGISTERED ESTIMAND, LENSED-SPACE-SPECIFIC, MECHANISM-UNRESOLVED.** What survives: room-volatility common-cause control (+0.80, CI clear of 0); mechanical-coupling probe (signal-specific, null drift does not predict); ORIG6-within ordering (+0.99); n_nights ≥ 3 and barkeep-excluded subsets (+0.71 / +0.70, CIs clear of 0). What does not survive: the pre-lens memory proxy (+0.14, null) and the dial-concentration control (CI covers 0). Both failures point the same way — **the quantity that transfers is the reader's own lensed read, and its amplitude is substantially set by which dials the lens attends to.** That is consistent with the reader-as-room framing (the reader's read, not the raw room, is the object), but it is not evidence of a *reader-level* fast→slow coupling independent of the lens's dial geometry. The sixth laundering's discharge stands at the registered estimand; the mechanism story the dissertation may carry is the weaker, better-supported one: *within-session movement and memory plasticity are one quantity in the reader's lensed reading space (ρ ≈ 0.78), and that quantity's amplitude is dial-concentration-driven; the raw room channel shows no such coupling.*
