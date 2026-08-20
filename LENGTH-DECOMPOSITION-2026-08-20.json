@@ -1,0 +1,457 @@
+{
+  "stage": "stage5_verdict",
+  "stage0_res": {
+    "raw_chord_A": 1.2285097805010095,
+    "raw_chord_H": 0.42076421172777045,
+    "raw_chord_pooled": 0.8478476350823416,
+    "summary_reference_1.2285": 1.2285097805010095,
+    "ABC_identical_md5": false,
+    "n_zwindows_per_cell": 20,
+    "corpus": "A (once) + H, strata SEG1 seq0-19 / SEG2 seq20-39, z-space W=8 trailing windows"
+  },
+  "_spline_meta": [
+    {
+      "dim": 0,
+      "train": "A",
+      "sign": 1.0,
+      "knots": [
+        64.0,
+        66.45,
+        74.55,
+        80.38
+      ]
+    },
+    {
+      "dim": 1,
+      "train": "A",
+      "sign": -1.0,
+      "knots": [
+        64.0,
+        66.45,
+        74.55,
+        80.38
+      ]
+    },
+    {
+      "dim": 2,
+      "train": "A",
+      "sign": 1.0,
+      "knots": [
+        64.0,
+        66.45,
+        74.55,
+        80.38
+      ]
+    },
+    {
+      "dim": 3,
+      "train": "A",
+      "sign": -1.0,
+      "knots": [
+        64.0,
+        66.45,
+        74.55,
+        80.38
+      ]
+    },
+    {
+      "dim": 4,
+      "train": "A",
+      "sign": 1.0,
+      "knots": [
+        64.0,
+        66.45,
+        74.55,
+        80.38
+      ]
+    },
+    {
+      "dim": 5,
+      "train": "A",
+      "sign": -1.0,
+      "knots": [
+        64.0,
+        66.45,
+        74.55,
+        80.38
+      ]
+    },
+    {
+      "dim": 6,
+      "train": "A",
+      "sign": 1.0,
+      "knots": [
+        64.0,
+        66.45,
+        74.55,
+        80.38
+      ]
+    },
+    {
+      "dim": 0,
+      "train": "H",
+      "sign": -1.0,
+      "knots": [
+        60.5,
+        67.54,
+        73.88,
+        79.67
+      ]
+    },
+    {
+      "dim": 1,
+      "train": "H",
+      "sign": -1.0,
+      "knots": [
+        60.5,
+        67.54,
+        73.88,
+        79.67
+      ]
+    },
+    {
+      "dim": 2,
+      "train": "H",
+      "sign": 1.0,
+      "knots": [
+        60.5,
+        67.54,
+        73.88,
+        79.67
+      ]
+    },
+    {
+      "dim": 3,
+      "train": "H",
+      "sign": -1.0,
+      "knots": [
+        60.5,
+        67.54,
+        73.88,
+        79.67
+      ]
+    },
+    {
+      "dim": 4,
+      "train": "H",
+      "sign": 1.0,
+      "knots": [
+        60.5,
+        67.54,
+        73.88,
+        79.67
+      ]
+    },
+    {
+      "dim": 5,
+      "train": "H",
+      "sign": -1.0,
+      "knots": [
+        60.5,
+        67.54,
+        73.88,
+        79.67
+      ]
+    },
+    {
+      "dim": 6,
+      "train": "H",
+      "sign": -1.0,
+      "knots": [
+        60.5,
+        67.54,
+        73.88,
+        79.67
+      ]
+    }
+  ],
+  "stage1_res": {
+    "r_len_dim_before": [
+      0.21994845377551484,
+      -0.0615611780680775,
+      0.4508525705914441,
+      -0.7533640048793311,
+      0.08479352196951824,
+      -0.40857282863151984,
+      0.019849771953325157
+    ],
+    "r_len_dim_after": [
+      -0.053227157884312315,
+      -0.004631344236281254,
+      -0.029027527352556037,
+      -0.005277705849399626,
+      0.03438349126702078,
+      -0.04785948608282451,
+      -0.002903198221922596
+    ],
+    "orthogonality_qc": {
+      "trainA": {
+        "r_infold": [
+          -0.14472423812062177,
+          -0.0049442705571603315,
+          -0.045663292252754784,
+          -0.012940289776869464,
+          0.05935804039428884,
+          -0.05893408527220975,
+          -0.06302383015057188
+        ],
+        "r_outfold": [
+          -0.8919174768799081,
+          -0.11786284933999788,
+          -0.47513613916478487,
+          0.320958271565903,
+          -0.07502403444022764,
+          0.029852072855981123,
+          -0.10514158760484132
+        ],
+        "max_abs_r_outfold": 0.8919174768799081
+      },
+      "trainH": {
+        "r_infold": [
+          -0.005749907046708162,
+          -0.0018289062621407684,
+          -0.033879668848291716,
+          4.359120516148794e-05,
+          0.011547175480672222,
+          -0.024138435643102314,
+          0.04872570735883423
+        ],
+        "r_outfold": [
+          0.4225707251083122,
+          0.10844255920399032,
+          0.33586490081125203,
+          -0.29693558394865205,
+          0.1579317687156595,
+          -0.12424600056896731,
+          0.10998503369340476
+        ],
+        "max_abs_r_outfold": 0.4225707251083122
+      }
+    },
+    "resid_norm_min": 0.2781376538369455,
+    "n_dropped_zero_norm": 0
+  },
+  "stage2_res": {
+    "cs_lo": 67.75,
+    "cs_hi": 78.0,
+    "coverage": 0.2875,
+    "n_windows_total": 80,
+    "n_windows_cs": 23,
+    "raw_chord_on_cs_pooled": 0.8017903529040549,
+    "dec_chord_pooled": 1.8292979325697483,
+    "dec_chord_A": 1.5268960775672435,
+    "dec_chord_H": 0.8793127776923344,
+    "n_cs_A": 11,
+    "n_cs_H": 12,
+    "ratio_dec_over_rawcs": 2.2815165160619593
+  },
+  "stage3_res": {
+    "perm_pooled_obs": 1.8292979325697483,
+    "perm_p_value": 0.09558088382323535,
+    "perm_null_mean": 1.5889608601410856,
+    "perm_null_sd": 0.24610489487974058,
+    "perm_cell_sizes": [
+      3,
+      2,
+      4,
+      2,
+      3,
+      3,
+      2,
+      4
+    ],
+    "n_exchangeable_pairs": 5,
+    "boot_ci95": [
+      1.4976182462778342,
+      1.918586401875772
+    ]
+  },
+  "stage4_res": {
+    "baseline_full_corpus": {
+      "full|content|logreg": {
+        "n": 68,
+        "n_excluded_degfold": 0,
+        "degenerate_folds": 0,
+        "accuracy": 0.6029411764705882,
+        "binom_p": 0.11425430684992627
+      },
+      "full|content|centroid": {
+        "n": 68,
+        "n_excluded_degfold": 0,
+        "degenerate_folds": 0,
+        "accuracy": 0.7647058823529411,
+        "binom_p": 1.4074155775977878e-05
+      },
+      "full|silence|logreg": {
+        "n": 68,
+        "n_excluded_degfold": 0,
+        "degenerate_folds": 0,
+        "accuracy": 0.8970588235294118,
+        "binom_p": 7.387402755493466e-12
+      },
+      "full|silence|centroid": {
+        "n": 68,
+        "n_excluded_degfold": 0,
+        "degenerate_folds": 0,
+        "accuracy": 0.8823529411764706,
+        "binom_p": 5.747760931486598e-11
+      }
+    },
+    "triad": {
+      "W4|resid_content|logreg": {
+        "n": 13,
+        "n_excluded_degfold": 11,
+        "degenerate_folds": 1,
+        "accuracy": 1.0,
+        "binom_p": 0.00024414062500000016
+      },
+      "W4|resid_content|centroid": {
+        "n": 13,
+        "n_excluded_degfold": 11,
+        "degenerate_folds": 1,
+        "accuracy": 1.0,
+        "binom_p": 0.00024414062500000016
+      },
+      "W4|silence|logreg": {
+        "n": 13,
+        "n_excluded_degfold": 11,
+        "degenerate_folds": 1,
+        "accuracy": 1.0,
+        "binom_p": 0.00024414062500000016
+      },
+      "W4|silence|centroid": {
+        "n": 13,
+        "n_excluded_degfold": 11,
+        "degenerate_folds": 1,
+        "accuracy": 0.9230769230769231,
+        "binom_p": 0.0034179687500000004
+      },
+      "W4|resid_content+silence|logreg": {
+        "n": 13,
+        "n_excluded_degfold": 11,
+        "degenerate_folds": 1,
+        "accuracy": 1.0,
+        "binom_p": 0.00024414062500000016
+      },
+      "W4|resid_content+silence|centroid": {
+        "n": 13,
+        "n_excluded_degfold": 11,
+        "degenerate_folds": 1,
+        "accuracy": 1.0,
+        "binom_p": 0.00024414062500000016
+      },
+      "W4|raw_content_cs|logreg": {
+        "n": 13,
+        "n_excluded_degfold": 11,
+        "degenerate_folds": 1,
+        "accuracy": 1.0,
+        "binom_p": 0.00024414062500000016
+      },
+      "W4|raw_content_cs|centroid": {
+        "n": 13,
+        "n_excluded_degfold": 11,
+        "degenerate_folds": 1,
+        "accuracy": 1.0,
+        "binom_p": 0.00024414062500000016
+      },
+      "W4|coverage": {
+        "lo": 57.0,
+        "hi": 96.0,
+        "coverage": 0.35294117647058826,
+        "n_cs": 24,
+        "n_total": 68
+      },
+      "W8|resid_content|logreg": {
+        "n": 0,
+        "n_excluded_degfold": 10,
+        "degenerate_folds": 2,
+        "accuracy": null,
+        "binom_p": null
+      },
+      "W8|resid_content|centroid": {
+        "n": 0,
+        "n_excluded_degfold": 10,
+        "degenerate_folds": 2,
+        "accuracy": null,
+        "binom_p": null
+      },
+      "W8|silence|logreg": {
+        "n": 0,
+        "n_excluded_degfold": 10,
+        "degenerate_folds": 2,
+        "accuracy": null,
+        "binom_p": null
+      },
+      "W8|silence|centroid": {
+        "n": 0,
+        "n_excluded_degfold": 10,
+        "degenerate_folds": 2,
+        "accuracy": null,
+        "binom_p": null
+      },
+      "W8|resid_content+silence|logreg": {
+        "n": 0,
+        "n_excluded_degfold": 10,
+        "degenerate_folds": 2,
+        "accuracy": null,
+        "binom_p": null
+      },
+      "W8|resid_content+silence|centroid": {
+        "n": 0,
+        "n_excluded_degfold": 10,
+        "degenerate_folds": 2,
+        "accuracy": null,
+        "binom_p": null
+      },
+      "W8|raw_content_cs|logreg": {
+        "n": 0,
+        "n_excluded_degfold": 10,
+        "degenerate_folds": 2,
+        "accuracy": null,
+        "binom_p": null
+      },
+      "W8|raw_content_cs|centroid": {
+        "n": 0,
+        "n_excluded_degfold": 10,
+        "degenerate_folds": 2,
+        "accuracy": null,
+        "binom_p": null
+      },
+      "W8|coverage": {
+        "lo": 57.0,
+        "hi": 96.0,
+        "coverage": 0.19230769230769232,
+        "n_cs": 10,
+        "n_total": 52
+      }
+    }
+  },
+  "stage5_res": {
+    "verdict": "INDETERMINATE",
+    "reasons": [
+      "common-support coverage below 70% (z-space 0.287, triad 0.353) \u2014 the SEG1/SEG2 length distributions overlap too little for support-based estimation on this corpus; PASS/KILL branches presuppose a valid common-support evaluation",
+      "manipulation check failed: silence-only still discriminates on the trimmed set (acc=1.0, p=2.4e-04) \u2014 the trimming has no teeth; the registration routes this to INDETERMINATE, not a pass",
+      "orthogonality QC failed out-of-fold (max|r| up to 0.892): the length->dial mediator mapping does not transfer across nights (flip vs ramp geometry), so the residualized dials are not certifiably length-orthogonal; the deconfounded point estimate is reported but cannot be certified as the registered estimand"
+    ],
+    "notes": [
+      "note: the KILL tolerance clause (silence 1.0 >= resid 1.0 - 0.1) also fires, but on a degenerate common-support triad (n=24, all arms at ceiling) \u2014 reported, not counted, per the coverage precondition",
+      "note: perm p=0.0956 (>= 0.05) and boot CI [1.4976182462778342, 1.918586401875772] lie ABOVE 0.37 \u2014 nothing in the data supports PASS either; the corpus cannot adjudicate Stage 1"
+    ],
+    "gates": {
+      "gap": 1.8292979325697483,
+      "gap_pass_band": 0.37,
+      "perm_p": 0.09558088382323535,
+      "ci95": [
+        1.4976182462778342,
+        1.918586401875772
+      ],
+      "acc_resid_content": 1.0,
+      "acc_silence_cs": 1.0,
+      "silence_p": 0.00024414062500000016,
+      "coverage_z": 0.2875,
+      "coverage_triad": 0.35294117647058826,
+      "manip_check_ok": false,
+      "orthogonality_ok": false
+    }
+  }
+}
