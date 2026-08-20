@@ -1,0 +1,84 @@
+{
+ "generated": "2026-08-20",
+ "script": "scripts/night_h.py",
+ "night_H": {
+  "file": "data/nights/night-H.jsonl",
+  "sha256": "c55025aca61eccfc822f63036aca3d147abdcb94bb0b22d4bfb0391bccead343",
+  "stripped_md5": "52e299c05d84b792a4295619fbc20532",
+  "n_msgs": 40,
+  "roster": [
+   "writer",
+   "poet",
+   "essayist",
+   "engineer",
+   "critic",
+   "captain"
+  ],
+  "composition": "5x8 ramp blocks, cynical fraction 0->1",
+  "strata": "SEG1 seq 0-19 / SEG2 seq 20-39 (same as A/B/C)"
+ },
+ "baseline": {
+  "ratio_real": 0.5599426323987404,
+  "ratio_all": 0.48976741800154805,
+  "verdict_real": "in band: indeterminate",
+  "verdict_all": "in band: indeterminate"
+ },
+ "with_H": {
+  "ratio_real": 0.5980145554199514,
+  "ratio_all": 0.5283313057506579,
+  "spread_z_real": 0.4674612156758001,
+  "drift_z_real": 0.7816886920879857,
+  "spread_z_all": 0.42356586737089474,
+  "drift_z_all": 0.80170503386902,
+  "ratio_vs_base_real": 1.1572602737876525,
+  "ratio_vs_base_all": 1.020558830101567,
+  "verdict_real": "in band: indeterminate",
+  "verdict_all": "in band: indeterminate",
+  "transitions": {
+   "A: SEG1->SEG2": 0.8196228946718344,
+   "B: SEG1->SEG2": 0.8196228946718344,
+   "C: SEG1->SEG2": 0.8196228946718344,
+   "D: pre-entry->post-entry": 0.7379823290500019,
+   "D-cold: pre-entry->post-entry": 0.8800596119413884,
+   "H: SEG1->SEG2": 0.4951064772404246
+  },
+  "per_reader": {
+   "captain": {
+    "drift": 0.34276389512464395,
+    "vs_base": 0.17581647624654004
+   },
+   "critic": {
+    "drift": 1.7268334513144346,
+    "vs_base": 0.9138452515040538
+   },
+   "drifter": {
+    "drift": 0.9321680250322967,
+    "vs_base": 0.46608401251614834
+   },
+   "engineer": {
+    "drift": 0.9411248661075988,
+    "vs_base": 0.48977855052573965
+   },
+   "essayist": {
+    "drift": 0.6949828193280757,
+    "vs_base": 0.3520562717366649
+   },
+   "poet": {
+    "drift": 0.3547488038251303,
+    "vs_base": 0.18302833980533031
+   },
+   "writer": {
+    "drift": 0.479198983883719,
+    "vs_base": 0.24695597986852724
+   }
+  },
+  "n_real": 7,
+  "n_total": 20,
+  "band": [
+   0.3,
+   0.6
+  ],
+  "band_crossed": "no",
+  "movement": "STAYED"
+ }
+}
