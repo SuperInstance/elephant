@@ -1,0 +1,141 @@
+{
+ "generated": "2026-08-20",
+ "script": "scripts/night_h.py",
+ "follow_up_of": "NIGHT-H-REDESIGN-2026-08-20.md",
+ "nights": {
+  "H": {
+   "file": "data/nights/night-H.jsonl",
+   "sha256": "c55025aca61eccfc822f63036aca3d147abdcb94bb0b22d4bfb0391bccead343",
+   "stripped_md5": "52e299c05d84b792a4295619fbc20532",
+   "n_msgs": 40,
+   "roster": [
+    "writer",
+    "poet",
+    "essayist",
+    "engineer",
+    "critic",
+    "captain"
+   ],
+   "geometry": "ramp: 5x8 blocks, cynical 0 -> 1 in quarter steps",
+   "strata": "SEG1 seq 0-19 / SEG2 seq 20-39 (same as A/B/C)"
+  },
+  "H2": {
+   "file": "data/nights/night-H2.jsonl",
+   "sha256": "3823fd12b8a57b385a4a003c52a4a081a8cdd77260935653f224598262525547",
+   "stripped_md5": "a54839384bf51e3e03552a927a6b4739",
+   "n_msgs": 40,
+   "roster": [
+    "writer",
+    "poet",
+    "essayist",
+    "engineer",
+    "critic",
+    "captain"
+   ],
+   "geometry": "multi-stage ramp: 8x5 blocks, cynical 0,.2,.4,.4,.6,.6,.8,1",
+   "strata": "SEG1 seq 0-19 / SEG2 seq 20-39 (same as A/B/C)"
+  },
+  "H3": {
+   "file": "data/nights/night-H3.jsonl",
+   "sha256": "cafc9fa3206b960ddd1cc7c01e4b6f79fe35f3ed50658c9e8327ba948c36f1a6",
+   "stripped_md5": "240850353364bc4c90e4efc53b07aeb7",
+   "n_msgs": 40,
+   "roster": [
+    "writer",
+    "poet",
+    "essayist",
+    "engineer",
+    "critic",
+    "captain"
+   ],
+   "geometry": "oscillation, tightening envelope: cynical 0,1,.2,.8,.4,.6,.4,.6",
+   "strata": "SEG1 seq 0-19 / SEG2 seq 20-39 (same as A/B/C)"
+  },
+  "H4": {
+   "file": "data/nights/night-H4.jsonl",
+   "sha256": "3e4165f5bfcd0be0011fcf5fc5d129c4ca8cc2ccab8873381871602b1f32ff45",
+   "stripped_md5": "1ff8c6d83392f57f710da38349cbc8e9",
+   "n_msgs": 40,
+   "roster": [
+    "writer",
+    "poet",
+    "essayist",
+    "engineer",
+    "critic",
+    "captain"
+   ],
+   "geometry": "long-dwell-plateau: cynical 0 -> .5 (24-msg plateau) -> 1",
+   "strata": "SEG1 seq 0-19 / SEG2 seq 20-39 (same as A/B/C)"
+  }
+ },
+ "baseline": {
+  "ratio_real": 0.5599426323987404,
+  "ratio_all": 0.48976741800154805
+ },
+ "sweep": {
+  "H": {
+   "own_transition_drift": 0.4951064772404246,
+   "ratio_real": 0.5980145554199514,
+   "ratio_all": 0.5283313057506579,
+   "spread_z_real": 0.4674612156758001,
+   "drift_z_real": 0.7816886920879857,
+   "spread_z_all": 0.42356586737089474,
+   "drift_z_all": 0.80170503386902,
+   "ratio_vs_base_real": 1.1572602737876525,
+   "ratio_vs_base_all": 1.020558830101567,
+   "verdict_real": "in band: indeterminate",
+   "verdict_all": "in band: indeterminate"
+  },
+  "H2": {
+   "own_transition_drift": 0.4116138469268668,
+   "ratio_real": 0.6083630734813038,
+   "ratio_all": 0.5397116785270331,
+   "spread_z_real": 0.46431089553662513,
+   "drift_z_real": 0.7632134752683906,
+   "spread_z_all": 0.42121513262763843,
+   "drift_z_all": 0.7804447251858765,
+   "ratio_vs_base_real": 1.1175671873559208,
+   "ratio_vs_base_all": 0.9874288506262904,
+   "verdict_real": "above band: premise holds",
+   "verdict_all": "in band: indeterminate"
+  },
+  "H3": {
+   "own_transition_drift": 0.36923418612692543,
+   "ratio_real": 0.6075628239599584,
+   "ratio_all": 0.5360291024593552,
+   "spread_z_real": 0.45953631363240205,
+   "drift_z_real": 0.7563601581763139,
+   "spread_z_all": 0.41703616157653817,
+   "drift_z_all": 0.7780102976930441,
+   "ratio_vs_base_real": 1.0865943588300373,
+   "ratio_vs_base_all": 0.9544564685591419,
+   "verdict_real": "above band: premise holds",
+   "verdict_all": "in band: indeterminate"
+  },
+  "H4": {
+   "own_transition_drift": 0.42080876541171414,
+   "ratio_real": 0.6052823327409806,
+   "ratio_all": 0.535658807647748,
+   "spread_z_real": 0.45906761151286735,
+   "drift_z_real": 0.7584355046908611,
+   "spread_z_all": 0.41601999588760585,
+   "drift_z_all": 0.7766510882449313,
+   "ratio_vs_base_real": 1.109881046224777,
+   "ratio_vs_base_all": 0.9859979309345301,
+   "verdict_real": "above band: premise holds",
+   "verdict_all": "in band: indeterminate"
+  }
+ },
+ "cumulative": {
+  "ratio_real": 0.6987648325397611,
+  "ratio_all": 0.6319664470957257,
+  "verdict_real": "above band: premise holds",
+  "verdict_all": "above band: premise holds"
+ },
+ "band": [
+  0.3,
+  0.6
+ ],
+ "any_clear": true,
+ "any_exit": true
+}
