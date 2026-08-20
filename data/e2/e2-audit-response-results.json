@@ -1,0 +1,256 @@
+{
+ "attempt3_monotonicity_on_fixtures": {
+  "seg": true,
+  "cont": true
+ },
+ "ladder_robustness_11nights": {
+  "seg_monotone": true,
+  "cont_monotone": true,
+  "seg_vals": [
+   0.011026052148506375,
+   0.20597238555362046,
+   0.3924025801762998,
+   0.7048228500221151,
+   0.8079319281219669
+  ],
+  "cont_vals": [
+   0.07761210126461122,
+   0.1669333461461277,
+   0.3420858318076308,
+   0.6072687912704617,
+   0.8467358432599655
+  ],
+  "seg_within_tol": [
+   true,
+   true,
+   true,
+   false,
+   true
+  ],
+  "cont_within_tol": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "rows": [
+   {
+    "rung": 0.0,
+    "rep": 0,
+    "seed": 20260819,
+    "family": "lambda",
+    "lambda": 0.0,
+    "true_ratio": 3.4702662369749027e-16,
+    "est_seg": 0.011026052148506375,
+    "est_cont": 0.07761210126461122,
+    "seg_bias": 0.011026052148506375,
+    "cont_bias": 0.07761210126461122
+   },
+   {
+    "rung": 0.0,
+    "rep": 1,
+    "seed": 20260820,
+    "family": "lambda",
+    "lambda": 0.0,
+    "true_ratio": 3.4702662369749027e-16,
+    "est_seg": 0.011026052148506375,
+    "est_cont": 0.07761210126461122,
+    "seg_bias": 0.011026052148506375,
+    "cont_bias": 0.07761210126461122
+   },
+   {
+    "rung": 0.0,
+    "rep": 2,
+    "seed": 20260821,
+    "family": "lambda",
+    "lambda": 0.0,
+    "true_ratio": 3.4702662369749027e-16,
+    "est_seg": 0.011026052148506375,
+    "est_cont": 0.07761210126461122,
+    "seg_bias": 0.011026052148506375,
+    "cont_bias": 0.07761210126461122
+   },
+   {
+    "rung": 0.15,
+    "rep": 0,
+    "seed": 20261819,
+    "family": "lambda",
+    "lambda": 0.265625,
+    "true_ratio": 0.14787637700653392,
+    "est_seg": 0.20597238555362046,
+    "est_cont": 0.1669333461461277,
+    "seg_bias": 0.05597238555362047,
+    "cont_bias": 0.01693334614612771
+   },
+   {
+    "rung": 0.15,
+    "rep": 1,
+    "seed": 20261820,
+    "family": "lambda",
+    "lambda": 0.203125,
+    "true_ratio": 0.15054008157170784,
+    "est_seg": 0.20075495764715542,
+    "est_cont": 0.18985962502926673,
+    "seg_bias": 0.05075495764715543,
+    "cont_bias": 0.03985962502926674
+   },
+   {
+    "rung": 0.15,
+    "rep": 2,
+    "seed": 20261821,
+    "family": "lambda",
+    "lambda": 0.28125,
+    "true_ratio": 0.14650598969505033,
+    "est_seg": 0.16398803794877007,
+    "est_cont": 0.1986029478949031,
+    "seg_bias": 0.013988037948770071,
+    "cont_bias": 0.048602947894903104
+   },
+   {
+    "rung": 0.3,
+    "rep": 0,
+    "seed": 20262819,
+    "family": "lambda",
+    "lambda": 0.453125,
+    "true_ratio": 0.2960951007732484,
+    "est_seg": 0.3924025801762998,
+    "est_cont": 0.3420858318076308,
+    "seg_bias": 0.09240258017629982,
+    "cont_bias": 0.042085831807630814
+   },
+   {
+    "rung": 0.3,
+    "rep": 1,
+    "seed": 20262820,
+    "family": "lambda",
+    "lambda": 0.34375,
+    "true_ratio": 0.295930492491562,
+    "est_seg": 0.27678977313539904,
+    "est_cont": 0.2974488038568697,
+    "seg_bias": -0.023210226864600947,
+    "cont_bias": -0.002551196143130263
+   },
+   {
+    "rung": 0.3,
+    "rep": 2,
+    "seed": 20262821,
+    "family": "lambda",
+    "lambda": 0.421875,
+    "true_ratio": 0.30184584096798006,
+    "est_seg": 0.3588859721860755,
+    "est_cont": 0.3211432339553708,
+    "seg_bias": 0.0588859721860755,
+    "cont_bias": 0.02114323395537082
+   },
+   {
+    "rung": 0.6,
+    "rep": 0,
+    "seed": 20263819,
+    "family": "lambda",
+    "lambda": 0.890625,
+    "true_ratio": 0.5962165233230492,
+    "est_seg": 0.7048228500221151,
+    "est_cont": 0.6072687912704617,
+    "seg_bias": 0.10482285002211511,
+    "cont_bias": 0.007268791270461761
+   },
+   {
+    "rung": 0.6,
+    "rep": 1,
+    "seed": 20263820,
+    "family": "lambda",
+    "lambda": 0.78125,
+    "true_ratio": 0.5990132557914778,
+    "est_seg": 0.670576034121378,
+    "est_cont": 0.606295653971257,
+    "seg_bias": 0.07057603412137803,
+    "cont_bias": 0.006295653971256976
+   },
+   {
+    "rung": 0.6,
+    "rep": 2,
+    "seed": 20263821,
+    "family": "lambda",
+    "lambda": 0.7265625,
+    "true_ratio": 0.6005070889697527,
+    "est_seg": 0.6599258537779915,
+    "est_cont": 0.6074872190301441,
+    "seg_bias": 0.05992585377799153,
+    "cont_bias": 0.007487219030144154
+   },
+   {
+    "rung": 0.9,
+    "rep": 0,
+    "seed": 20264819,
+    "family": "directional",
+    "lambda": 0.2578125,
+    "true_ratio": 0.9017018706387033,
+    "est_seg": 0.8079319281219669,
+    "est_cont": 0.8467358432599655,
+    "seg_bias": -0.09206807187803312,
+    "cont_bias": -0.053264156740034485
+   },
+   {
+    "rung": 0.9,
+    "rep": 1,
+    "seed": 20264820,
+    "family": "directional",
+    "lambda": 0.2578125,
+    "true_ratio": 0.9017018706387033,
+    "est_seg": 0.8079319281219669,
+    "est_cont": 0.8467358432599655,
+    "seg_bias": -0.09206807187803312,
+    "cont_bias": -0.053264156740034485
+   },
+   {
+    "rung": 0.9,
+    "rep": 2,
+    "seed": 20264821,
+    "family": "lambda",
+    "lambda": 2.4375,
+    "true_ratio": 0.8992226166913528,
+    "est_seg": 1.168675068625875,
+    "est_cont": 0.962447590638299,
+    "seg_bias": 0.26867506862587487,
+    "cont_bias": 0.062447590638298967
+   }
+  ]
+ },
+ "field_extended_variants": {
+  "point": {
+   "ext_seg": 0.7659723244136206,
+   "ext_cont": 0.6717966794326192,
+   "nonmono_seg": 0.9685136852167814,
+   "nonmono_cont": 0.849435752410212
+  },
+  "ci": {
+   "ext_seg": [
+    0.47658910190959647,
+    0.9959985535311735
+   ],
+   "ext_cont": [
+    0.43832425145063136,
+    0.921019433910696
+   ],
+   "nonmono_seg": [
+    0.6454790161468029,
+    1.100996088763345
+   ],
+   "nonmono_cont": [
+    0.5695422321485278,
+    1.0544609887183394
+   ]
+  },
+  "icc_ext": 0.7692550165781945,
+  "n_readers": 15,
+  "drift_nonmono": 0.5413956879899061,
+  "drift_ext": 0.684553627100022,
+  "spread_ext_cont": 0.45988085357935027,
+  "spread_ext_seg": 0.5243491329355787,
+  "verdict_ext_cont": "touches band -> indeterminate",
+  "verdict_ext_seg": "touches band -> indeterminate",
+  "verdict_nonmono_cont": "touches band -> indeterminate",
+  "verdict_nonmono_seg": "above band"
+ }
+}

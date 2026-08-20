@@ -54,6 +54,9 @@ ATTENDANCE = {
     "S4a": ORIG6 + ["fiddler", "singer"],          # + drifter staged-cold @12
     "S4b": ORIG6 + ["cartographer", "blacksmith", "tinker"],  # + drifter @28
     "S5": ORIG6 + ["lamplighter", "weaver"],
+    # addendum 3 (non-monotonic families, same text banks):
+    "S6": ORIG6 + ["barkeep", "singer", "weaver"],
+    "S7": ORIG6 + ["fiddler", "lamplighter", "blacksmith"],
 }
 
 # Registered schedules (occupant indices for drifter insertion).
@@ -72,6 +75,14 @@ def _insert(script, lines, after_indices):
     return out
 
 
+def _oscillate(a, b, block=5):
+    """Alternate a/b in `block`-line blocks (a first)."""
+    out = []
+    for i in range(0, max(len(a), len(b)), block):
+        out += a[i:i + block] + b[i:i + block]
+    return out
+
+
 def scripts():
     night_script = SEG1 + SEG2
     return {
@@ -81,6 +92,9 @@ def scripts():
         "S4a": _insert(night_script, DRIFTER_LINES, S4A_INSERT_AFTER),
         "S4b": _insert(night_script, DRIFTER_LINES[:5], S4B_INSERT_AFTER),
         "S5": list(SEG1),
+        # addendum 3: non-monotonic families (registered compositions)
+        "S6": SEG1[:10] + SEG2[:10] + SEG1[10:20] + SEG2[10:20],  # double reversal
+        "S7": _oscillate(SEG1, SEG2, block=5),                    # oscillation
     }
 
 
@@ -129,15 +143,25 @@ def generate(verify=False):
     existing = [f for f in (f"night-{t}.jsonl" for t in sp)
                 if os.path.exists(os.path.join(NIGHTS_DIR, f))]
     if existing and not verify:
-        sys.exit(f"REFUSING to overwrite existing nights: {existing} "
-                 f"(append-only corpus)")
+        # addendum-3 mode: only S6/S7 may be missing; the 6 base nights are
+        # frozen artifacts and must already exist.
+        missing = [t for t in ("S6", "S7")
+                   if not os.path.exists(os.path.join(NIGHTS_DIR, f"night-{t}.jsonl"))]
+        if not missing:
+            sys.exit(f"REFUSING to overwrite existing nights: {existing} "
+                     f"(append-only corpus)")
     if verify:
         verify_determinism(sp)
         return
 
+    manifest_path = MANIFEST
     manifest = {"generated": "2026-08-19", "reader_schema": 2, "nights": {}}
-    for tag in ("S1", "S2", "S3", "S4a", "S4b", "S5"):
+    if os.path.exists(manifest_path):
+        manifest = json.load(open(manifest_path, encoding="utf-8"))
+    for tag in ("S1", "S2", "S3", "S4a", "S4b", "S5", "S6", "S7"):
         staged = tag in ("S4a", "S4b")
+        if os.path.exists(os.path.join(NIGHTS_DIR, f"night-{tag}.jsonl")):
+            continue  # append-only: addendum-3 nights only
         path = run_night(tag, sp[tag], ATTENDANCE[tag], staged)
         rows = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
         speaks = [r for r in rows if r["type"] == "speak"]
@@ -156,7 +180,9 @@ def generate(verify=False):
                                 "S3": "late flip@20",
                                 "S4a": "newcomer cold entry pre-flip @12",
                                 "S4b": "newcomer cold entry post-flip @28",
-                                "S5": "no-flip control"}[tag],
+                                "S5": "no-flip control",
+                                "S6": "double reversal warm->cyn->warm->cyn",
+                                "S7": "oscillation (alternating 5-line blocks)"}[tag],
         }
         print(f"[e2-nights] night-{tag}: {len(speaks)} msgs, "
               f"roster={len(manifest['nights'][tag]['roster'])}"
@@ -164,14 +190,14 @@ def generate(verify=False):
 
     # determinism check: regenerate into a temp dir, compare stripped md5s
     with tempfile.TemporaryDirectory() as tmp:
-        for tag in ("S1", "S2", "S3", "S4a", "S4b", "S5"):
+        for tag in manifest["nights"]:
             run_night(tag, sp[tag], ATTENDANCE[tag], tag in ("S4a", "S4b"),
                       outdir=tmp)
             md5 = stripped_md5(os.path.join(tmp, f"night-{tag}.jsonl"))
             assert md5 == manifest["nights"][tag]["stripped_md5"], tag
             manifest["nights"][tag]["deterministic_replay_identical"] = True
-    print("[e2-nights] determinism: all 6 nights byte-identical on re-run "
-          "(stripped of session_id)")
+    print(f"[e2-nights] determinism: all {len(manifest['nights'])} nights "
+          f"byte-identical on re-run (stripped of session_id)")
 
     with open(MANIFEST, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=1)

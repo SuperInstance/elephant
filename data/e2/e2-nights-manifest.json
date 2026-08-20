@@ -119,6 +119,46 @@
    "cold_entry_seq": null,
    "schedule_family": "no-flip control",
    "deterministic_replay_identical": true
+  },
+  "S6": {
+   "file": "night-S6.jsonl",
+   "sha256": "9f3b3927e70c668d6b51517571c7a94977359d7b2c1b17f265203c4f4e5785c3",
+   "stripped_md5": "d5075e4a86630279085f6df5d5e26595",
+   "n_msgs": 40,
+   "roster": [
+    "barkeep",
+    "captain",
+    "critic",
+    "engineer",
+    "essayist",
+    "poet",
+    "singer",
+    "weaver",
+    "writer"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "double reversal warm->cyn->warm->cyn",
+   "deterministic_replay_identical": true
+  },
+  "S7": {
+   "file": "night-S7.jsonl",
+   "sha256": "fabf142c0c3df0bc604f9b3cd385db25704b71ea0526026e75bbe2b15a7db42d",
+   "stripped_md5": "10094c02f38d1821bc04be2236d36c29",
+   "n_msgs": 40,
+   "roster": [
+    "blacksmith",
+    "captain",
+    "critic",
+    "engineer",
+    "essayist",
+    "fiddler",
+    "lamplighter",
+    "poet",
+    "writer"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "oscillation (alternating 5-line blocks)",
+   "deterministic_replay_identical": true
   }
  }
 }

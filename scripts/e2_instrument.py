@@ -60,9 +60,15 @@ NIGHT_SPECS = {
     "S4a":    ("night-S4a.jsonl", [("warm-pre", 0, 11, "signal"), ("warm-entry", 12, 19, "signal"), ("cynical", 20, 45, "signal")]),
     "S4b":    ("night-S4b.jsonl", [("warm", 0, 19, "signal"), ("cynical-pre", 20, 27, "signal"), ("cynical-entry", 28, 44, "signal")]),
     "S5":     ("night-S5.jsonl", [("warm-a", 0, 9, "null"), ("warm-b", 10, 19, "null")]),
+    # addendum 3: non-monotonic families
+    "S6":     ("night-S6.jsonl", [("w1", 0, 9, "signal"), ("c1", 10, 19, "signal"),
+                                  ("w2", 20, 29, "signal"), ("c2", 30, 39, "signal")]),
+    "S7":     ("night-S7.jsonl", [(f"b{i}", i * 5, i * 5 + 4, "signal") for i in range(8)]),
 }
 
 PRIMARY_NIGHTS = ["A", "D", "D-cold", "S1", "S2", "S3", "S4a", "S4b", "S5"]
+EXTENDED_NIGHTS = PRIMARY_NIGHTS + ["S6", "S7"]
+NONMONO_NIGHTS = ["S6", "S7"]
 SIGNAL_NIGHTS = ["A", "D", "D-cold", "S1", "S2", "S3", "S4a", "S4b"]
 ORIG6 = ["writer", "poet", "essayist", "engineer", "critic", "captain"]
 
@@ -79,6 +85,14 @@ FIELD_NIGHTS = {
     "blacksmith": ["S3", "S4b"],
     "weaver": ["S3", "S5"],
 }
+
+# addendum 3: extended attendance (non-monotonic families)
+FIELD_NIGHTS_EXT = dict(FIELD_NIGHTS)
+for _r, _nights in {"barkeep": ["S6"], "singer": ["S6"], "weaver": ["S6"],
+                    "fiddler": ["S7"], "lamplighter": ["S7"],
+                    "blacksmith": ["S7"],
+                    **{n: ["S6", "S7"] for n in ORIG6}}.items():
+    FIELD_NIGHTS_EXT[_r] = FIELD_NIGHTS_EXT.get(_r, []) + _nights
 
 # Cold-entry nights per reader (readings begin at the reader's first speak).
 COLD_ENTRY = {"drifter": ["S4a", "S4b"]}
