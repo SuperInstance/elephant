@@ -1,0 +1,124 @@
+{
+ "generated": "2026-08-19",
+ "reader_schema": 2,
+ "nights": {
+  "S1": {
+   "file": "night-S1.jsonl",
+   "sha256": "469287d716a5d24d97b2cd6f7251945f3139c049940a4779e383c1c9eae61412",
+   "stripped_md5": "e065c58c5c04ef81d2b7ae16eb62a210",
+   "n_msgs": 40,
+   "roster": [
+    "barkeep",
+    "captain",
+    "cartographer",
+    "critic",
+    "engineer",
+    "essayist",
+    "fiddler",
+    "poet",
+    "writer"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "warm\u2192cynical canonical (flip@20)",
+   "deterministic_replay_identical": true
+  },
+  "S2": {
+   "file": "night-S2.jsonl",
+   "sha256": "fad883b7186b198fb5705d56e33f3115b9e6ca72a7b38124cf8f887c67260769",
+   "stripped_md5": "cf73cfde337686d2e4c00330abafa827",
+   "n_msgs": 28,
+   "roster": [
+    "captain",
+    "critic",
+    "engineer",
+    "essayist",
+    "lamplighter",
+    "poet",
+    "singer",
+    "tinker",
+    "writer"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "early flip@8",
+   "deterministic_replay_identical": true
+  },
+  "S3": {
+   "file": "night-S3.jsonl",
+   "sha256": "1183163e3cdcd1ffd414bd790d40b2c9723feec56544b08fb5aa1e5aa772a4f9",
+   "stripped_md5": "154a33141d1cd22b01915cf7e3ca8dd5",
+   "n_msgs": 28,
+   "roster": [
+    "barkeep",
+    "blacksmith",
+    "captain",
+    "critic",
+    "engineer",
+    "essayist",
+    "poet",
+    "weaver",
+    "writer"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "late flip@20",
+   "deterministic_replay_identical": true
+  },
+  "S4a": {
+   "file": "night-S4a.jsonl",
+   "sha256": "71a52a65dc85a9fa70d7dad4e1f329ac185c8b5610342fcf22cd24f956128e53",
+   "stripped_md5": "f67f27074e8d178de90fb993668dfc47",
+   "n_msgs": 46,
+   "roster": [
+    "captain",
+    "critic",
+    "engineer",
+    "essayist",
+    "fiddler",
+    "poet",
+    "singer",
+    "writer"
+   ],
+   "cold_entry_seq": 12,
+   "schedule_family": "newcomer cold entry pre-flip @12",
+   "deterministic_replay_identical": true
+  },
+  "S4b": {
+   "file": "night-S4b.jsonl",
+   "sha256": "998b8cee9b6df6287cc200be215b65b0133ec07b949eb54f3f1ad89df926b785",
+   "stripped_md5": "bb2431e27a25ca911960a3f3ee24403d",
+   "n_msgs": 45,
+   "roster": [
+    "blacksmith",
+    "captain",
+    "cartographer",
+    "critic",
+    "engineer",
+    "essayist",
+    "poet",
+    "tinker",
+    "writer"
+   ],
+   "cold_entry_seq": 28,
+   "schedule_family": "newcomer cold entry post-flip @28",
+   "deterministic_replay_identical": true
+  },
+  "S5": {
+   "file": "night-S5.jsonl",
+   "sha256": "52a15e323d08ce67a2d317717ee7c844fdd8d55819080d06b16b152f206ccdaf",
+   "stripped_md5": "92c6b33b2f3fcb9f2fefdea3bf276024",
+   "n_msgs": 20,
+   "roster": [
+    "captain",
+    "critic",
+    "engineer",
+    "essayist",
+    "lamplighter",
+    "poet",
+    "weaver",
+    "writer"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "no-flip control",
+   "deterministic_replay_identical": true
+  }
+ }
+}

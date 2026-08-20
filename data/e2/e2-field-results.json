@@ -1,0 +1,163 @@
+{
+ "date": "2026-08-19",
+ "corpus_sd": 0.23672602933417594,
+ "per_dial_sd": [
+  0.16831237898602408,
+  0.007047834962760524,
+  0.09099741390009354,
+  0.4847201957944068,
+  0.2805342840150473,
+  0.03642557771839503,
+  0.20158188679852052
+ ],
+ "n_readers": 15,
+ "primary": {
+  "estimator": "E-cont-canonical (flagged)",
+  "ratio": 0.6088343494127646,
+  "spread": 0.45557699366215904,
+  "drift": 0.7482774158546969,
+  "ci": [
+   0.37104307622947474,
+   0.9210069555286454
+  ],
+  "seg_ratio": 0.6852608071021763,
+  "seg_ci": [
+   0.3936625231837843,
+   0.9633644546193274
+  ]
+ },
+ "icc": {
+  "aggregate": 0.7714018356572278,
+  "per_dial": {
+   "mood": 0.9651507862075179,
+   "volume": 0.9765766180500269,
+   "earnestness": 0.9532706593358901,
+   "cynicism": 0.6405552702054303,
+   "joke_landing": 0.6485174910708407,
+   "panic": 0.30198248677645984,
+   "presence": 0.9137595379544282
+  },
+  "ci": [
+   0.6669569150988168,
+   0.8096414791833404
+  ]
+ },
+ "null_drift_control": 0.2906168374771242,
+ "verdict": "INDETERMINATE: CI touches the 0.3\u20130.6 band",
+ "kill_condition": "does not fire (CI upper > 0.6)",
+ "power_analysis": {
+  "ci_half_width": 0.27498193964958534,
+  "distance_to_nearest_edge": 0.00883434941276462,
+  "n_required": 14533
+ },
+ "class_residual": {
+  "spread": 0.3266610667930687,
+  "ratio": 0.4365507495905782
+ },
+ "archetype_drift": {
+  "critic": 1.1475681313937254,
+  "poet": 0.4667855015422706,
+  "captain": 0.5976901943686939,
+  "drifter": 0.49098323890354606,
+  "engineer": 0.5084367154589865,
+  "essayist": 0.7597381928976081,
+  "writer": 0.3716873473298774
+ },
+ "sensitivities": {
+  "actual_presence": {
+   "cont": 0.3815462224056417,
+   "seg": 0.38888492552370774,
+   "note": "attempt-1 instrument; participation-conflated (bias +0.18 at planted 0, on fixtures)"
+  },
+  "with_BC": {
+   "cont": 0.6109516603906285,
+   "seg": 0.6865906531959883
+  },
+  "with_S5_null_drift": {
+   "cont": 0.6088343494127646,
+   "null_included": 0.7482774158546969
+  },
+  "old_corpus_continuity": {
+   "cont": 0.5599426323987403,
+   "corpus_sd": 0.22916611701372525,
+   "note": "pre-measurement estimator+corpus; continuity check vs 0.5599"
+  }
+ },
+ "per_reader": {
+  "barkeep": {
+   "drift": 2.3851607862338327,
+   "null": NaN,
+   "n_nights": 2
+  },
+  "blacksmith": {
+   "drift": 0.3320036374159472,
+   "null": NaN,
+   "n_nights": 2
+  },
+  "captain": {
+   "drift": 0.3642440102576555,
+   "null": 0.2347216750637123,
+   "n_nights": 9
+  },
+  "cartographer": {
+   "drift": 1.4127112433372977,
+   "null": NaN,
+   "n_nights": 2
+  },
+  "critic": {
+   "drift": 1.3064264631722113,
+   "null": 0.27324888853927953,
+   "n_nights": 9
+  },
+  "drifter": {
+   "drift": 0.49098323890354606,
+   "null": NaN,
+   "n_nights": 3
+  },
+  "engineer": {
+   "drift": 0.5084367154589865,
+   "null": 0.256737591090453,
+   "n_nights": 9
+  },
+  "essayist": {
+   "drift": 0.6375914019757893,
+   "null": 0.2520248480336151,
+   "n_nights": 9
+  },
+  "fiddler": {
+   "drift": 0.19235429476078672,
+   "null": NaN,
+   "n_nights": 2
+  },
+  "lamplighter": {
+   "drift": 0.8311363784797322,
+   "null": 0.30017191276065586,
+   "n_nights": 2
+  },
+  "poet": {
+   "drift": 0.433696555862916,
+   "null": 0.3910128903722025,
+   "n_nights": 9
+  },
+  "singer": {
+   "drift": 0.44118786946449884,
+   "null": NaN,
+   "n_nights": 2
+  },
+  "tinker": {
+   "drift": 0.6346563113479488,
+   "null": NaN,
+   "n_nights": 2
+  },
+  "weaver": {
+   "drift": 0.881884983819427,
+   "null": 0.3177824899636442,
+   "n_nights": 2
+  },
+  "writer": {
+   "drift": 0.3716873473298774,
+   "null": 0.29923440399343054,
+   "n_nights": 9
+  }
+ }
+}
