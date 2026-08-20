@@ -1,0 +1,403 @@
+{
+  "date": "2026-08-20",
+  "teeth_audit": {
+    "roomd": {
+      "n_snapshots": 5414,
+      "span_min": 179.95241204500198,
+      "poll_gap_med_s": 2.0055224895477295,
+      "rooms": {
+        "doctor-canary": {
+          "n_arrivals": 13,
+          "jump_sizes": {
+            "3": 13
+          },
+          "n_gaps": 12,
+          "gap_med_s": 899.9938488006592,
+          "gap_sd_s": 183.2968989334065,
+          "gaps_within_2.5s_of_median": 8,
+          "teeth": false
+        },
+        "the-bridge": {
+          "n_arrivals": 0,
+          "jump_sizes": {},
+          "n_gaps": 0,
+          "gap_med_s": null,
+          "gap_sd_s": null,
+          "gaps_within_2.5s_of_median": 0,
+          "teeth": false
+        }
+      }
+    },
+    "production": {
+      "n_rows": 76,
+      "rooms": {
+        "bar-rail": 76
+      },
+      "gap_med_s": 1800.443890094757,
+      "gap_sd_s": 9573.161248594954,
+      "teeth": false,
+      "reason": "single room; gaps = 30-min measurement poll cadence (the apparatus's sampling clock, not conversation pacing); single class => classification impossible"
+    },
+    "nights_proxy": {
+      "A": {
+        "n": 40,
+        "seg1_len_mean": 76.05,
+        "seg1_len_sd": 12.22487218747092,
+        "seg2_len_mean": 61.45,
+        "seg2_len_sd": 17.112787616282745
+      },
+      "B": {
+        "n": 40,
+        "seg1_len_mean": 76.05,
+        "seg1_len_sd": 12.22487218747092,
+        "seg2_len_mean": 61.45,
+        "seg2_len_sd": 17.112787616282745
+      },
+      "C": {
+        "n": 40,
+        "seg1_len_mean": 76.05,
+        "seg1_len_sd": 12.22487218747092,
+        "seg2_len_mean": 61.45,
+        "seg2_len_sd": 17.112787616282745
+      },
+      "H": {
+        "n": 40,
+        "seg1_len_mean": 75.95,
+        "seg1_len_sd": 13.843680868901885,
+        "seg2_len_mean": 61.55,
+        "seg2_len_sd": 15.923174934666768
+      },
+      "identical_len_seq_A_B": true,
+      "identical_len_seq_A_C": true,
+      "identical_len_seq_A_H": false,
+      "welch_d_seg1_vs_seg2_len": 0.9817747054461179,
+      "teeth": true
+    }
+  },
+  "window": {
+    "W": 4,
+    "stride": 1,
+    "tau_model": "tau = 0.2 + 0.005*len s"
+  },
+  "L1_condition": {
+    "content_dials|logreg|lono": {
+      "arm": "content_dials",
+      "mode": "lono",
+      "clf": "logreg",
+      "n": 68,
+      "accuracy": 0.6029411764705882,
+      "auc": 0.6410034602076125,
+      "binom_p_vs_chance": 0.11425430684992627
+    },
+    "content_dials|logreg|half": {
+      "arm": "content_dials",
+      "mode": "half",
+      "clf": "logreg",
+      "n": 28,
+      "accuracy": 0.75,
+      "auc": 0.5714285714285714,
+      "binom_p_vs_chance": 0.01254095137119283
+    },
+    "content_dials|centroid|lono": {
+      "arm": "content_dials",
+      "mode": "lono",
+      "clf": "centroid",
+      "n": 68,
+      "accuracy": 0.7647058823529411,
+      "auc": 0.7897923875432526,
+      "binom_p_vs_chance": 1.4074155775977878e-05
+    },
+    "content_dials|centroid|half": {
+      "arm": "content_dials",
+      "mode": "half",
+      "clf": "centroid",
+      "n": 28,
+      "accuracy": 0.5,
+      "auc": 0.7142857142857143,
+      "binom_p_vs_chance": 0.9999999999999919
+    },
+    "content_field_fit|logreg|lono": {
+      "arm": "content_field_fit",
+      "mode": "lono",
+      "clf": "logreg",
+      "n": 68,
+      "accuracy": 0.6029411764705882,
+      "auc": 0.6470588235294118,
+      "binom_p_vs_chance": 0.11425430684992627
+    },
+    "content_field_fit|logreg|half": {
+      "arm": "content_field_fit",
+      "mode": "half",
+      "clf": "logreg",
+      "n": 28,
+      "accuracy": 0.75,
+      "auc": 0.6428571428571429,
+      "binom_p_vs_chance": 0.01254095137119283
+    },
+    "content_field_fit|centroid|lono": {
+      "arm": "content_field_fit",
+      "mode": "lono",
+      "clf": "centroid",
+      "n": 68,
+      "accuracy": 0.6029411764705882,
+      "auc": 0.7941176470588235,
+      "binom_p_vs_chance": 0.11425430684992627
+    },
+    "content_field_fit|centroid|half": {
+      "arm": "content_field_fit",
+      "mode": "half",
+      "clf": "centroid",
+      "n": 28,
+      "accuracy": 0.5,
+      "auc": 0.7857142857142857,
+      "binom_p_vs_chance": 0.9999999999999919
+    },
+    "silence|logreg|lono": {
+      "arm": "silence",
+      "mode": "lono",
+      "clf": "logreg",
+      "n": 68,
+      "accuracy": 0.8970588235294118,
+      "auc": 0.9057093425605537,
+      "binom_p_vs_chance": 7.387402755493466e-12
+    },
+    "silence|logreg|half": {
+      "arm": "silence",
+      "mode": "half",
+      "clf": "logreg",
+      "n": 28,
+      "accuracy": 0.6071428571428571,
+      "auc": 0.7295918367346939,
+      "binom_p_vs_chance": 0.3449284508824316
+    },
+    "silence|centroid|lono": {
+      "arm": "silence",
+      "mode": "lono",
+      "clf": "centroid",
+      "n": 68,
+      "accuracy": 0.8823529411764706,
+      "auc": 0.9083044982698962,
+      "binom_p_vs_chance": 5.747760931486598e-11
+    },
+    "silence|centroid|half": {
+      "arm": "silence",
+      "mode": "half",
+      "clf": "centroid",
+      "n": 28,
+      "accuracy": 0.6785714285714286,
+      "auc": 0.7959183673469388,
+      "binom_p_vs_chance": 0.08715855330228732
+    },
+    "silence+position|logreg|lono": {
+      "arm": "silence+position",
+      "mode": "lono",
+      "clf": "logreg",
+      "n": 68,
+      "accuracy": 0.9558823529411765,
+      "auc": 0.9783737024221453,
+      "binom_p_vs_chance": 3.5550311609442577e-16
+    },
+    "silence+position|logreg|half": {
+      "arm": "silence+position",
+      "mode": "half",
+      "clf": "logreg",
+      "n": 28,
+      "accuracy": 0.8214285714285714,
+      "auc": 0.923469387755102,
+      "binom_p_vs_chance": 0.0009122341871261485
+    },
+    "silence+position|centroid|lono": {
+      "arm": "silence+position",
+      "mode": "lono",
+      "clf": "centroid",
+      "n": 68,
+      "accuracy": 0.9411764705882353,
+      "auc": 0.96280276816609,
+      "binom_p_vs_chance": 5.873990530091972e-15
+    },
+    "silence+position|centroid|half": {
+      "arm": "silence+position",
+      "mode": "half",
+      "clf": "centroid",
+      "n": 28,
+      "accuracy": 0.7142857142857143,
+      "auc": 0.9081632653061225,
+      "binom_p_vs_chance": 0.035698138177394576
+    }
+  },
+  "L1_lono_directions": {
+    "content_field_fit": {
+      "logreg": {
+        "trainA_testH": {
+          "n": 34,
+          "accuracy": 0.7058823529411765,
+          "auc": 0.7058823529411765
+        },
+        "trainH_testA": {
+          "n": 34,
+          "accuracy": 0.5,
+          "auc": 0.8823529411764706
+        }
+      },
+      "centroid": {
+        "trainA_testH": {
+          "n": 34,
+          "accuracy": 0.7058823529411765,
+          "auc": 0.7647058823529411
+        },
+        "trainH_testA": {
+          "n": 34,
+          "accuracy": 0.5,
+          "auc": 1.0
+        }
+      }
+    },
+    "silence": {
+      "logreg": {
+        "trainA_testH": {
+          "n": 34,
+          "accuracy": 0.8823529411764706,
+          "auc": 0.8512110726643599
+        },
+        "trainH_testA": {
+          "n": 34,
+          "accuracy": 0.9117647058823529,
+          "auc": 0.9826989619377162
+        }
+      },
+      "centroid": {
+        "trainA_testH": {
+          "n": 34,
+          "accuracy": 0.8529411764705882,
+          "auc": 0.8339100346020761
+        },
+        "trainH_testA": {
+          "n": 34,
+          "accuracy": 0.9117647058823529,
+          "auc": 0.986159169550173
+        }
+      }
+    }
+  },
+  "L2": {
+    "content_field_fit|logreg": {
+      "arm": "content_field_fit",
+      "clf": "logreg",
+      "mode": "half (msg-disjoint)",
+      "n": 28,
+      "accuracy": 0.6785714285714286,
+      "auc": 0.7142857142857143,
+      "binom_p_vs_chance": 0.08715855330228732
+    },
+    "content_field_fit|centroid": {
+      "arm": "content_field_fit",
+      "clf": "centroid",
+      "mode": "half (msg-disjoint)",
+      "n": 28,
+      "accuracy": 0.8928571428571429,
+      "auc": 0.9438775510204082,
+      "binom_p_vs_chance": 2.7440488338470235e-05
+    },
+    "silence|logreg": {
+      "arm": "silence",
+      "clf": "logreg",
+      "mode": "half (msg-disjoint)",
+      "n": 28,
+      "accuracy": 0.39285714285714285,
+      "auc": 0.40816326530612246,
+      "binom_p_vs_chance": 0.3449284508824316
+    },
+    "silence|centroid": {
+      "arm": "silence",
+      "clf": "centroid",
+      "mode": "half (msg-disjoint)",
+      "n": 28,
+      "accuracy": 0.35714285714285715,
+      "auc": 0.39285714285714285,
+      "binom_p_vs_chance": 0.18493334203958367
+    }
+  },
+  "mechanism_r_len_dial": {
+    "mood": 0.061267135539093555,
+    "volume": -0.2980816545751602,
+    "earnestness": 0.14425550590112285,
+    "cynicism": -0.2976500748025078,
+    "joke_landing": -0.21859571442949877,
+    "panic": -6.492296539432658e-07,
+    "presence": -0.07849828549444011
+  },
+  "window_size_sensitivity_lono": {
+    "W4": {
+      "content_dials|logreg": {
+        "acc": 0.6029411764705882,
+        "p": 0.11425430684992627,
+        "n": 68
+      },
+      "content_dials|centroid": {
+        "acc": 0.7647058823529411,
+        "p": 1.4074155775977878e-05,
+        "n": 68
+      },
+      "content_field_fit|logreg": {
+        "acc": 0.6029411764705882,
+        "p": 0.11425430684992627,
+        "n": 68
+      },
+      "content_field_fit|centroid": {
+        "acc": 0.6029411764705882,
+        "p": 0.11425430684992627,
+        "n": 68
+      },
+      "silence|logreg": {
+        "acc": 0.8970588235294118,
+        "p": 7.387402755493466e-12,
+        "n": 68
+      },
+      "silence|centroid": {
+        "acc": 0.8823529411764706,
+        "p": 5.747760931486598e-11,
+        "n": 68
+      }
+    },
+    "W8": {
+      "content_dials|logreg": {
+        "acc": 0.5576923076923077,
+        "p": 0.48845566937990115,
+        "n": 52
+      },
+      "content_dials|centroid": {
+        "acc": 0.7884615384615384,
+        "p": 3.5887916129518456e-05,
+        "n": 52
+      },
+      "content_field_fit|logreg": {
+        "acc": 0.5576923076923077,
+        "p": 0.48845566937990115,
+        "n": 52
+      },
+      "content_field_fit|centroid": {
+        "acc": 0.5576923076923077,
+        "p": 0.48845566937990115,
+        "n": 52
+      },
+      "silence|logreg": {
+        "acc": 0.9230769230769231,
+        "p": 1.3065282189473067e-10,
+        "n": 52
+      },
+      "silence|centroid": {
+        "acc": 0.9423076923076923,
+        "p": 1.0426770558069686e-11,
+        "n": 52
+      }
+    }
+  },
+  "dial_tier_fine_gap_reference": 1.2285097805010095,
+  "decision_rule": {
+    "content_discriminates": "acc>=0.60 and p<0.05 (LONO logreg)",
+    "clock": "acc_silence >= acc_content-0.10",
+    "object": "acc_silence <= acc_content-0.15"
+  },
+  "verdict": "INDETERMINATE under the pre-registered branches",
+  "third_shape_note": "THIRD SHAPE (declared honesty clause): content FAILED its own discrimination gate while silence-only discriminates significantly and ABOVE content \u2014 direct evidence in the CLOCK direction at this level; the falsifier fired"
+}
