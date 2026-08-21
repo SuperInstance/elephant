@@ -16,20 +16,23 @@ by scripts/e2_nights.py), so the registered analysis pipeline
 (scripts/e2_instrument.py, scripts/premise_band_movers.py,
 scripts/slope_regression*.py) consumes generated corpora unchanged.
 
-κ-TRAJECTORY-FIRST DESIGN (ideation §4.1: "entry steps are concentration
-and roster-composition events; flips are mean-direction events"):
-  - The PRIMARY control channel of a night is κ(t): piecewise per stratum,
-    with κ-EVENTS (multiplicative pulses with exponential relaxation) at
-    registered entry positions, plus small jitter.
-  - μ_room(t) is SLAVED to a direction-only warmth schedule: μ(t) =
-    w(t)·Ŵ + sqrt(1−w(t)²)·e⊥(t), e⊥ ⊥ Ŵ a slow tangent random walk (the
-    deadband drift floor). Warmth is DEFINED as the signed cosine Ŵ·μ̂ —
-    the vmf.py direction-only convention. The magnitude-contaminated
-    field.py warmth() (same weights applied to raw re-centered readings,
-    collinear with field extremity) is NEVER used to set anything; it is
-    only logged (warmth_v0) as the legacy channel, computed from the
-    emitted readings. Flips are warmth-schedule jumps (μ events); entries
-    are κ events with μ continuous by construction.
+EVENT SEMANTICS (corrected 2026-08-21 by the κ(t)-around-entry check —
+memory/kappa-t-check-2026-08-21.md, DIRECTION-EVENT verdict; supersedes the
+original "κ-trajectory-first" presupposition, which the field falsified):
+  - The PRIMARY control channel of a night is the direction-only warmth
+    schedule μ(t) = w(t)·Ŵ + sqrt(1−w(t)²)·e⊥(t), e⊥ ⊥ Ŵ a slow tangent
+    random walk (the deadband drift floor). Warmth is DEFINED as the signed
+    cosine Ŵ·μ̂ — the vmf.py direction-only convention. FLIPS are warmth
+    jumps (μ events); ENTRIES are μ events too — the entrant's text pulls
+    the room's warmth by a flip-magnitude step (field: Δwarmth −0.147 vs
+    flip −0.151, p=0.68). The magnitude-contaminated field.py warmth()
+    (same weights on raw re-centered readings, collinear with field
+    extremity) is NEVER used to set anything; it is only logged (warmth_v0).
+  - κ(t) is the concentration channel with FIELD polarity — warm content
+    tight (24), cynical loose (11) — and transitions only ever LOOSEN it
+    (flip response = the level change; entry = a smaller multiplicative
+    loosening). κ is a designed channel matching the engine's measured κ
+    semantics, not a roster-driven one.
 
 SKEW-PRODUCT READER FIBER (Agenda Problem 3; ideation §1.1/§2.1):
   each reader R is a second-level vMF field whose mean deviates from the
@@ -105,19 +108,22 @@ D = 7
 W_WIN = 8          # engine's trailing-window size (tapnight.TapNightSession W)
 STEP = 60.0        # auto60 clock
 KAPPA_R_DEFAULT = 40.0   # reader-fiber concentration (tight instrument)
-DEV_SCALE = 0.70         # norm of the persona-anchored deviation direction
-                         # (G7 calibration 2026-08-21: 0.55 → 0.70 so the
-                         # realized end-to-end ICC lands in [0.85, 0.96]; see
-                         # the ICC_TARGET note below)
+DEV_SCALE = 0.85         # norm of the persona-anchored deviation direction
+                         # (G7 calibration 2026-08-21: 0.85 under the
+                         # CORRECTED κ semantics — entry eras are now loose
+                         # (κ≈6.7 latent), which adds within-night variance
+                         # the persistent deviation must dominate; realized
+                         # end-to-end ICC 0.886 at the registered seed)
 OU_PHI = 0.9             # between-night deviation persistence
-ICC_TARGET = 0.96        # ANALYTIC OU-level honesty target: the between-night
+ICC_TARGET = 0.99        # ANALYTIC OU-level honesty target: the between-night
                          # OU wobble ALONE would realize this ICC. The field-
-                         # measure geometry (ladder × on-sphere fiber, weak-
-                         # dial lottery) contributes additional within-
-                         # variance, so the END-TO-END realized ICC — measured
-                         # by the G7 self-test through the registered
-                         # Measurement — lands in the filed band [0.85, 0.96]
-                         # (0.87 at the registered seed 20260821; field wave-2
+                         # measure geometry (ladder × on-sphere fiber, loose
+                         # entry eras, weak-dial lottery) contributes the
+                         # remaining within-variance, so the END-TO-END
+                         # realized ICC — measured by the G7 self-test through
+                         # the registered Measurement — lands in the filed
+                         # band [0.85, 0.96] (0.886 at the registered seed
+                         # 20260821 under corrected κ; field wave-2
                          # actual-presence value 0.8444, wave-1 filed 0.9076)
 ORTH_WALK = 0.005        # e⊥ tangent random-walk step (deadband drift floor).
                          # G7 calibration 2026-08-21: 0.02 → 0.005. The walk
@@ -135,6 +141,32 @@ ORTH_WALK = 0.005        # e⊥ tangent random-walk step (deadband drift floor).
 KAPPA_JITTER = 0.03      # multiplicative log-jitter on κ(t)
 FLIP_SIZE = 0.5          # warmth jump at a warm→cynical flip (Δw)
 
+# --- corrected event semantics (κ(t)-check, 2026-08-21 — DIRECTION-EVENT #
+# verdict; memory/kappa-t-check-2026-08-21.md) -------------------------- #
+# Field measurements on the filed corpora (per-strata logged fits + the
+# pooled event table):
+#   * entry-steps are μ/direction events: Δwarmth −0.147 ≈ flip's −0.151
+#     (p=0.68), ‖Δμ̂‖ +0.301 ≈ flip's +0.329 (p=0.48) — μ is NOT continuous
+#     at entry; the entrant's text pulls the room like a smaller flip.
+#   * κ polarity: warm content TIGHT (κ≈24), cynical content LOOSE (κ≈11)
+#     — the old 10/18 ran opposite to the field.
+#   * κ responds to EVERY content transition by LOOSENING (flip window
+#     Δlogκ −0.746 ≈ the warm→cold level change ln(11/24); entry −0.320,
+#     a strictly smaller version; quiet ≈ 0). The old +12 entry TIGHTENING
+#     pulse was the wrong sign.
+# Design translation: latent levels KAPPA_WARM/KAPPA_COLD carry the flip
+# response; entries multiply the latent κ by KAPPA_ENTRY_FACTOR (sized so
+# the LOGGED window response ≈ −0.32 through the cumulative-fit renewal
+# fraction ~0.25 at the entry position: latent ln(0.28) ≈ −1.28); the two
+# combine by pointwise min (transitions only ever loosen latent κ). The
+# logged fits smooth both into the field's gradual window responses.
+ENTRY_DWARMTH = 0.485    # entry μ-step (0.97 × FLIP_SIZE: pooled Δwarmth
+                         # entry/flip = 0.147/0.151, κ-check §4)
+KAPPA_WARM = 24.0        # warm-content latent concentration (field ≈ 24)
+KAPPA_COLD = 11.0        # cynical-content latent concentration (field ≈ 11)
+KAPPA_ENTRY_FACTOR = 0.28  # latent κ multiplier at entry (e^{-1.28})
+KAPPA_FLOOR = 2.5        # latent κ sanity floor
+
 BANK_CLASSES = ["MoodDial", "VolumeDial", "EarnestnessDial", "CynicismDial",
                 "JokeLandingDial", "PanicDial", "PresenceDial",
                 "ModelVsCodeDial", "VisionDial"]
@@ -144,8 +176,9 @@ BANK_CLASSES = ["MoodDial", "VolumeDial", "EarnestnessDial", "CynicismDial",
 # warmth = target signed cosine Ŵ·μ̂ (direction-only); base values mirror  #
 # the filed roster-invariant ladder (STAGE2 §1: S2 .3187, S4a .4465,      #
 # D/D-cold .6293, S4b .6319, S1/A .6551, S3 .7409, S5 .7589). Flips are   #
-# warmth (μ) jumps of FLIP_SIZE centered on the base; entries are κ       #
-# events only. κ: warm strata loose (10), cold strata tight (18).         #
+# warmth (μ) jumps of FLIP_SIZE; entries are μ steps of ENTRY_DWARMTH     #
+# (κ-check: entry ≡ flip in μ-response). κ: warm tight (24), cynical       #
+# loose (11), entries loosen further — field polarity.                    #
 # ----------------------------------------------------------------------- #
 NIGHT_FAMILIES = {
     # tag: (base_warmth, n_speaks, flip_seq|None, entry_seqs)
@@ -287,24 +320,40 @@ def persona_deviations(names, personas):
 # Room path: κ-first schedule, μ slaved to the direction-only warmth      #
 # ----------------------------------------------------------------------- #
 def room_schedule(family, null_mode, rng, flip_size=FLIP_SIZE):
-    """(warmth(t), kappa(t)) arrays. κ is the designed channel: per-stratum
-    levels + multiplicative κ-events at entries with exponential relaxation
-    + jitter. Warmth is flat at base in null mode (cohesion-only shift:
-    the κ structure stays, the μ structure goes)."""
+    """(warmth(t), kappa(t)) arrays — CORRECTED event semantics (κ(t)-check
+    2026-08-21, DIRECTION-EVENT verdict):
+      * warmth is the μ channel: flips are schedule jumps of flip_size;
+        ENTRIES are μ events too — the entrant's text pulls warmth down by
+        ENTRY_DWARMTH (flip-magnitude), exactly as the field's staged
+        entries do (Δwarmth −0.147 vs flip −0.151, p=0.68). μ is not
+        continuous at entry.
+      * κ is the concentration channel with FIELD polarity: warm content
+        tight (24), cynical loose (11); transitions only ever LOOSEN it —
+        the flip response IS the level change, entries multiply by
+        KAPPA_ENTRY_FACTOR, combined by pointwise min.
+      * null mode: warmth flat at base (no μ structure); the only scheduled
+        variation is the common κ shift at the would-be flip, field
+        polarity (tight→loose) — cohesion-only, no direction content."""
     base, n, flip, entries = family
     w = np.full(n, base)
     if flip is not None and not null_mode:
         w[:flip] = base + flip_size / 2.0
         w[flip:] = base - flip_size / 2.0
+    if not null_mode:
+        for e in entries:   # entry = μ/direction event (not a κ event)
+            w[e:] -= ENTRY_DWARMTH
     w = np.clip(w, -0.95, 0.95)
-    kappa = np.where(w >= base, 10.0, 18.0) if not null_mode \
-        else np.full(n, 14.0)
-    if null_mode and flip is not None:  # cohesion-only common shift
-        kappa = np.full(n, 14.0)
-        kappa[flip:] = 20.0
-    for e in entries:  # entry = κ event (pulse + relaxation), μ untouched
-        for t in range(e, n):
-            kappa[t] += 12.0 * math.exp(-(t - e) / 6.0)
+    if null_mode:
+        kappa = np.full(n, KAPPA_WARM)
+        if flip is not None:  # cohesion-only common shift, field polarity
+            kappa[flip:] = KAPPA_COLD
+    else:
+        kappa = (np.where(np.arange(n) < flip, KAPPA_WARM, KAPPA_COLD)
+                 if flip is not None else np.full(n, KAPPA_WARM))
+    for e in entries:   # entry loosening: min-semantics (never tighten)
+        level = float(kappa[max(0, e - 1)])   # latent level just before entry
+        kappa[e:] = np.minimum(kappa[e:], level * KAPPA_ENTRY_FACTOR)
+    kappa = np.maximum(kappa, KAPPA_FLOOR)
     kappa = kappa * np.exp(rng.normal(0.0, KAPPA_JITTER, n))
     return w, kappa
 
@@ -672,6 +721,7 @@ def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
                 "alpha": branch[0], "ou_phi": branch[1],
                 "kappa_R": branch[2], "redraw_dev_per_night": branch[3],
                 "null_mode": null_mode, "flip_size": flip_size,
+                "entry_dwarmth": ENTRY_DWARMTH,
                 "pair_seed": pair_seed, "reader_schema": 2, "nights": {}}
     for fam in NIGHT_ORDER:
         tag = tags[fam]
@@ -900,19 +950,32 @@ def self_test():
           f"logged warmth_vmf tracks the schedule through the cumulative "
           f"fits (warm {warm_mean:.3f} -> late {late_mean:.3f})")
 
-    # --- 6. kappa-first: entries are kappa events, flips are mu events -- #
+    # --- 6. corrected event semantics (κ-check: DIRECTION-EVENT) -------- #
     rng = np.random.default_rng(1)
-    rp4 = room_path(fam["T4a"], False, rng)
-    e = 12
-    k_jump = abs(rp4["kappa"][e] - rp4["kappa"][e - 1])
-    mu_jump_at_entry = float(np.linalg.norm(rp4["mu"][e] - rp4["mu"][e - 1]))
-    assert k_jump > 5.0 and mu_jump_at_entry < 0.05
-    f = 20
-    mu_jump_at_flip = float(np.linalg.norm(rp4["mu"][f] - rp4["mu"][f - 1]))
-    assert mu_jump_at_flip > 10 * mu_jump_at_entry
-    print(f"[self-test] 6. entry@12: |dK|={k_jump:.1f} vs |dmu|="
-          f"{mu_jump_at_entry:.4f}; flip@20: |dmu|={mu_jump_at_flip:.3f} "
-          "(entries are kappa events; flips are mu events)")
+    rp1 = room_path(fam["T1"], False, rng)    # flip@20 only
+    rp4 = room_path(fam["T4a"], False, rng)   # entry@12 + flip@20
+    e, f = 12, 20
+    dmu_entry = float(np.linalg.norm(rp4["mu"][e] - rp4["mu"][e - 1]))
+    dmu_flip = float(np.linalg.norm(rp1["mu"][f] - rp1["mu"][f - 1]))
+    # entry moves μ at FLIP magnitude (field: ‖Δμ̂‖ 0.301 vs 0.329, p=0.48;
+    # Δwarmth −0.147 vs −0.151, p=0.68) — μ is not continuous at entry
+    assert 0.5 * dmu_flip < dmu_entry < 2.0 * dmu_flip, \
+        f"entry |dmu| {dmu_entry:.3f} not flip-like ({dmu_flip:.3f})"
+    # κ polarity: warm content tight, cynical loose (field ≈ 24 / ≈ 11)
+    warm_k = float(np.mean(rp1["kappa"][:f]))
+    cold_k = float(np.mean(rp1["kappa"][f:]))
+    assert warm_k > cold_k + 8.0, f"warm κ {warm_k:.1f} !>> cold {cold_k:.1f}"
+    # transitions only LOOSEN κ (field: entry Δlogκ −0.32, flip −0.75;
+    # the old +12 tightening pulse was sign-flipped vs the field)
+    assert rp4["kappa"][e] < rp4["kappa"][e - 1] - 5.0, "entry must loosen κ"
+    assert rp1["kappa"][f] < rp1["kappa"][f - 1] - 5.0, "flip must loosen κ"
+    k_min_post = float(np.min(rp4["kappa"][e:]))
+    assert k_min_post >= KAPPA_FLOOR * 0.9
+    print(f"[self-test] 6. entry@12 |dmu|={dmu_entry:.3f} ≈ flip@20 "
+          f"|dmu|={dmu_flip:.3f} (μ events, κ-check parity); κ warm "
+          f"{warm_k:.1f} > cold {cold_k:.1f}, loosens at entry "
+          f"({rp4['kappa'][e-1]:.1f}->{rp4['kappa'][e]:.1f}) and flip "
+          f"({rp1['kappa'][f-1]:.1f}->{rp1['kappa'][f]:.1f}) — field polarity)")
 
     # --- 7. branch discrimination at the alpha endpoints ---------------- #
     def spread(label, ft):
@@ -994,11 +1057,13 @@ def self_test():
           "identical to night-T4a.jsonl; staged == non-staged key sets")
 
     # --- 11. G7: realized between-night ICC of a mini instrument wave --- #
-    # Full-design mini wave (the plan's registered attendance/ladder),
-    # measured through the REGISTERED Measurement via the G5 adapter.
+    # Full-design wave (the plan's registered attendance/ladder) at the
+    # REGISTERED seed, measured through the REGISTERED Measurement via the
+    # G5 adapter. (Scratch tags in a temp dir — not the registered corpora;
+    # calibration-target check only, per plan §5.1's self-test boundary.)
     from scripts.riverbed_adapter import load_wave
     icc_dir = os.path.join(tmp, "icc-wave")
-    generate_wave(icc_dir, branch_name="instrument", seed=7)
+    generate_wave(icc_dir, branch_name="instrument", seed=20260821)
     wv = load_wave(icc_dir)
     icc, icc_dial = wv["measurement"].icc()
     assert 0.85 <= icc <= 0.96, \

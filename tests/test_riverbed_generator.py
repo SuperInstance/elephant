@@ -21,10 +21,13 @@ from scripts.riverbed_adapter import (NightFromFile, build_measurement,
                                       family_strata, load_wave, wave_attendance,
                                       wave_cold)
 from scripts.riverbed_generator import (BRANCHES, ENTRANT_NAME,
-                                        ENTRANT_SPEAKS, NIGHT_FAMILIES,
+                                        ENTRANT_SPEAKS, ENTRY_DWARMTH,
+                                        KAPPA_COLD, KAPPA_ENTRY_FACTOR,
+                                        KAPPA_WARM, NIGHT_FAMILIES,
                                         SEALED_FIELDS, generate_night,
                                         generate_wave, load_personas,
-                                        persona_deviations, unblind)
+                                        persona_deviations, room_path,
+                                        room_schedule, unblind)
 from scripts.riverbed_wave_gate import run_gate
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -386,6 +389,63 @@ class TestG13PairMode:
         # the staged entrant behaves identically in pair mode (entry @12)
         assert ENTRANT_NAME not in si[11]["readers"]
         assert ENTRANT_NAME in si[12]["readers"]
+
+
+# --------------------------------------------------------------------------- #
+# Corrected event semantics (κ(t)-check 2026-08-21, DIRECTION-EVENT verdict)
+# --------------------------------------------------------------------------- #
+class TestCorrectedEventSemantics:
+    """memory/kappa-t-check-2026-08-21.md: entry-steps are μ/direction
+    events (Δwarmth −0.147 ≈ flip's −0.151, p=0.68); κ polarity is warm=
+    tight ≈24 / cynical=loose ≈11; transitions only LOOSEN κ."""
+
+    def test_entry_is_a_warmth_event(self):
+        rng = np.random.default_rng(0)
+        w, k = room_schedule(NIGHT_FAMILIES["T4a"], False, rng)
+        base, n, flip, entries = NIGHT_FAMILIES["T4a"]
+        e = entries[0]
+        # μ steps down at entry by ENTRY_DWARMTH (flip-magnitude)
+        assert w[e - 1] - w[e] == pytest.approx(ENTRY_DWARMTH)
+        # the flip's own step is intact
+        assert w[flip - 1] - w[flip] == pytest.approx(0.5)
+
+    def test_entry_moves_mu_at_flip_magnitude(self):
+        rng = np.random.default_rng(1)
+        rp1 = room_path(NIGHT_FAMILIES["T1"], False, rng)
+        rp4 = room_path(NIGHT_FAMILIES["T4a"], False, rng)
+        dmu_entry = float(np.linalg.norm(rp4["mu"][12] - rp4["mu"][11]))
+        dmu_flip = float(np.linalg.norm(rp1["mu"][20] - rp1["mu"][19]))
+        assert 0.5 * dmu_flip < dmu_entry < 2.0 * dmu_flip
+
+    def test_kappa_polarity_warm_tight_cynical_loose(self):
+        rng = np.random.default_rng(0)
+        w, k = room_schedule(NIGHT_FAMILIES["T1"], False, rng)
+        assert k[:20].mean() == pytest.approx(KAPPA_WARM, abs=1.0)
+        assert k[20:].mean() == pytest.approx(KAPPA_COLD, abs=1.0)
+        assert k[:20].mean() > k[20:].mean() + 8.0
+
+    def test_transitions_only_loosen_kappa(self):
+        rng = np.random.default_rng(0)
+        w4, k4 = room_schedule(NIGHT_FAMILIES["T4a"], False, rng)
+        assert k4[12] < k4[11] - 5.0          # entry loosens (no +12 spike)
+        assert k4[12:] .max() < k4[:12].min()  # never re-tightens after
+
+    def test_kappa_floor_respected(self):
+        rng = np.random.default_rng(0)
+        # T4b: flip then entry — deepest stacked loosening
+        w, k = room_schedule(NIGHT_FAMILIES["T4b"], False, rng)
+        assert (k >= 2.5 * 0.9).all()
+
+    def test_null_mode_field_polarity(self):
+        rng = np.random.default_rng(0)
+        w, k = room_schedule(NIGHT_FAMILIES["T2"], True, rng)
+        base, n, flip, entries = NIGHT_FAMILIES["T2"]
+        assert len(set(w.tolist())) == 1              # warmth flat
+        assert k[:flip].mean() > k[flip:].mean() + 8  # cohesion shift loosens
+
+    def test_manifest_carries_entry_dwarmth(self, wave):
+        d, man = wave
+        assert man["entry_dwarmth"] == pytest.approx(ENTRY_DWARMTH)
 
 
 # --------------------------------------------------------------------------- #

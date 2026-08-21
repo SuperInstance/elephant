@@ -61,15 +61,20 @@ def check(results, cond, label):
     return bool(cond)
 
 
-def expected_logged_warmth(base, flip, flip_size, n, W=W_SMOOTH):
+def expected_logged_warmth(base, flip, flip_size, n, W=W_SMOOTH,
+                          entries=None, entry_dwarmth=0.485):
     """The deterministic component of logged warmth_vmf(t): observations
     are trailing-W means of the scheduled path; the logged fit is
-    cumulative over the night. Returns E[fit warmth](t) from the schedule
-    alone — this is the 'cumulative-fit lag accounted' comparison."""
+    cumulative over the night. Entries are μ events (κ-check 2026-08-21):
+    the schedule steps down by entry_dwarmth at each entry, exactly like a
+    (smaller) flip. Returns E[fit warmth](t) from the schedule alone — the
+    'cumulative-fit lag accounted' comparison."""
     w = np.full(n, float(base))
     if flip is not None:
         w[:flip] = base + flip_size / 2.0
         w[flip:] = base - flip_size / 2.0
+    for e in (entries or []):
+        w[e:] -= float(entry_dwarmth)
     sm = np.array([w[max(0, t - W + 1):t + 1].mean() for t in range(n)])
     return np.cumsum(sm) / np.arange(1, n + 1)
 
@@ -149,8 +154,11 @@ def run_gate(manifest_path):
         nt = w["nights"][tag]
         sched = meta["schedule"]
         n = len(nt.speaks)
+        edw = float(man.get("entry_dwarmth", 0.485))
         exp_flip = expected_logged_warmth(sched["base_warmth"],
-                                          sched["flip_seq"], flip_size, n)
+                                          sched["flip_seq"], flip_size, n,
+                                          entries=sched.get("entry_seqs"),
+                                          entry_dwarmth=edw)
         exp_flat = expected_logged_warmth(sched["base_warmth"], None,
                                           flip_size, n)
         fitted = [(r["seq"], r["fit"]["warmth_vmf"]) for r in nt.speaks
