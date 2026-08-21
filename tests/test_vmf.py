@@ -29,6 +29,7 @@ from elephant.vmf import (
     RHOMAX,
     WARM,
     edge,
+    record_with,
     vmf_fit,
     windowed,
     zvec,
@@ -346,6 +347,34 @@ def test_edge_deadband_replay_is_still():
     assert e["real"] is False
     assert edge(None, fit) is None
     assert edge(fit, None) is None
+
+
+def test_record_with_books_ledger_entries():
+    # The cell-ledger producer (quilt bridge, docs/quilt-bridge.md):
+    # imbalance ≡ d_mu on the before→after field-edge (identity 4).
+    s = _make_session()
+    fit_b = vmf_fit(windowed(s.room, s.bank, W=8))
+    # no reading → nothing booked (the NMIN honesty gate)
+    assert record_with(fit_b, None) is None
+    assert record_with(None, None) is None
+    # no prior → the genesis entry: no surprise claimed, never a fake number
+    g = record_with(None, fit_b, cell="room.field.test", ts=7.0)
+    assert g is not None
+    assert g["v"] == 1 and g["cell"] == "room.field.test" and g["ts"] == 7.0
+    assert g["before"] is None and g["expected"] is None
+    assert g["imbalance"] is None and g["delta"] is None
+    assert g["after"] == fit_b["mu_hat"]
+    assert g["provenance"]["producer"] == "elephant.vmf.record_with"
+    # a full edge: imbalance == d_mu == ‖after − before‖ (persistence prior)
+    r = record_with(fit_b, fit_b, cell="room.field.test", ts=8.0)
+    assert r is not None
+    d_mu = float(np.linalg.norm(np.array(r["after"]) - np.array(r["before"])))
+    assert r["imbalance"] == pytest.approx(d_mu)  # identity 4
+    assert r["imbalance"] == pytest.approx(0.0)   # replay is still
+    assert r["expected"] == r["before"]           # persistence prior
+    assert r["delta"] == pytest.approx([0.0] * len(fit_b["mu_hat"]))
+    assert r["d_warmth"] == pytest.approx(edge(fit_b, fit_b)["d_warmth"])
+    assert r["real"] is False
 
 
 def test_vmf_never_uses_v0_concentration():

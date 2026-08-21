@@ -188,3 +188,50 @@ def edge(fb: Optional[dict], fa: Optional[dict], db_factor: float = 2.0) -> Opti
         "d_log_kappa": float(np.log(fa["kappa"] / fb["kappa"])),
         "real": d_mu > db_factor * max(fb["mu_se"], fa["mu_se"]),
     }
+
+
+def record_with(expected: Optional[dict], output: Optional[dict],
+                cell: str = "room.field", ts: float = 0.0,
+                db_factor: float = 2.0) -> Optional[dict]:
+    """One cell-ledger entry — the elephant's producer half of the quilt seam.
+
+    Wire contract (docs/quilt-bridge.md, quilt-rust/docs/cell-ledger.md): the
+    ledger stores the before→after directed edge as
+    ``{v, cell, ts, before, after, delta, imbalance, expected, provenance}``.
+    ``expected`` is the forecast the outcome was scored against; under the
+    default persistence prior (predict(b) = b) it IS ``before``, so
+    ``imbalance == ‖expected − output‖ == d_mu`` by construction — identity 4
+    of the bridge (on the unit sphere imbalance ≡ d_mu, the field-edge).
+
+    Honesty gates coincide with the ledger's: with no prior, the entry books
+    ``imbalance: null`` (the genesis entry — never fake a number); with no
+    reading at all (``output`` None — e.g. N < NMIN), nothing is booked.
+    """
+    if output is None:
+        return None  # no reading — nothing to book
+    if expected is None:
+        # Genesis entry: no prior, no surprise claimed (ledger §3).
+        return {
+            "v": 1, "cell": cell, "ts": float(ts),
+            "before": None, "after": output["mu_hat"],
+            "delta": None, "imbalance": None, "expected": None,
+            "provenance": {"origin": "reading",
+                            "producer": "elephant.vmf.record_with"},
+        }
+    e = edge(expected, output, db_factor=db_factor)
+    if e is None:
+        return None
+    return {
+        "v": 1, "cell": cell, "ts": float(ts),
+        "before": expected["mu_hat"],
+        "after": output["mu_hat"],
+        "delta": [float(a) - float(b)
+                  for a, b in zip(output["mu_hat"], expected["mu_hat"])],
+        "imbalance": e["d_mu"],          # identity 4: imbalance ≡ d_mu
+        "expected": expected["mu_hat"],  # persistence prior, sealed pre-outcome
+        "d_warmth": e["d_warmth"],       # the signed leg the ledger discards
+        "d_log_kappa": e["d_log_kappa"],
+        "real": e["real"],
+        "provenance": {"origin": "reading",
+                        "producer": "elephant.vmf.record_with"},
+    }

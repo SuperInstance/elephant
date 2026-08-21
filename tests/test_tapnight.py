@@ -1,10 +1,12 @@
 """elephant — tests: the Tap-night session (the elephant at The Tap)."""
+import json
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
+import pytest
 
 from elephant.field import DIAL_NAMES, RoomField
 from elephant.tapnight import Participant, TapNightSession
@@ -111,6 +113,56 @@ def test_self_tuning_diverges_two_personalities():
     # each sharpened toward its own voice: warm -> mood, cynic -> cynicism
     assert warm.dial_weights[DIAL_NAMES.index("mood")] > 0.35
     assert cynic.dial_weights[DIAL_NAMES.index("cynicism")] > 0.35
+
+
+def test_cell_ledger_producer_fires_on_speak(tmp_path):
+    # Cross-pollination missing-link #2: the elephant emits a cell-ledger
+    # record on every reading — imbalance ≡ d_mu (docs/quilt-bridge.md).
+    path = tmp_path / "ledger.jsonl"
+    s = TapNightSession("The Tap", participants=[
+        Participant("writer", dial_weights={"mood": 0.5, "joke_landing": 0.5},
+                    vibe={"mood": 0.6, "joke_landing": 0.4}),
+        Participant("critic", dial_weights={"cynicism": 1.0},
+                    vibe={"cynicism": 0.7}),
+    ], log_path=str(path))
+    s.start_session()
+    lines = [
+        ("writer", "I love this warm room, truly. haha", {"❤️": 2}),
+        ("critic", "Sure, sure. Obviously great. 🙄", {}),
+        ("writer", "We built it together, honestly, and it holds.", {}),
+        ("critic", "Whatever, lovely, as if.", {}),
+        ("writer", "The fire is warm and the room is kind tonight.", {"❤️": 1}),
+        ("critic", "A joke? Please. As if that landed. 🙄", {}),
+        ("writer", "It lands, it always lands, and we all laugh.", {"😂": 3}),
+        ("critic", "Rolling my eyes so hard. 😒", {}),
+        ("writer", "The presence in this room is something else.", {}),
+        ("critic", "Sure, presence. Whatever that means. 🙄", {}),
+        ("writer", "Warmth, honesty, and a joke that actually landed.",
+         {"😂": 1, "❤️": 1}),
+        ("critic", "Panic? No. Cynicism? Yes. 😏", {}),
+    ]
+    for a, t, r in lines:
+        s.speak(a, t, reactions=r)
+
+    rows = [json.loads(l) for l in path.read_text().splitlines() if l.strip()]
+    ledgers = [r for r in rows if r.get("type") == "ledger"]
+    assert len(ledgers) >= 2  # producer fired: genesis + at least one edge
+
+    # genesis entry: no prior, no surprise claimed (ledger §3)
+    assert ledgers[0]["v"] == 1
+    assert ledgers[0]["imbalance"] is None
+    assert ledgers[0]["before"] is None and ledgers[0]["expected"] is None
+    assert ledgers[0]["after"] is not None
+
+    # every subsequent entry: imbalance ≡ d_mu ≡ ‖after − before‖, and the
+    # persistence prior (predict(b) = b) is the before state — identity 4
+    for r in ledgers[1:]:
+        d_mu = float(np.linalg.norm(np.asarray(r["after"]) - np.asarray(r["before"])))
+        assert r["imbalance"] == pytest.approx(d_mu)
+        assert r["expected"] == r["before"]
+        assert len(r["delta"]) == len(r["before"])
+        assert r["cell"].startswith("room.field.")
+        assert r["provenance"]["producer"] == "elephant.vmf.record_with"
 
 
 if __name__ == "__main__":

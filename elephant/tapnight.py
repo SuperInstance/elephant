@@ -50,7 +50,7 @@ from elephant.dials import DEFAULT_DIALS
 from elephant.field import DIAL_NAMES, RoomField, read_field
 from elephant.room import Message, Room
 from elephant.vmf import A7 as vmf_A7, edge as vmf_edge, vmf_fit, \
-    windowed as vmf_windowed
+    record_with as vmf_record_with, windowed as vmf_windowed
 
 # Dial value ranges: the room field is clamped to these (charisma saturates,
 # never overshoots). mood & joke_landing are signed [-1,+1]; the rest run [0,1].
@@ -472,6 +472,13 @@ class TapNightSession:
         if self._last_fit is not None and fit is not None:
             edge = vmf_edge(self._last_fit, fit)
             edge["real"] = None  # floor uncalibrated until measurement nights
+        # Cell-ledger producer (quilt bridge, docs/quilt-bridge.md): book the
+        # before→after field-edge the moment it happens — imbalance ≡ d_mu.
+        # Emitted as its own append-only record (None when nothing to book).
+        ledger = vmf_record_with(self._last_fit, fit,
+                                 cell=f"room.field.{self.name}", ts=msg.ts)
+        if ledger is not None:
+            self._emit(dict(ledger, type="ledger"))
         if fit is not None:
             self._last_fit = fit
         trailing = self.room.messages[-self.W:]
