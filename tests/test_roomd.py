@@ -52,13 +52,18 @@ def test_panic_rings_exactly_once_rising_edge(tmp_path):
     assert packet["header"]["priority"] == "HIGH"
 
 
-def test_ring_rearms_on_fall(tmp_path):
+def test_ring_rearms_on_fall(tmp_path, monkeypatch):
+    # Patch time.time to guarantee unique ms-level timestamps for ring filenames.
+    _ts = [1000000.0]
+    def _tick():
+        _ts[0] += 0.01  # +10 ms per call, unique even at 1ms resolution
+        return _ts[0]
+    monkeypatch.setattr(time, "time", _tick)
     d = RoomDaemon(inbox=str(tmp_path))
     _ingest(d, PANIC)
     d.recompute()
-    _ingest(d, WARM)  # room cools (panic messages decay by gravity? messages persist; use fresh daemon rooms)
+    # Clear panic and re-ingest warm to lower the panic dial below threshold.
     d.rooms["galley"].messages = d.rooms["galley"].messages[:0] + type(d.rooms["galley"].messages)(WARM and [])
-    # simpler: clear and re-ingest warm
     for m in list(d.rooms["galley"].messages):
         d.rooms["galley"].messages.remove(m)
     _ingest(d, WARM)

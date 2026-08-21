@@ -16,6 +16,8 @@ modified; the wave gate's JSON re-run byte-identical.
    declared. Per the registration, the void is reported with the estimator
    finding and the fix route — never silently re-read.
 2. **The four legs, reported as indicative (both waves, never pooled):**
+      <!-- 2026-08-21 truthfulness annotation: VOID-by-rule: legs indicative
+   only, not declarative. -->
    **A fires** — wave-2 A = 0.647 (11/17 down-crossings within ±3 speaks of a
    registered transition, window-center referent; circular-shift null
    10,000: p = 0.0013, null95 = 0.45); wave-1 A = 0.632 (p = 0.0001,
@@ -23,6 +25,13 @@ modified; the wave gate's JSON re-run byte-identical.
    CI [0.122, 0.738]), wave-1 D = 5/10 = 0.50 (CI [0.187, 0.813]); both
    significantly above the null-night rate 0/1 (T9/S5 midpoint, no counted
    crossing on any null reader-night: 0/7 and 0/8 vs signal 14/65, 15/65).
+   **P holds decisively**
+   <!-- 2026-08-21 truthfulness annotation: "decisively" overclaims.
+   Red-team q-rule: q_trans ≈ q_rest ≈ 0.132 on the 4-dial subspace P measures;
+   the step is a rigid common translation there, so P_trans ≈ 1 is the estimator's
+   noise floor, not evidence of persistence. Correct verb: "P is saturated
+   (uninformative)." Kill branch unreachable by construction (needs 0.5 gap on
+   a 0.005-wide CI). -->
    **P holds decisively** — wave-2 P_trans = 0.9940 [0.991, 0.996] vs
    P_rest = 0.9935 (registered threshold: ≥ 0.5×P_rest = 0.497); wave-1
    0.9948 vs 0.9962. **S x-invariant in the primary** — slope 1.410
@@ -32,7 +41,13 @@ modified; the wave gate's JSON re-run byte-identical.
 3. **The mechanism picture (descriptive, no branch read off it):** at W=12
    the premise score is clear-side nearly everywhere (stable-phase mean ρ
    ≈ 2–4; transition-window dip ≈ 1.4–1.8). The transition drift spike
-   (split-half d ≈ 0.6–0.9 corpus-sd, vs stable ≈ 0.15–0.3) pushes a
+   (split-half d ≈ 0.6–0.9 corpus-sd, vs stable ≈ 0.15–0.3)
+   <!-- 2026-08-21 truthfulness annotation: these numbers are INCORRECT for the
+   canonical channel. The run's own JSON mean_d_by_phase: transition 0.363 vs
+   stable 0.317 (wave-2); straddle median 0.30. The 0.6–0.9 range is the
+   actual_presence sensitivity channel, not the primary. The true contrast is
+   ~1.27×, not 2–6×. -->
+   pushes a
    minority of readers (those with small offsets) through the 0.6 edge for
    exactly the ~1–2 window positions whose half-split straddles the
    boundary — those are the counted crossings, and their timing is tight
@@ -167,8 +182,12 @@ estimator finding (§5 of the verdict lines) and the fix route below.
 
 - **Event count ≥ 20** under the same registration (more nights, or more
   readers per night): with A's effect size (0.63–0.65 vs null ~0.25) and
-  P's 0.994, the composite would clear §5.3 and the verdict would move from
-  VOID to **SURVIVED (capped)** — "readers are instruments except at steps;
+  P's 0.994 (saturated per annotation above; not evidence of persistence), the
+  composite would clear §5.3 and the verdict would move from
+  VOID to **SURVIVED (capped)**
+  <!-- 2026-08-21 truthfulness annotation: VOID-by-rule: legs indicative
+  only, not declarative. This "what would change" paragraph reads as a
+  near-promise; it is scenario-sketching only. --> — "readers are instruments except at steps;
   the in-band ratio was an average over phases" (capped: does not reopen
   Branch A/B) — *if* S stays x-invariant and D's coverage climbs above 50%
   (D at 0.40–0.50 currently fails its clause; the composite tolerates a
