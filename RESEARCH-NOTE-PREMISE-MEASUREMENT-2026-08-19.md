@@ -4,7 +4,7 @@
 
 ## The premise under test
 
-The Nurse JEPA doctrine's second-order reading — the doctor reads the nurse's *change from her baseline* — is only real if readers have **idiosyncratic, stable** baselines. The synthetic reader-delta test assumed this; both the devil's pass-4 review and the rival's review demanded it be measured in the field. The devil's kill band: **if the field's baseline-spread-to-drift ratio lands below ~0.3–0.6 (corpus-sd units), the doctrine dies by its own registration.**
+The Nurse JEPA doctrine's second-order reading — the doctor reads the nurse's *change from her baseline* — is only real if readers have **idiosyncratic, stable** baselines. The synthetic reader-delta test assumed this; both the devil's pass-4 review and the rival's review demanded it be measured in the field. The devil's kill band: **if the field's baseline-spread-to-drift ratio lands below ~0.3–0.6 (corpus-sd units), the doctrine dies by its own registration.** *(Annotated 2026-08-21, zeroclaw-dissertation d59bf17 — NO CLEAN WIN: post-Switch-Test, "second-order" survives only as the structural term for baseline-relativity; the reader-delta object is a mean-shift, baseline-relative delta. This note's premise measurement stands unaffected — the in-band indeterminate verdict (0.5599 real / 0.4898 grounded) is a premise number, not a claim about the object's temporal reading.)*
 
 ## 1. Per-reader displacement model
 

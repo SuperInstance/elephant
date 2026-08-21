@@ -5,6 +5,13 @@ reads the nurse's CHANGE from her baseline) is only real if readers have
 IDIOSYNCRATIC, STABLE baselines. The synthetic reader-delta test assumed this
 premise; this script measures it in the field corpus (data/nights/*.jsonl).
 
+Post-Switch-Test annotation (2026-08-21, zeroclaw-dissertation d59bf17 — NO
+CLEAN WIN): "second-order" is retained as the structural term for baseline-
+relativity only; the reader-delta object is a mean-shift, baseline-relative
+delta (reads the step, not the change-of-reading). This script measures the
+PREMISE (baseline-spread-to-drift ratio), not the object's temporal claim, and
+its in-band result (0.5599 real-only / 0.4898 grounded) stands unaffected.
+
 The devil's kill band: if the field's baseline-spread-to-drift ratio lands
 below ~0.3-0.6 (corpus-sd units), the doctrine dies by its own registration.
 
