@@ -482,6 +482,22 @@ A short history of the build — the elephant grew like a room fills:
 
 ---
 
+## The fleet
+
+The elephant is one sense of a larger animal. Its siblings, and what flows
+between them:
+
+| Sibling | What flows |
+|---------|-----------|
+| [collective-unconscious](https://github.com/SuperInstance/collective-unconscious) | The other half of the seam — the elephant **computes** the 9-dial readings, CU **stores and retrieves** them (query by feeling). Bridge: [docs/collective-unconscious-bridge.md](docs/collective-unconscious-bridge.md). |
+| [crab-traps](https://github.com/SuperInstance/crab-traps) | The live ledger seam — chain-hashed field-edges already land in D1 via `POST /edge` on its Worker. |
+| [fleet-radio](https://github.com/SuperInstance/fleet-radio) | The voice — its Bar Bet reads the elephant's slope-regression numbers; its Weather Buoy reads the elephant's commits as weather. |
+| [ai-writings](https://github.com/SuperInstance/AI-Writings) | The rooms — the Tap-night corpora the elephant learned to read, and the corpus a feelings-indexed memory is built on. |
+| [mud-arena](https://github.com/SuperInstance/mud-arena) | More rooms — every perceive→act tick in the arena is a before→after edge waiting to be read. |
+| [quilt](https://github.com/SuperInstance/quilt) | The ledger — every reading is a delta, and the cell-ledger records exactly that edge (`imbalance ≡ d_mu`, see [docs/quilt-bridge.md](docs/quilt-bridge.md)). |
+
+---
+
 ## Gallery
 
 <p align="center"><img src="assets/images/gallery-elephant.jpg" alt="The elephant in the room — warm, felt, everywhere at once: the temperature no one names until it changes." width="720"></p>
