@@ -20,7 +20,7 @@ by tractability **and** liveness:
 |-----------|----------|-------|------|---------|
 | **the-tap** | Rust/TS (Workers) | ✅ live, fetchable | plain JSON relay API, no keys for reads | **chosen** |
 | git-native-mud | Python | ❌ turn-based, needs commits | `mud_engine.py` + YAML rooms | easy but not live |
-| mud-arena | Python | ❌ sim arena | `RoomGraph`, WebSocket | heavy, not a "room with a vibe" |
+| mud-engine | Python | ❌ sim arena | `RoomGraph`, WebSocket | heavy, not a "room with a vibe" |
 | ec2mud | Next.js/TS | ❌ local socket | Socket.IO on :3006 | browser-first, not live |
 
 The Tap is the MUD the captain actually points people at — it *is* the bar

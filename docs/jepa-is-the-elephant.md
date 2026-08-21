@@ -33,7 +33,7 @@
    like the hand-crafted matcher (beat 0.849)?" is a conductor's-baton question.
    The elephant is not a baton. It is a field over a room.
 2. **The unit of perception is the ROOM, not the stream.** The fleet already has
-   rooms — mud-arena's room engine, The Tap, the tide pools, the wheelhouse of
+   rooms — mud-engine's room engine, The Tap, the tide pools, the wheelhouse of
    F/V EILEEN. The ambient field of each room is what the elephant sense should feel.
 3. **Two social forces, not one:**
    - *Acclimation* — agent → room. Output features drift toward the room's ambient
