@@ -69,6 +69,9 @@ Run:
   python3 scripts/riverbed_generator.py --branch instrument
   python3 scripts/riverbed_generator.py --alpha 0.5 --tag-prefix rb-a50
   python3 scripts/riverbed_generator.py --branch collapse --null-mode
+  python3 scripts/riverbed_generator.py --alpha 0.25 --blind          # G3
+  python3 scripts/riverbed_generator.py --unblind <sealed.json>       # G3
+  python3 scripts/riverbed_generator.py --alpha 0.5 --pair-seed 4242  # G13
   python3 scripts/riverbed_generator.py --self-test
 """
 from __future__ import annotations
@@ -78,6 +81,8 @@ import hashlib
 import json
 import math
 import os
+import re
+import secrets
 import sys
 import tempfile
 from types import SimpleNamespace
@@ -100,10 +105,33 @@ D = 7
 W_WIN = 8          # engine's trailing-window size (tapnight.TapNightSession W)
 STEP = 60.0        # auto60 clock
 KAPPA_R_DEFAULT = 40.0   # reader-fiber concentration (tight instrument)
-DEV_SCALE = 0.55         # norm of the persona-anchored deviation direction
+DEV_SCALE = 0.70         # norm of the persona-anchored deviation direction
+                         # (G7 calibration 2026-08-21: 0.55 → 0.70 so the
+                         # realized end-to-end ICC lands in [0.85, 0.96]; see
+                         # the ICC_TARGET note below)
 OU_PHI = 0.9             # between-night deviation persistence
-ICC_TARGET = 0.9076      # filed field-corpus ICC (the honesty parameter)
-ORTH_WALK = 0.02         # e⊥ tangent random-walk step (deadband drift floor)
+ICC_TARGET = 0.96        # ANALYTIC OU-level honesty target: the between-night
+                         # OU wobble ALONE would realize this ICC. The field-
+                         # measure geometry (ladder × on-sphere fiber, weak-
+                         # dial lottery) contributes additional within-
+                         # variance, so the END-TO-END realized ICC — measured
+                         # by the G7 self-test through the registered
+                         # Measurement — lands in the filed band [0.85, 0.96]
+                         # (0.87 at the registered seed 20260821; field wave-2
+                         # actual-presence value 0.8444, wave-1 filed 0.9076)
+ORTH_WALK = 0.005        # e⊥ tangent random-walk step (deadband drift floor).
+                         # G7 calibration 2026-08-21: 0.02 → 0.005. The walk
+                         # is THREADED across the wave (one persistent space —
+                         # The Tap): each night continues the corpus's single
+                         # latent tangent path instead of redrawing fresh;
+                         # fresh-per-night directions couple the persona fibers
+                         # to the room's per-night draw and sink realized ICC
+                         # to ~0.74. At 0.005/step the path diffuses ~0.1 rad
+                         # across a 9-night corpus (room-scale persistence)
+                         # while within-night behavior stays walk-dominated at
+                         # the same floor shape. Full deadband-floor sweep vs
+                         # the field's 0.29 corpus-sd stable-phase d floor is
+                         # still Gap G6 (untested here — see S1 report).
 KAPPA_JITTER = 0.03      # multiplicative log-jitter on κ(t)
 FLIP_SIZE = 0.5          # warmth jump at a warm→cynical flip (Δw)
 
@@ -138,6 +166,46 @@ BRANCHES = {  # (alpha, ou_phi, kappa_R, redraw_dev_per_night)
     "collapse": (1.0, OU_PHI, KAPPA_R_DEFAULT, False),
     "noise": (0.0, 0.0, 8.0, True),
 }
+
+# TODO(G2 — Arm 2, wave-3 SEPARATE REGISTRATION ADDENDUM; do not build here):
+# the engine-native arm expresses branch semantics as a persona-resampling
+# map on TapNightSession constructor inputs (collapse = per-night warmth-
+# conditioned persona redraw; the name persists, the instrument doesn't —
+# e2_nights.py run_night(...) is the wiring point). The direct-vMF arm above
+# is complete; the extension point is a future build_arm2_wave(...) sibling
+# of generate_wave() in this module. Registered only via its own addendum.
+
+# ----------------------------------------------------------------------- #
+# G1 — mid-night entrants (field roster mechanics, wave-3 plan §3 G1).    #
+# Families with entry_seqs STAGE the entrant exactly as the engine does  #
+# the drifter on the T-nights (verified on data/nights/night-{T4a,T4b,   #
+# T5,T5c}.jsonl): absent from session_open roster, declared in           #
+# staged_entries, OMITTED from every readers block before the entry seq  #
+# (the field's drifter-omission convention that fires the analysis      #
+# NaN-before-entry path), present from it with entry_mode "staged-cold", #
+# authoring his first speak AT the entry seq.                            #
+# ----------------------------------------------------------------------- #
+ENTRANT_NAME = "drifter"
+ENTRANT_SPEAKS = {  # engine-mirrored staged speak seqs (measured on the
+    "T4a": [12, 16, 20, 24, 28, 32],   # filed wave-2 corpus, 2026-08-21)
+    "T4b": [28, 32, 36, 40, 43],
+    "T5":  [24, 28, 32, 36, 40, 44],
+    "T5c": [24, 28, 32, 36, 40, 44],
+}
+# Measurement attendance of the staged entrant per canonical family —
+# mirrors FIELD_NIGHTS_W2/COLD_ENTRY_W2 semantics: the drifter measurement-
+# attends T4a/T4b; his T5/T5c line-readings are warmth content only.
+# Custom staged families default to attendance=True.
+STAGED_ATTENDANCE = {"T4a": True, "T4b": True, "T5": False, "T5c": False}
+
+
+def staged_speaks(fam, family):
+    """Seqs the staged entrant authors (engine positions for the canonical
+    families; entry + 4k, <=6 lines, for custom staged families)."""
+    if fam in ENTRANT_SPEAKS:
+        return list(ENTRANT_SPEAKS[fam])
+    e, n = family[3][0], family[1]
+    return [e + 4 * k for k in range(6) if e + 4 * k < n]
 
 
 # ----------------------------------------------------------------------- #
@@ -195,13 +263,24 @@ def load_personas():
 
 def persona_deviations(names, personas):
     """Persona-anchored deviation directions: z(vibe_start) de-meaned over
-    the wave's reader pool, normalized, scaled to DEV_SCALE. Persona space
-    only — no estimator coordinate (roster-mean of READINGS, corpus_sd,
-    o/d) is ever touched."""
+    the wave's reader pool, rescaled so the AVERAGE norm is DEV_SCALE.
+    Persona space only — no estimator coordinate (roster-mean of READINGS,
+    corpus_sd, o/d) is ever touched.
+
+    G7 calibration note (2026-08-21): PROPORTIONAL, not per-reader
+    unit-normalized — the engine's reader deviations are proportional to
+    the persona's dial profile with heterogeneous magnitudes, and
+    unit-normalizing every reader to the same norm erases that
+    heterogeneity (it also starves weak dials of between-reader spread:
+    realized panic-dial ICC collapsed to ~0.1). Proportional anchors
+    reproduce the engine's magnitude structure."""
     z = {n: SCALE * (np.asarray(personas[n]["vibe_start"], float) - CENTER)
          for n in names}
     mean = np.mean(np.stack([z[n] for n in names]), axis=0)
-    return {n: DEV_SCALE * _unit(z[n] - mean) for n in names}
+    raw = {n: z[n] - mean for n in names}
+    avg = float(np.mean([np.linalg.norm(v) for v in raw.values()]))
+    c = DEV_SCALE / (avg + 1e-12)
+    return {n: c * raw[n] for n in names}
 
 
 # ----------------------------------------------------------------------- #
@@ -230,18 +309,26 @@ def room_schedule(family, null_mode, rng, flip_size=FLIP_SIZE):
     return w, kappa
 
 
-def room_path(family, null_mode, rng, flip_size=FLIP_SIZE):
+def room_path(family, null_mode, rng, flip_size=FLIP_SIZE, e_state=None):
     """One sample path of the room base orbit: μ(t) on S⁶ with Ŵ·μ(t) =
     w(t) EXACTLY (direction-only warmth), e⊥ a slow tangent walk; latent
     per-message draws s_i ~ vMF(μ(i), κ(i)); observed windowed samples
     o_t = normalize(mean of trailing W_WIN s_i) — the engine's
     windowed-reading analog (this smoothing is what the logged fits see).
-    """
+
+    e_state (G7): optional dict threading the tangent direction ACROSS the
+    wave — one persistent latent path per corpus (The Tap is one space):
+    the first night seeds it, later nights continue it. Within-night
+    behavior is unchanged (same ORTH_WALK step). None ⇒ fresh draw
+    (single-night / self-test use)."""
     base, n, flip, entries = family
     w, kappa = room_schedule(family, null_mode, rng, flip_size)
     # e⊥(t): unit, ⊥ Ŵ, slow tangent random walk (the drift floor)
-    e = rng.normal(size=D)
-    e = _unit(e - (e @ WARM) * WARM)
+    if e_state is not None and e_state.get("e") is not None:
+        e = _unit(np.asarray(e_state["e"], float))
+    else:
+        e = rng.normal(size=D)
+        e = _unit(e - (e @ WARM) * WARM)
     mus, s_lat = [], []
     for t in range(n):
         xi = rng.normal(size=D)
@@ -249,6 +336,8 @@ def room_path(family, null_mode, rng, flip_size=FLIP_SIZE):
         e = _unit(e + ORTH_WALK * xi)
         mus.append(w[t] * WARM + math.sqrt(max(0.0, 1.0 - w[t] ** 2)) * e)
         s_lat.append(vmf_sample(rng, mus[-1], kappa[t]))
+    if e_state is not None:
+        e_state["e"] = e
     obs = [_unit(np.mean(s_lat[max(0, t - W_WIN + 1):t + 1], axis=0))
            for t in range(n)]
     return {"w": w, "kappa": kappa, "mu": mus, "obs": obs}
@@ -288,14 +377,44 @@ def _clamp(v):
 # ----------------------------------------------------------------------- #
 def generate_night(tag, family, roster_names, personas, dev_anchors,
                    ou_state, branch, seed, outdir, null_mode=False,
-                   flip_size=FLIP_SIZE):
+                   flip_size=FLIP_SIZE, pair_seed=None, fam=None, e_state=None):
     """Emit data path outdir/night-<tag>.jsonl. Returns (path, ou_state)
-    with the OU state advanced for every ATTENDING reader (between-night
-    step happens once per attended night, in fixed NIGHT_ORDER)."""
+    with the OU state advanced for every APPEARING reader (roster + staged
+    entrant; the between-night step happens once per night appeared, in
+    fixed family order at the wave level).
+
+    G1 (field entry mechanics): a family with entry_seqs stages the
+    ENTRANT mid-night — omitted from the readers block before the entry
+    seq, present from it (entry_mode "staged-cold"), never in the open
+    roster but declared in staged_entries, exactly like the engine.
+
+    G13 (2AFC pair matching): with pair_seed set, the room path and the
+    reader fiber draw from SEPARATE rng streams keyed (pair_seed, family)
+    — branch-invariant by construction (the key carries the family, not
+    the branch-carrying tag), so paired corpora get the SAME room path,
+    rosters, authors and kappa(t), and alpha enters only through the
+    fiber mean m_R = mu + (1-alpha)*dev. At fixed kappa_R the per-draw
+    fiber counts are kappa-determined, so streams stay aligned across
+    the branches of a pair.
+    """
     alpha, ou_phi, kappa_r, redraw = branch
-    rng = np.random.default_rng((seed, zlib_crc(tag)))
+    fam = fam if fam is not None else tag
+    if pair_seed is not None:  # G13: branch-invariant streams
+        room_rng = np.random.default_rng((pair_seed, zlib_crc(fam), 1))
+        rng = np.random.default_rng((pair_seed, zlib_crc(fam), 2))
+    else:
+        rng = np.random.default_rng((seed, zlib_crc(tag)))
+        room_rng = rng
     n = family[1]
-    room = room_path(family, null_mode, rng, flip_size)
+    room = room_path(family, null_mode, room_rng, flip_size, e_state=e_state)
+
+    # --- G1: staged entrant (families with entry events) --------------- #
+    entries = family[3]
+    entrant = ENTRANT_NAME if entries else None
+    entry_seq = entries[0] if entries else None
+    assert entrant not in roster_names, "entrant must stage, not roster"
+    e_speaks = set(staged_speaks(fam, family)) if entrant else set()
+    present = list(roster_names) + ([entrant] if entrant else [])
 
     # --- reader fiber: advance OU / redraw deviations for this night --- #
     # ICC honesty: steady-state OU variance = (1−ICC)/ICC of the anchor
@@ -303,7 +422,7 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
     ou_sigma = DEV_SCALE * math.sqrt((1.0 - ICC_TARGET) / ICC_TARGET
                                      * (1.0 - ou_phi ** 2))
     dev_now = {}
-    for name in roster_names:
+    for name in present:
         if redraw:
             dev_now[name] = DEV_SCALE * _unit(rng.normal(size=D))
         else:
@@ -312,12 +431,17 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
             ou_state[name] = st
             dev_now[name] = dev_anchors[name] + st
 
-    # --- author schedule (seeded rotation over the roster) --- #
+    # --- author schedule (seeded rotation over the roster; the staged --- #
+    # entrant authors exactly his engine positions — draw count and call
+    # order are branch-invariant, so paired corpora align) -------------- #
     authors = [roster_names[i] for i in rng.integers(0, len(roster_names), n)]
+    for q in sorted(e_speaks):
+        assert 0 <= q < n, f"entrant speak {q} outside night ({fam})"
+        authors[q] = entrant
 
-    # --- reader fibers sampled against the room path --- #
+    # --- reader fibers sampled against the room path ------------------- #
     g, denom = {}, {}
-    for name in roster_names:
+    for name in present:
         wt = np.asarray(personas[name]["dial_weights"], float)
         g[name] = wt / wt.max() if wt.max() > 1e-12 else np.ones(D)
         # The pipeline reads z_R = SCALE*g ⊙ (eff − CENTER); components with
@@ -326,37 +450,46 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
         dnm = SCALE * g[name]
         denom[name] = np.where(dnm > 1e-9, dnm, 1.0)
         denom[name] = (denom[name], dnm > 1e-9)
-    x_reader = {name: [] for name in roster_names}   # unit z-space draws
-    eff_reader = {name: [] for name in roster_names}  # dial-space images
+    x_reader = {name: {} for name in present}    # unit z-space draws, by seq
+    eff_reader = {name: {} for name in present}  # dial-space images, by seq
     for t in range(n):
-        for name in roster_names:
+        for name in present:
+            if name == entrant and t < entry_seq:
+                continue  # G1: no fiber draws before entry
             m = _unit(room["mu"][t] + (1.0 - alpha) * dev_now[name])
             x = vmf_sample(rng, m, kappa_r)
-            x_reader[name].append(x)
+            x_reader[name][t] = x
             dn, mask = denom[name]
-            eff_reader[name].append(_clamp(
-                CENTER + np.where(mask, x / dn, 0.0)))
+            eff_reader[name][t] = _clamp(
+                CENTER + np.where(mask, x / dn, 0.0))
 
     session_id = hashlib.md5(f"riverbed:{seed}:{tag}".encode()).hexdigest()
-    rows = []
-    rows.append({
+
+    def _entry(name):
+        """Roster-shaped param block (open roster and staged_entries share
+        the engine's exact 6-key shape — verified on night-T4a.jsonl)."""
+        return {"name": name,
+                "dial_weights": [float(x) for x in personas[name]["dial_weights"]],
+                "acclimation_rate": float(personas[name]["acclimation_rate"]),
+                "charisma": float(personas[name]["charisma"]),
+                "vibe": list(personas[name]["vibe_start"]),
+                "vibe_start": list(personas[name]["vibe_start"])}
+
+    open_row = {
         "v": 1, "type": "session_open", "session_id": session_id,
         "space_id": "The Tap", "t_start": 0.0, "clock_mode": "auto60",
         "reader": {"kind": "RoomElephant", "identity": "riverbed-v1",
                    "bank": list(BANK_CLASSES)},
         "params": {"W": W_WIN, "standardization": "z=2(v-c)/(hi-lo)",
                    "estimator": "vmf-mle-newton-v1", "kappa_max": 500},
-        "roster": {name: {"name": name,
-                          "dial_weights": [float(x) for x in personas[name]["dial_weights"]],
-                          "acclimation_rate": float(personas[name]["acclimation_rate"]),
-                          "charisma": float(personas[name]["charisma"]),
-                          "vibe": list(personas[name]["vibe_start"]),
-                          "vibe_start": list(personas[name]["vibe_start"])}
-                   for name in roster_names},
+        "roster": {name: _entry(name) for name in roster_names},
         "reader_schema": {"version": 2, "field": "field_eff_to_reader",
                           "lens": ["vibe_now", "weights_now"],
                           "fit": "vmf-mle-newton-v1", "gate": "roster"},
-    })
+    }
+    if entrant is not None:  # G1: staged, exactly like the engine
+        open_row["staged_entries"] = {entrant: _entry(entrant)}
+    rows = [open_row]
 
     interactions = {}
     seen_author = set()
@@ -376,7 +509,9 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
             last_fit = fit
 
         readers, effs = {}, {}
-        for name in roster_names:
+        for name in present:
+            if name == entrant and t < entry_seq:
+                continue  # G1: absent from the readers block before entry
             x = x_reader[name][t]
             eff = eff_reader[name][t]
             effs[name] = eff
@@ -390,8 +525,12 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
                     "weights_now": [float(x_) for x_ in personas[name]["dial_weights"]],
                 },
                 "reader_fit": _reader_fit_light(
-                    x_reader[name][max(0, t - W_WIN + 1):t + 1]),
+                    [x_reader[name][s] for s in range(max(0, t - W_WIN + 1), t + 1)
+                     if s in x_reader[name]]),
             }
+        entry_mode = {name: "roster" for name in roster_names}
+        if entrant is not None and t >= entry_seq:
+            entry_mode[entrant] = "staged-cold"  # G1: engine entry-mode value
         reading_of = {}
         a = effs[author]
         na = float(np.linalg.norm(a))
@@ -417,7 +556,7 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
             "interactions_after": dict(interactions),
             "fit": fit, "edge": edge,
             "readers": readers,
-            "entry_mode": {name: "roster" for name in roster_names},
+            "entry_mode": entry_mode,
             "reading_of": reading_of,
         })
         seen_author.add(author)
@@ -443,9 +582,9 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
             "top_dials": ", ".join(n_ for n_, _ in dev_order[:3]),
         },
         "n_messages": n, "notes": "",
-        "reader_final": {name: np.median(np.stack(eff_reader[name]),
-                                         axis=0).tolist()
-                         for name in roster_names},
+        "reader_final": {name: np.median(np.stack(
+            list(eff_reader[name].values())), axis=0).tolist()
+            for name in present},
     })
 
     path = os.path.join(outdir, f"night-{tag}.jsonl")
@@ -473,10 +612,20 @@ def stripped_md5(path):
 
 # ----------------------------------------------------------------------- #
 # Wave generation + manifest (e2_nights discipline: sha256, stripped md5, #
-# determinism re-run; branch recorded but sealable for blinded analysis)  #
+# determinism re-run). G3: with blind=True the manifest is REDACTED —     #
+# SEALED_FIELDS (branch params + seeds) are withheld and tags carry an    #
+# opaque corpus id — and the withheld parameters live in a sealed         #
+# sidecar bound to the corpus by sha256 (nights + sealed file); open it   #
+# ONLY post-registration via unblind()/--unblind, after verdicts are      #
+# filed (wave-3 plan §5.5, ideation §2.3).                               #
 # ----------------------------------------------------------------------- #
+SEALED_FIELDS = ("branch", "alpha", "ou_phi", "kappa_R",
+                 "redraw_dev_per_night", "null_mode", "seed", "pair_seed")
+
+
 def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
-                  null_mode=False, tag_prefix=None, flip_size=FLIP_SIZE):
+                  null_mode=False, tag_prefix=None, flip_size=FLIP_SIZE,
+                  pair_seed=None, blind=False, corpus_id=None):
     os.makedirs(outdir, exist_ok=True)
     if branch_name in BRANCHES and alpha is None:
         branch = BRANCHES[branch_name]
@@ -484,9 +633,18 @@ def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
         a = float(alpha)
         branch = (a, OU_PHI, KAPPA_R_DEFAULT, False)
         branch_name = f"alpha-{a:g}"
-    prefix = tag_prefix or f"rb-{branch_name}" + ("-null" if null_mode else "")
+    if blind:
+        corpus_id = re.sub(r"[^A-Za-z0-9_-]", "", corpus_id or "") \
+            or secrets.token_hex(4)
+        if tag_prefix:
+            print("[riverbed] NOTE: --tag-prefix ignored under --blind "
+                  "(opaque corpus id enforces the seal)")
+        prefix = f"rb-{corpus_id}"
+    else:
+        prefix = tag_prefix or f"rb-{branch_name}" + ("-null" if null_mode else "")
     personas = load_personas()
-    all_readers = sorted({n for names in ATTENDANCE.values() for n in names})
+    all_readers = sorted({n for names in ATTENDANCE.values() for n in names}
+                         | {ENTRANT_NAME})
     dev_anchors = persona_deviations(all_readers, personas)
     ou_state: dict = {}
 
@@ -499,11 +657,13 @@ def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
                  f"(append-only corpus; pick a new --tag-prefix or outdir)")
 
     paths = {}
-    for fam in NIGHT_ORDER:  # fixed order: OU advances per attended night
+    e_state: dict = {}   # G7: one persistent tangent path across the wave
+    for fam in NIGHT_ORDER:  # fixed order: OU advances per appeared night
         path, ou_state = generate_night(
             tags[fam], NIGHT_FAMILIES[fam], ATTENDANCE[fam], personas,
             dev_anchors, ou_state, branch, seed, outdir,
-            null_mode=null_mode, flip_size=flip_size)
+            null_mode=null_mode, flip_size=flip_size,
+            pair_seed=pair_seed, fam=fam, e_state=e_state)
         paths[fam] = path
 
     manifest = {"generated_by": "scripts/riverbed_generator.py",
@@ -512,12 +672,13 @@ def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
                 "alpha": branch[0], "ou_phi": branch[1],
                 "kappa_R": branch[2], "redraw_dev_per_night": branch[3],
                 "null_mode": null_mode, "flip_size": flip_size,
-                "reader_schema": 2, "nights": {}}
+                "pair_seed": pair_seed, "reader_schema": 2, "nights": {}}
     for fam in NIGHT_ORDER:
         tag = tags[fam]
         rows = [json.loads(l) for l in open(paths[fam], encoding="utf-8")
                 if l.strip()]
         speaks = [r for r in rows if r["type"] == "speak"]
+        entries = NIGHT_FAMILIES[fam][3]
         manifest["nights"][tag] = {
             "file": os.path.basename(paths[fam]),
             "family": fam,
@@ -528,29 +689,89 @@ def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
                                   if r["type"] == "session_open")["roster"]),
             "schedule": {"base_warmth": NIGHT_FAMILIES[fam][0],
                          "flip_seq": NIGHT_FAMILIES[fam][2],
-                         "entry_seqs": NIGHT_FAMILIES[fam][3]},
+                         "entry_seqs": entries},
+            # G1: staged-entrant bookkeeping (design facts, branch-free —
+            # safe for the redacted manifest; consumed by the adapter/gate)
+            "staged_entrant": ENTRANT_NAME if entries else None,
+            "entry_seq": entries[0] if entries else None,
+            "entrant_is_attendance": (bool(STAGED_ATTENDANCE.get(fam, True))
+                                       if entries else None),
         }
 
     # determinism: re-run the whole wave into a temp dir, compare stripped
+    # (the replay re-threads the tangent path from a fresh state)
     with tempfile.TemporaryDirectory() as tmp:
         ou2: dict = {}
+        e2: dict = {}
         for fam in NIGHT_ORDER:
             p2, ou2 = generate_night(tags[fam], NIGHT_FAMILIES[fam],
                                      ATTENDANCE[fam], personas, dev_anchors,
                                      ou2, branch, seed, tmp,
                                      null_mode=null_mode,
-                                     flip_size=flip_size)
+                                     flip_size=flip_size,
+                                     pair_seed=pair_seed, fam=fam,
+                                     e_state=e2)
             assert stripped_md5(p2) == manifest["nights"][tags[fam]]["stripped_md5"], tags[fam]
             manifest["nights"][tags[fam]]["deterministic_replay_identical"] = True
+
+    if not blind:
+        mpath = os.path.join(outdir, "riverbed-manifest.json")
+        with open(mpath, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=1)
+        print(f"[riverbed] branch={branch_name} alpha={branch[0]} "
+              f"null_mode={null_mode} seed={seed} "
+              f"pair_seed={pair_seed if pair_seed is not None else '-'}")
+        print(f"[riverbed] 9 nights -> {outdir} "
+              f"(determinism re-run: all stripped-md5 identical)")
+        print(f"[riverbed] manifest -> {mpath}")
+        return manifest
+
+    # --- G3: redact the manifest, seal the branch parameters ------------- #
+    redacted = {k: v for k, v in manifest.items() if k not in SEALED_FIELDS}
+    redacted["blinded"] = True
+    redacted["corpus_id"] = corpus_id
+    sname = f"riverbed-sealed-{corpus_id}.json"
+    sealed = {k: manifest[k] for k in SEALED_FIELDS}
+    sealed.update({"corpus_id": corpus_id, "tag_prefix": prefix,
+                   "nights": {t: manifest["nights"][t]["sha256"]
+                              for t in manifest["nights"]}})
+    spath = os.path.join(outdir, sname)
+    with open(spath, "w", encoding="utf-8") as f:
+        json.dump(sealed, f, indent=1)
+    redacted["sealed"] = {"file": sname,
+                          "sha256": hashlib.sha256(open(spath, "rb").read()).hexdigest()}
     mpath = os.path.join(outdir, "riverbed-manifest.json")
     with open(mpath, "w", encoding="utf-8") as f:
-        json.dump(manifest, f, indent=1)
-    print(f"[riverbed] branch={branch_name} alpha={branch[0]} "
-          f"null_mode={null_mode} seed={seed}")
+        json.dump(redacted, f, indent=1)
+    print(f"[riverbed] corpus_id={corpus_id} branch=SEALED alpha=SEALED "
+          f"seed=SEALED (unblind only post-registration)")
     print(f"[riverbed] 9 nights -> {outdir} "
           f"(determinism re-run: all stripped-md5 identical)")
-    print(f"[riverbed] manifest -> {mpath}")
-    return manifest
+    print(f"[riverbed] redacted manifest -> {mpath}; sealed sidecar -> {spath}")
+    return redacted
+
+
+def unblind(sealed_path, manifest_path=None):
+    """Open a sealed riverbed sidecar (post-registration only): verify the
+    seal — the redacted manifest's sealed.sha256 pins the sidecar bytes,
+    the sidecar's night sha256s pin the corpus — then return the withheld
+    branch parameters. Any tamper (sidecar, manifest, or night file)
+    raises AssertionError."""
+    sealed_path = os.path.abspath(sealed_path)
+    base = os.path.dirname(sealed_path)
+    mpath = manifest_path or os.path.join(base, "riverbed-manifest.json")
+    man = json.load(open(mpath, encoding="utf-8"))
+    assert man.get("sealed", {}).get("file") == os.path.basename(sealed_path), \
+        "sealed file is not the one this manifest declared"
+    got = hashlib.sha256(open(sealed_path, "rb").read()).hexdigest()
+    assert man["sealed"]["sha256"] == got, \
+        "sealed sidecar does not match the manifest seal (tampered?)"
+    sealed = json.load(open(sealed_path, encoding="utf-8"))
+    for tag, sha in sealed["nights"].items():
+        fn = os.path.join(base, man["nights"][tag]["file"])
+        assert hashlib.sha256(open(fn, "rb").read()).hexdigest() == sha, \
+            f"night {tag} does not match the seal (tampered?)"
+    return sealed
 
 
 # ----------------------------------------------------------------------- #
@@ -565,6 +786,8 @@ def _shim_night(path):
     nt.close = next(r for r in rows if r["type"] == "session_close")
     nt.v2 = "readers" in nt.speaks[0]
     nt.params = {n: dict(p) for n, p in nt.open["roster"].items()}
+    for n, p in nt.open.get("staged_entries", {}).items():
+        nt.params.setdefault(n, dict(p))  # staged entrants are params too
     for n in nt.params:
         nt.params[n]["dial_weights"] = np.asarray(nt.params[n]["dial_weights"], float)
         nt.params[n]["vibe_start"] = np.asarray(nt.params[n]["vibe_start"], float)
@@ -584,7 +807,7 @@ def self_test():
     fam = {"T1": (0.65, 40, 20, []), "T4a": (0.45, 46, 20, [12])}
     roster = ["writer", "poet", "engineer", "critic", "captain", "essayist"]
     personas = load_personas()
-    anchors = persona_deviations(roster, personas)
+    anchors = persona_deviations(roster + [ENTRANT_NAME], personas)
     paths = {}
     for label, branch, nullm in (("instr", BRANCHES["instrument"], False),
                                  ("coll", BRANCHES["collapse"], False),
@@ -727,6 +950,115 @@ def self_test():
           f"kappa shift {rn['kappa'].min():.1f}->{rn['kappa'].max():.1f} "
           "(cohesion-only)")
 
+    # --- 9. G1: staged entrant semantics mirror the field --------------- #
+    st = _shim_night(paths[("instr", "T4a")])
+    assert ENTRANT_NAME not in st.open["roster"], "entrant must not roster"
+    assert sorted(st.open["staged_entries"]) == [ENTRANT_NAME]
+    ent = st.open["staged_entries"][ENTRANT_NAME]
+    assert set(ent) == set(next(iter(st.open["roster"].values()))) == {
+        "name", "dial_weights", "acclimation_rate", "charisma",
+        "vibe", "vibe_start"}, "staged entry shape != roster shape"
+    inr = [ENTRANT_NAME in r["readers"] for r in st.speaks]
+    e = 12
+    assert not any(inr[:e]) and all(inr[e:]), \
+        "entrant must be omitted before entry and present from it"
+    assert next(r["seq"] for r in st.speaks
+                if r["author"] == ENTRANT_NAME) == e, "cold entry at first speak"
+    assert st.speaks[e - 1]["entry_mode"].get(ENTRANT_NAME) is None
+    assert st.speaks[e]["entry_mode"][ENTRANT_NAME] == "staged-cold"
+    reads_ent = logged_readings(st, ENTRANT_NAME)  # presence from 1st appear
+    assert len(reads_ent) == 46 - e, "readings must start at entry"
+    from scripts.e2_instrument import Night as _Night  # noqa: F401 (doc)
+    print(f"[self-test] 9. G1: entrant staged @{e} — omitted before/present "
+          f"from entry, staged-cold, {len(reads_ent)} readings (field parity)")
+
+    # --- 10. G9: staged-night schema parity vs the filed corpus --------- #
+    real4 = _shim_night(os.path.join(ROOT, "data", "nights", "night-T4a.jsonl"))
+    assert set(st.open) == set(real4.open), \
+        f"staged open keys differ: {set(real4.open) ^ set(st.open)}"
+    r_se = next(iter(real4.open["staged_entries"].values()))
+    assert set(ent) == set(r_se), "staged_entries shape differs from field"
+    compared = 0
+    for a, b in zip(st.speaks, real4.speaks):
+        assert set(a) == set(b), f"staged speak keys differ at seq {a['seq']}"
+        if ENTRANT_NAME in a["readers"]:
+            assert set(a["readers"][ENTRANT_NAME]) == \
+                set(b["readers"][ENTRANT_NAME]), \
+                "entrant reader-block keys differ"
+            compared += 1
+    assert compared, "no entrant rows found for the staged parity check"
+    assert set(gen.speaks[15]) == set(st.speaks[15]), \
+        "staged vs non-staged speak key sets differ"
+    print("[self-test] 10. G9: staged-night parity — open (incl. "
+          "staged_entries), speak rows, entrant reader-block keys all "
+          "identical to night-T4a.jsonl; staged == non-staged key sets")
+
+    # --- 11. G7: realized between-night ICC of a mini instrument wave --- #
+    # Full-design mini wave (the plan's registered attendance/ladder),
+    # measured through the REGISTERED Measurement via the G5 adapter.
+    from scripts.riverbed_adapter import load_wave
+    icc_dir = os.path.join(tmp, "icc-wave")
+    generate_wave(icc_dir, branch_name="instrument", seed=7)
+    wv = load_wave(icc_dir)
+    icc, icc_dial = wv["measurement"].icc()
+    assert 0.85 <= icc <= 0.96, \
+        f"realized instrument ICC {icc:.4f} outside [0.85, 0.96]"
+    print(f"[self-test] 11. G7: instrument wave (21 readers x 9 families, "
+          f"sd={wv['sd']:.4f}) realized ICC = {icc:.4f} in [0.85, 0.96] "
+          "(registered Measurement, unmodified)")
+
+    # --- 12. G13: pair mode — branches share the room path -------------- #
+    tmp2 = tempfile.mkdtemp(prefix="riverbed-pair-", dir=tmp)
+    kw = dict(family=fam["T1"], roster_names=roster, personas=personas,
+              dev_anchors=anchors, seed=7, outdir=tmp2, fam="T1")
+    p0, _ = generate_night("st-p0-T1", branch=BRANCHES["instrument"],
+                           ou_state={}, pair_seed=4242, **kw)
+    p1, _ = generate_night("st-p1-T1", branch=BRANCHES["collapse"],
+                           ou_state={}, pair_seed=4242, **kw)
+    r0 = [json.loads(l) for l in open(p0) if l.strip()]
+    r1 = [json.loads(l) for l in open(p1) if l.strip()]
+    s0 = [r for r in r0 if r["type"] == "speak"]
+    s1 = [r for r in r1 if r["type"] == "speak"]
+    assert all(a["field_raw_after"] == b["field_raw_after"]
+               for a, b in zip(s0, s1)), "pair: room paths differ"
+    assert all(a["author"] == b["author"] for a, b in zip(s0, s1)), \
+        "pair: author schedules differ"
+    assert any(a["readers"]["writer"] != b["readers"]["writer"]
+               for a, b in zip(s0, s1)), "pair: fibers did not diverge"
+    pn, _ = generate_night("st-np-T1", branch=BRANCHES["instrument"],
+                           ou_state={}, **kw)  # tag-keyed (no pair seed)
+    sn = [r for r in (json.loads(l) for l in open(pn) if l.strip())
+          if r["type"] == "speak"]
+    assert any(a["field_raw_after"] != b["field_raw_after"]
+               for a, b in zip(sn, s0)), \
+        "without --pair-seed the tag-keyed rng must give a different room"
+    print("[self-test] 12. G13: pair mode — same room path/authors across "
+          "alpha=0 vs alpha=1, fibers diverge; tag-keyed default differs")
+
+    # --- 13. G3: blinding — redacted manifest + sealed round-trip -------- #
+    bdir = os.path.join(tmp, "blind-wave")
+    red = generate_wave(bdir, branch_name="collapse", blind=True,
+                        corpus_id="SELFTEST")
+    for k in SEALED_FIELDS:
+        assert k not in red, f"redacted manifest leaks {k}"
+    assert red["blinded"] and red["corpus_id"] == "SELFTEST"
+    assert all("SELFTEST" in t and "collapse" not in t
+               for t in red["nights"]), "tags must be opaque to branch"
+    sealed = unblind(os.path.join(bdir, red["sealed"]["file"]))
+    assert sealed["branch"] == "collapse" and sealed["alpha"] == 1.0
+    tampered = json.load(open(os.path.join(bdir, red["sealed"]["file"])))
+    tampered["alpha"] = 0.0
+    tpath = os.path.join(bdir, "tampered-sealed.json")
+    with open(tpath, "w") as f:
+        json.dump(tampered, f)
+    try:
+        unblind(tpath)
+        raise AssertionError("tampered seal must not unblind")
+    except AssertionError as exc:
+        assert "seal" in str(exc)
+    print("[self-test] 13. G3: blind wave — branch/seed withheld, opaque "
+          "tags, sealed sidecar round-trips, tamper detected")
+
     print("[self-test] ALL CHECKS PASSED")
 
 
@@ -741,6 +1073,16 @@ def main():
     ap.add_argument("--seed", type=int, default=20260821)
     ap.add_argument("--flip-size", type=float, default=FLIP_SIZE)
     ap.add_argument("--tag-prefix", default=None)
+    ap.add_argument("--pair-seed", type=int, default=None,
+                    help="G13: branch-invariant room/fiber streams keyed "
+                         "(pair_seed, family) — 2AFC adversarial pairs")
+    ap.add_argument("--blind", nargs="?", const="auto", default=None,
+                    metavar="CORPUS-ID",
+                    help="G3: redacted manifest (branch params withheld, "
+                         "opaque tags) + sealed sidecar; open post-"
+                         "registration via --unblind")
+    ap.add_argument("--unblind", default=None, metavar="SEALED.json",
+                    help="verify a seal and print the withheld branch params")
     ap.add_argument("--outdir", default=None)
     ap.add_argument("--self-test", action="store_true")
     args = ap.parse_args()
@@ -748,17 +1090,30 @@ def main():
     if args.self_test:
         self_test()
         return
+    if args.unblind:
+        sealed = unblind(args.unblind)
+        print(json.dumps({k: sealed[k] for k in
+                          list(SEALED_FIELDS) + ["corpus_id", "tag_prefix"]},
+                         indent=1))
+        return
     if args.branch == "custom" and args.alpha is None:
         sys.exit("--branch custom requires --alpha")
     branch_name = "instrument" if args.alpha is not None else args.branch
+    blind = args.blind is not None
+    corpus_id = None
+    if blind:
+        corpus_id = (args.blind if args.blind != "auto" else None) \
+            or secrets.token_hex(4)
     outdir = args.outdir
     if outdir is None:
-        name = (f"alpha-{args.alpha:g}" if args.alpha is not None
-                else args.branch) + ("-null" if args.null_mode else "")
+        name = corpus_id if blind else (
+            f"alpha-{args.alpha:g}" if args.alpha is not None
+            else args.branch) + ("-null" if args.null_mode else "")
         outdir = os.path.join(DEFAULT_OUT, name)
     generate_wave(outdir, branch_name=branch_name, alpha=args.alpha,
-                   seed=args.seed, null_mode=args.null_mode,
-                   tag_prefix=args.tag_prefix, flip_size=args.flip_size)
+                  seed=args.seed, null_mode=args.null_mode,
+                  tag_prefix=args.tag_prefix, flip_size=args.flip_size,
+                  pair_seed=args.pair_seed, blind=blind, corpus_id=corpus_id)
 
 
 if __name__ == "__main__":
