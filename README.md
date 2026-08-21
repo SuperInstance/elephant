@@ -458,6 +458,14 @@ A short history of the build — the elephant grew like a room fills:
 
 ---
 
+## Gallery
+
+<p align="center"><img src="assets/images/gallery-elephant.jpg" alt="The elephant in the room — warm, felt, everywhere at once: the temperature no one names until it changes." width="720"></p>
+
+*The elephant is the room-temperature sense — you don't notice it until you go to a different room.*
+
+---
+
 ## Roadmap
 
 - **v1 — train the dials.** Replace the hand-crafted readers with learned
