@@ -18,6 +18,14 @@ This is not the temperature of fine-tuning. It is the temperature of
 
 ---
 
+## What this is, in five lines
+
+`elephant` is room-perception research: it models a chat room or sensor feed as a
+**field** read by hand-crafted **dials** (mood, panic, presence). The numeric core
+is real math — von Mises–Fisher fleet concentration (κ), OAS-shrinkage biomass
+anchors, slope-regression experiments. The dials are keyword heuristics, honestly
+labeled; "JEPA" is the aspiration, not yet an implementation (the backbone is a stub).
+
 ## The Just So
 
 Before it was a sense, it was a story. Five trades, one joint, and the
@@ -409,15 +417,17 @@ is the worked example.
 ## Tests
 
 ```bash
-python3 -m pytest tests/ -q      # 49 passed
+python3 -m pytest tests/ -q      # 277 tests
 ```
 
-49 tests across seven files: `test_elephant.py` (room physics, field,
+277 tests across 25 files: `test_elephant.py` (room physics, field,
 dials, acclimation/charisma), `test_fleetmath.py` (kinematics, vMF κ,
 inductive biomass), `test_harness.py` (ingest → field → anchor),
 `test_fleet_simulation.py` (the 30-day arc end-to-end), `test_tapnight.py`
 (session + self-tuning divergence), `test_zeitgeist.py` (presets +
-description tinting), `test_spaces.py` (adapters, registry, send-back).
+description tinting), `test_spaces.py` (adapters, registry, send-back),
+and 18 more covering the vMF math, pulse/decomposition, terrain, contrast,
+the learned-dial stub, MUD/space adapters, and the vision dial.
 
 What they cover: the elephant gap and sauna/plunge contrast, cold-room
 tighter-κ, windowed density, finite acclimation on overshoot, three-reading
