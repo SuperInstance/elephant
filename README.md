@@ -1,5 +1,7 @@
 # 🐘 elephant — the inter-model temperature
 
+*Naming: this is **elephant v1** — the name stays with this repo. See [docs/NAMING.md](docs/NAMING.md) for the JEPA framing and the next-species naming doctrine.*
+
 <p align="center"><img src="assets/images/hero.png" alt="The elephant — the room-temperature sense" width="720"></p>
 
 > **JEPA is the elephant.** You don't notice it until you go to a

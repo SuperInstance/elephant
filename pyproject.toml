@@ -7,7 +7,7 @@ dependencies = ["numpy"]
 
 [project.optional-dependencies]
 learned = ["torch"]
-dev = ["pytest"]
+dev = ["pytest", "scipy"]
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -15,3 +15,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["elephant*"]
+
+[tool.pytest.ini_options]
+# The test suite lives in tests/ (277 tests across 25 files). Keeping
+# discovery explicit also keeps stray *-named scripts (e.g. scripts/*_test.py,
+# which is a research script, not a pytest module) out of the collection path.
+testpaths = ["tests"]

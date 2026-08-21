@@ -98,7 +98,11 @@ def test_doc_space_ingests_real_git_log():
     assert len(doc.room) > 0
     # Authors are committers (real names, no synthetic [file]/[room] authors).
     authors = {m.author for m in doc.room.messages}
-    assert len(authors) >= 2
+    # Author count in the last-20 window varies with repo history (it can be a
+    # single author for long stretches), so only require the room to be non-
+    # empty of committers; the real guards are below: no synthetic
+    # [file]/[room] authors, and normalized monotonic timestamps.
+    assert len(authors) >= 1
     assert not any(a.startswith("[") for a in authors)
     # Normalized timestamps: monotonic, starting at 0.
     ts = [m.ts for m in doc.room.messages]

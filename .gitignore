@@ -1,5 +1,7 @@
 __pycache__/
 *.pyc
+build/
+*.egg-info/
 data/
 checkpoints/
 scripts/cache_clock_split.npz
