@@ -6,8 +6,15 @@ The draw mirrors scripts/premise_measurement.py::synthesize (the established
 field-distribution sampler), with one registered refinement: the vibe noise
 is per-dial (the across-persona sd vector), not the pooled scalar.
 
-Procedure (seed 20260819, numpy default_rng, committed before any E2 night
-is generated):
+Wave-2 (Stage-2 corpus, STAGE2-CORPUS-DESIGN-2026-08-20.md §5.2): 6 further
+seeded draws (new-1 .. new-6, the design's new-N readers) with the SAME
+procedure, drawn with seed 20260820 (the wave-2 date) as a fresh stream so
+the filed eight remain bit-identical to their 20260819 draw. Band assignment
+(new-1/new-2 cold, new-3/new-4 mid, new-5/new-6 warm) is the design's
+registration, not part of the persona draw.
+
+Procedure (numpy default_rng; seed 20260819 committed before any E2 night
+is generated; seed 20260820 for the six wave-2 draws):
   archetype_i = existing personas[uniform draw]        # the class label
   charisma    = clip(arch + N(0, sd_char_across_personas),  min, max)
   acclimation = clip(arch + N(0, sd_rate_across_personas),  min, max)
@@ -15,7 +22,7 @@ is generated):
   vibe_start  = clip(arch_vibe + N(0, sd_vibe_per_dial),    dial bounds)
 
 Names (registered, fixed): barkeep, singer, fiddler, lamplighter,
-cartographer, blacksmith, tinker, weaver.
+cartographer, blacksmith, tinker, weaver, new-1 .. new-6.
 
 Output: data/e2/e2-personas.json  (frozen artifact; referenced verbatim by
 the E2 registration in the dissertation repo). Read-only against nights.
@@ -38,8 +45,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "data", "e2", "e2-personas.json")
 
 SEED = 20260819
+W2_SEED = 20260820   # wave-2 draws (new-1..new-6), same procedure, fresh stream
 NEW_NAMES = ["barkeep", "singer", "fiddler", "lamplighter",
-             "cartographer", "blacksmith", "tinker", "weaver"]
+             "cartographer", "blacksmith", "tinker", "weaver",
+             "new-1", "new-2", "new-3", "new-4", "new-5", "new-6"]
+W2_NAMES = ["new-1", "new-2", "new-3", "new-4", "new-5", "new-6"]
 
 D = 7
 DIALS = ["mood", "volume", "earnestness", "cynicism",
@@ -103,8 +113,7 @@ def _existing():
     ]
 
 
-def draw(seed=SEED):
-    rng = np.random.default_rng(seed)
+def draw(seed=SEED, w2_seed=W2_SEED):
     existing = _existing()
     names = [p.name for p in existing]
     chars = np.array([p.charisma for p in existing])
@@ -115,8 +124,7 @@ def draw(seed=SEED):
     sd_rate = float(rates.std(ddof=1))
     sd_vibe = vibes.std(axis=0, ddof=1)                    # per-dial vector
 
-    personas = {}
-    for i, new_name in enumerate(NEW_NAMES):
+    def _one(rng, new_name):
         arch = existing[int(rng.integers(len(existing)))]
         ch = float(np.clip(arch.charisma + rng.normal(0, sd_char),
                            chars.min(), chars.max()))
@@ -125,7 +133,7 @@ def draw(seed=SEED):
         w = arch.dial_weights * np.exp(rng.normal(0, 0.15, size=D))
         w = w / w.sum()
         vb = np.clip(arch.vibe + rng.normal(0, sd_vibe), LO, HI)
-        personas[new_name] = {
+        return {
             "name": new_name,
             "archetype": arch.name,                       # the class label
             "dial_weights": [float(x) for x in w],
@@ -133,6 +141,16 @@ def draw(seed=SEED):
             "charisma": ch,
             "vibe_start": [float(x) for x in vb],
         }
+
+    personas = {}
+    # filed eight: the committed 20260819 stream, bit-identical to wave 1
+    rng = np.random.default_rng(seed)
+    for new_name in NEW_NAMES[:8]:
+        personas[new_name] = _one(rng, new_name)
+    # wave-2 six (new-1..new-6): fresh stream, same procedure
+    rng2 = np.random.default_rng(w2_seed)
+    for new_name in W2_NAMES:
+        personas[new_name] = _one(rng2, new_name)
     # cast means (for the ladder's lambda-planting reference point)
     cast_mean = {
         "dial_weights": [float(x) for x in weights.mean(axis=0)],
@@ -155,11 +173,14 @@ def main():
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     doc = {
         "seed": SEED,
+        "w2_seed": W2_SEED,
         "procedure": ("archetype uniform over the 7 existing personas; "
                       "charisma/acclimation = archetype + N(0, across-persona sd) "
                       "clipped to observed range; dial_weights = archetype * "
                       "lognormal(0, 0.15) renormalized; vibe_start = archetype + "
-                      "N(0, per-dial across-persona sd) clipped to dial bounds"),
+                      "N(0, per-dial across-persona sd) clipped to dial bounds; "
+                      "the six wave-2 draws (new-1..new-6) use seed 20260820 "
+                      "(fresh stream; filed eight unchanged)"),
         "new_personas": personas,
         "existing_personas_frozen": existing_params,
         "cast_mean": cast_mean,

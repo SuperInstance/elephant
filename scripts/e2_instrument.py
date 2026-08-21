@@ -66,6 +66,23 @@ NIGHT_SPECS = {
     "S7":     ("night-S7.jsonl", [(f"b{i}", i * 5, i * 5 + 4, "signal") for i in range(8)]),
 }
 
+# Stage-2 wave-2 nights (STAGE2-CORPUS-DESIGN-2026-08-20.md §5.3): T-tags =
+# fresh logs of the same frozen families (T1=S1, T2=S2, T3=A, T4a=S4a,
+# T4b=S4b, T5=D, T5c=D-cold, T8=S3, T9=S5); strata mirror the mapped
+# families exactly. PRIMARY_NIGHTS / FIELD_NIGHTS above stay untouched.
+W2_NIGHTS = {
+    "T1":     ("night-T1.jsonl", [("warm", 0, 19, "signal"), ("cynical", 20, 39, "signal")]),
+    "T2":     ("night-T2.jsonl", [("warm", 0, 7, "signal"), ("cynical", 8, 27, "signal")]),
+    "T3":     ("night-T3.jsonl", [("warm", 0, 19, "signal"), ("cynical", 20, 39, "signal")]),
+    "T4a":    ("night-T4a.jsonl", [("warm-pre", 0, 11, "signal"), ("warm-entry", 12, 19, "signal"), ("cynical", 20, 45, "signal")]),
+    "T4b":    ("night-T4b.jsonl", [("warm", 0, 19, "signal"), ("cynical-pre", 20, 27, "signal"), ("cynical-entry", 28, 44, "signal")]),
+    "T5":     ("night-T5.jsonl", [("pre", 0, 23, "signal"), ("post", 24, 45, "signal")]),
+    "T5c":    ("night-T5c.jsonl", [("pre", 0, 23, "signal"), ("post", 24, 45, "signal")]),
+    "T8":     ("night-T8.jsonl", [("warm", 0, 19, "signal"), ("cynical", 20, 27, "signal")]),
+    "T9":     ("night-T9.jsonl", [("warm-a", 0, 9, "null"), ("warm-b", 10, 19, "null")]),
+}
+W2_NIGHT_LIST = ["T1", "T2", "T3", "T4a", "T4b", "T5", "T5c", "T8", "T9"]
+
 PRIMARY_NIGHTS = ["A", "D", "D-cold", "S1", "S2", "S3", "S4a", "S4b", "S5"]
 EXTENDED_NIGHTS = PRIMARY_NIGHTS + ["S6", "S7"]
 NONMONO_NIGHTS = ["S6", "S7"]
@@ -97,6 +114,35 @@ for _r, _nights in {"barkeep": ["S6"], "singer": ["S6"], "weaver": ["S6"],
 # Cold-entry nights per reader (readings begin at the reader's first speak).
 COLD_ENTRY = {"drifter": ["S4a", "S4b"]}
 
+# Wave-2 field attendance (design §2 matrix; measurement attendance — the
+# drifter's staged T5/T5c line-readings are warmth content, not attendance).
+FIELD_NIGHTS_W2 = {
+    "writer": ["T2", "T4a", "T5"],
+    "engineer": ["T2", "T4a", "T5c"],
+    "drifter": ["T4a", "T4b", "T2"],
+    "lamplighter": ["T2", "T4a", "T1"],
+    "tinker": ["T2", "T4a", "T3"],
+    "new-1": ["T2", "T4a", "T5", "T5c"],
+    "new-2": ["T2", "T4a", "T5", "T4b"],
+    "poet": ["T5", "T5c", "T4b", "T1"],
+    "critic": ["T5", "T5c", "T4b", "T3"],
+    "singer": ["T5", "T5c", "T1", "T3"],
+    "cartographer": ["T5c", "T4b", "T1", "T3"],
+    "blacksmith": ["T5", "T4b", "T1", "T3"],
+    "new-3": ["T5", "T5c", "T4b"],
+    "new-4": ["T5", "T5c", "T1"],
+    "essayist": ["T9", "T8", "T4b"],
+    "captain": ["T9", "T8", "T1"],
+    "barkeep": ["T9", "T8", "T3"],
+    "fiddler": ["T9", "T8", "T5"],
+    "weaver": ["T9", "T8", "T5c"],
+    "new-5": ["T9", "T8", "T4b", "T1"],
+    "new-6": ["T9", "T8", "T1", "T3"],
+}
+
+# Wave-2 cold entries (staged drifter on his attended nights only).
+COLD_ENTRY_W2 = {"drifter": ["T4a", "T4b"]}
+
 
 def archetype_labels():
     doc = json.load(open(PERSONAS, encoding="utf-8"))
@@ -109,7 +155,8 @@ def archetype_labels():
 
 class Night:
     def __init__(self, name):
-        fn, strata = NIGHT_SPECS[name]
+        fn, strata = (NIGHT_SPECS[name] if name in NIGHT_SPECS
+                      else W2_NIGHTS[name])
         self.name = name
         self.path = os.path.join(NIGHTS_DIR, fn)
         rows = [json.loads(l) for l in open(self.path, encoding="utf-8") if l.strip()]

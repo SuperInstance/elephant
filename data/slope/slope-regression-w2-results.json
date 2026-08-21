@@ -1,0 +1,465 @@
+{
+ "date": "2026-08-20",
+ "wave": 2,
+ "test": "H-reader\u2261room slope regression, Stage-2 corpus (STAGE2-CORPUS-DESIGN-2026-08-20.md)",
+ "corpus_sd": 0.23672602933417586,
+ "guards_w2": {
+  "drift": 0.8083977654853248,
+  "cont_spread": 0.49603262575315527,
+  "icc": 0.9076088526275571,
+  "icc_ci": [
+   0.7831880060886426,
+   0.911153703148217
+  ],
+  "icc_per_dial": {
+   "mood": 0.9832543813860019,
+   "volume": 0.9363130821643733,
+   "earnestness": 0.9052509115439329,
+   "cynicism": 0.8529113479451005,
+   "joke_landing": 0.8289193178562256,
+   "panic": 0.9100586872024432,
+   "presence": 0.9365542402948236
+  }
+ },
+ "min_nights": 3,
+ "excluded_readers": {},
+ "per_reader": {
+  "barkeep": {
+   "n_nights": 3,
+   "nights": [
+    "T3",
+    "T8",
+    "T9"
+   ],
+   "x": 0.7183131342485511,
+   "y": 0.8416679730809747,
+   "archetype": "critic"
+  },
+  "blacksmith": {
+   "n_nights": 4,
+   "nights": [
+    "T1",
+    "T3",
+    "T4b",
+    "T5"
+   ],
+   "x": 0.6428731268501684,
+   "y": 0.9849803975339124,
+   "archetype": "poet"
+  },
+  "captain": {
+   "n_nights": 3,
+   "nights": [
+    "T1",
+    "T8",
+    "T9"
+   ],
+   "x": 0.7183131342485511,
+   "y": 0.926963104046039,
+   "archetype": "captain"
+  },
+  "cartographer": {
+   "n_nights": 4,
+   "nights": [
+    "T1",
+    "T3",
+    "T4b",
+    "T5c"
+   ],
+   "x": 0.6428731268501684,
+   "y": 0.8801428471990697,
+   "archetype": "critic"
+  },
+  "critic": {
+   "n_nights": 4,
+   "nights": [
+    "T3",
+    "T4b",
+    "T5",
+    "T5c"
+   ],
+   "x": 0.63641879121861,
+   "y": 0.8452913400983044,
+   "archetype": "critic"
+  },
+  "drifter": {
+   "n_nights": 3,
+   "nights": [
+    "T2",
+    "T4a",
+    "T4b"
+   ],
+   "x": 0.46568948840827523,
+   "y": 0.9720861459765224,
+   "archetype": "drifter"
+  },
+  "engineer": {
+   "n_nights": 3,
+   "nights": [
+    "T2",
+    "T4a",
+    "T5c"
+   ],
+   "x": 0.4648207458473934,
+   "y": 0.6269032357608166,
+   "archetype": "engineer"
+  },
+  "essayist": {
+   "n_nights": 3,
+   "nights": [
+    "T4b",
+    "T8",
+    "T9"
+   ],
+   "x": 0.7105760959673552,
+   "y": 0.7141099629767653,
+   "archetype": "essayist"
+  },
+  "fiddler": {
+   "n_nights": 3,
+   "nights": [
+    "T5",
+    "T8",
+    "T9"
+   ],
+   "x": 0.7097073534064732,
+   "y": 0.8169435524739592,
+   "archetype": "critic"
+  },
+  "lamplighter": {
+   "n_nights": 3,
+   "nights": [
+    "T1",
+    "T2",
+    "T4a"
+   ],
+   "x": 0.47342652668947127,
+   "y": 0.9274004961817947,
+   "archetype": "captain"
+  },
+  "new-1": {
+   "n_nights": 4,
+   "nights": [
+    "T2",
+    "T4a",
+    "T5",
+    "T5c"
+   ],
+   "x": 0.5059437840521426,
+   "y": 0.9665042963985729,
+   "archetype": "drifter"
+  },
+  "new-2": {
+   "n_nights": 4,
+   "nights": [
+    "T2",
+    "T4a",
+    "T4b",
+    "T5"
+   ],
+   "x": 0.506595340972804,
+   "y": 0.7947697641748426,
+   "archetype": "essayist"
+  },
+  "new-3": {
+   "n_nights": 3,
+   "nights": [
+    "T4b",
+    "T5",
+    "T5c"
+   ],
+   "x": 0.630181641227272,
+   "y": 0.9416509569773174,
+   "archetype": "writer"
+  },
+  "new-4": {
+   "n_nights": 3,
+   "nights": [
+    "T1",
+    "T5",
+    "T5c"
+   ],
+   "x": 0.637918679508468,
+   "y": 0.5888265061226827,
+   "archetype": "engineer"
+  },
+  "new-5": {
+   "n_nights": 4,
+   "nights": [
+    "T1",
+    "T4b",
+    "T8",
+    "T9"
+   ],
+   "x": 0.6967146322736721,
+   "y": 0.5150996820928639,
+   "archetype": "engineer"
+  },
+  "new-6": {
+   "n_nights": 4,
+   "nights": [
+    "T1",
+    "T3",
+    "T8",
+    "T9"
+   ],
+   "x": 0.7025174109845693,
+   "y": 0.9370883344739933,
+   "archetype": "writer"
+  },
+  "poet": {
+   "n_nights": 4,
+   "nights": [
+    "T1",
+    "T4b",
+    "T5",
+    "T5c"
+   ],
+   "x": 0.63641879121861,
+   "y": 0.9970677219166568,
+   "archetype": "poet"
+  },
+  "singer": {
+   "n_nights": 4,
+   "nights": [
+    "T1",
+    "T3",
+    "T5",
+    "T5c"
+   ],
+   "x": 0.642221569929507,
+   "y": 0.8759842965085137,
+   "archetype": "critic"
+  },
+  "tinker": {
+   "n_nights": 3,
+   "nights": [
+    "T2",
+    "T3",
+    "T4a"
+   ],
+   "x": 0.47342652668947127,
+   "y": 0.9987925186296438,
+   "archetype": "poet"
+  },
+  "weaver": {
+   "n_nights": 3,
+   "nights": [
+    "T5c",
+    "T8",
+    "T9"
+   ],
+   "x": 0.7097073534064732,
+   "y": 0.7643741540208416,
+   "archetype": "essayist"
+  },
+  "writer": {
+   "n_nights": 3,
+   "nights": [
+    "T2",
+    "T4a",
+    "T5"
+   ],
+   "x": 0.4648207458473934,
+   "y": 0.9445498044902567,
+   "archetype": "writer"
+  }
+ },
+ "primary": {
+  "readers": [
+   "barkeep",
+   "blacksmith",
+   "captain",
+   "cartographer",
+   "critic",
+   "drifter",
+   "engineer",
+   "essayist",
+   "fiddler",
+   "lamplighter",
+   "new-1",
+   "new-2",
+   "new-3",
+   "new-4",
+   "new-5",
+   "new-6",
+   "poet",
+   "singer",
+   "tinker",
+   "weaver",
+   "writer"
+  ],
+  "n": 21,
+  "slope": -0.35876481805917837,
+  "intercept": 1.0690291351819403,
+  "slope_ci": [
+   -0.9353655212532035,
+   0.28166378849890383
+  ],
+  "intercept_ci": [
+   0.677277314691936,
+   1.4110388590833245
+  ],
+  "perm_p_two_sided": 0.26817318268173185
+ },
+ "contains_0": true,
+ "contains_1": false,
+ "class_residual_tripwire": true,
+ "verdict": "INDETERMINATE \u2014 class-residual tripwire fired (design \u00a76 FM4: report both slopes, no declaration on the primary); leaning alignment: primary CI contains 0 and excludes 1, slope small, no collapse signal anywhere",
+ "preconditions_pass": true,
+ "sensitivities": {
+  "actual_presence": {
+   "readers": [
+    "barkeep",
+    "blacksmith",
+    "captain",
+    "cartographer",
+    "critic",
+    "drifter",
+    "engineer",
+    "essayist",
+    "fiddler",
+    "lamplighter",
+    "new-1",
+    "new-2",
+    "new-3",
+    "new-4",
+    "new-5",
+    "new-6",
+    "poet",
+    "singer",
+    "tinker",
+    "weaver",
+    "writer"
+   ],
+   "n": 21,
+   "slope": -0.23657162429901346,
+   "intercept": 0.9756381127320862,
+   "slope_ci": [
+    -0.8071050412373125,
+    0.3644597176491174
+   ],
+   "intercept_ci": [
+    0.6129109395442564,
+    1.319104219411378
+   ],
+   "perm_p_two_sided": 0.44985501449855014
+  },
+  "class_residual_21": {
+   "readers": [
+    "barkeep",
+    "blacksmith",
+    "captain",
+    "cartographer",
+    "critic",
+    "drifter",
+    "engineer",
+    "essayist",
+    "fiddler",
+    "lamplighter",
+    "new-1",
+    "new-2",
+    "new-3",
+    "new-4",
+    "new-5",
+    "new-6",
+    "poet",
+    "singer",
+    "tinker",
+    "weaver",
+    "writer"
+   ],
+   "n": 21,
+   "slope": -0.12614049727751844,
+   "intercept": 0.07682243403906572,
+   "slope_ci": [
+    -0.24078216968948662,
+    -0.03758083192445701
+   ],
+   "intercept_ci": [
+    0.024726359209189603,
+    0.14635989291908685
+   ],
+   "perm_p_two_sided": 0.0217978202179782
+  },
+  "unnormalized_z": {
+   "readers": [
+    "barkeep",
+    "blacksmith",
+    "captain",
+    "cartographer",
+    "critic",
+    "drifter",
+    "engineer",
+    "essayist",
+    "fiddler",
+    "lamplighter",
+    "new-1",
+    "new-2",
+    "new-3",
+    "new-4",
+    "new-5",
+    "new-6",
+    "poet",
+    "singer",
+    "tinker",
+    "weaver",
+    "writer"
+   ],
+   "n": 21,
+   "slope": -0.2198017423639826,
+   "intercept": 0.653781670478425,
+   "slope_ci": [
+    -1.2072968433019025,
+    0.7747094881617701
+   ],
+   "intercept_ci": [
+    -0.005883028450322387,
+    1.27287641862558
+   ],
+   "perm_p_two_sided": 0.6937306269373062
+  },
+  "session_close_warmth": {
+   "readers": [
+    "barkeep",
+    "blacksmith",
+    "captain",
+    "cartographer",
+    "critic",
+    "drifter",
+    "engineer",
+    "essayist",
+    "fiddler",
+    "lamplighter",
+    "new-1",
+    "new-2",
+    "new-3",
+    "new-4",
+    "new-5",
+    "new-6",
+    "poet",
+    "singer",
+    "tinker",
+    "weaver",
+    "writer"
+   ],
+   "n": 21,
+   "slope": -0.29340028289899284,
+   "intercept": 0.9783435964397897,
+   "slope_ci": [
+    -0.7269678103737146,
+    0.12542768782118355
+   ],
+   "intercept_ci": [
+    0.7855486828902803,
+    1.1597065149809593
+   ],
+   "perm_p_two_sided": 0.20137986201379862
+  }
+ },
+ "seeds": {
+  "bootstrap": 20260820,
+  "permutation": 20260820
+ },
+ "machinery": "scripts/slope_regression.py imported unmodified"
+}

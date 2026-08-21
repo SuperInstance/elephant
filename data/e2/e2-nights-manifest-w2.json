@@ -1,0 +1,176 @@
+{
+ "generated": "2026-08-20",
+ "reader_schema": 2,
+ "wave": 2,
+ "nights": {
+  "T1": {
+   "file": "night-T1.jsonl",
+   "sha256": "9135e69ac4070c15e9c34b5dcdf218560ee83d50ed849538003a8d647162805c",
+   "stripped_md5": "afc2435bc93db7262424f5f1faa5e045",
+   "n_msgs": 40,
+   "roster": [
+    "blacksmith",
+    "captain",
+    "cartographer",
+    "lamplighter",
+    "new-4",
+    "new-5",
+    "new-6",
+    "poet",
+    "singer"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "S1 family: warm\u2192cynical canonical (flip@20)",
+   "deterministic_replay_identical": true
+  },
+  "T2": {
+   "file": "night-T2.jsonl",
+   "sha256": "37b99dffd936e6dacce8a6d017e3577b3ebc16e00b3e897b8ce138acc8b8e636",
+   "stripped_md5": "18fd73ab8e8f36bf47299e5a7151f62e",
+   "n_msgs": 28,
+   "roster": [
+    "drifter",
+    "engineer",
+    "lamplighter",
+    "new-1",
+    "new-2",
+    "tinker",
+    "writer"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "S2 family: early flip@8",
+   "deterministic_replay_identical": true
+  },
+  "T3": {
+   "file": "night-T3.jsonl",
+   "sha256": "a8bc1738f2c88f3d918422a1d07508d145a42e528eac411827b67d2891ad5bcb",
+   "stripped_md5": "f9ba37395dbfbc4dfb5cb7cdd37c0bba",
+   "n_msgs": 40,
+   "roster": [
+    "barkeep",
+    "blacksmith",
+    "cartographer",
+    "critic",
+    "new-6",
+    "singer",
+    "tinker"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "A family: canonical warm\u2192cynical (\u2261S1 warmth)",
+   "deterministic_replay_identical": true
+  },
+  "T4a": {
+   "file": "night-T4a.jsonl",
+   "sha256": "7d55e63ac517b86687aae1066a376fe07de2662272ff3642c7e0fdf1f1e8a56e",
+   "stripped_md5": "4c0e7a40ff46b1c1306922fa5ff293c1",
+   "n_msgs": 46,
+   "roster": [
+    "engineer",
+    "lamplighter",
+    "new-1",
+    "new-2",
+    "tinker",
+    "writer"
+   ],
+   "cold_entry_seq": 12,
+   "schedule_family": "S4a family: newcomer cold entry pre-flip @12",
+   "deterministic_replay_identical": true
+  },
+  "T4b": {
+   "file": "night-T4b.jsonl",
+   "sha256": "774f257020d319432f866e3590b99fb16e12273a1b0648656411c98f970e4705",
+   "stripped_md5": "02b19b3677e1567c0b36bf71a2ec9ee3",
+   "n_msgs": 45,
+   "roster": [
+    "blacksmith",
+    "cartographer",
+    "critic",
+    "essayist",
+    "new-2",
+    "new-3",
+    "new-5",
+    "poet"
+   ],
+   "cold_entry_seq": 28,
+   "schedule_family": "S4b family: newcomer cold entry post-flip @28",
+   "deterministic_replay_identical": true
+  },
+  "T5": {
+   "file": "night-T5.jsonl",
+   "sha256": "cc0d4cd7e4a911e1306ed9d9f98928638243031c2747109020e7f369a17a88a6",
+   "stripped_md5": "fe7360fc79bc5ece350ba67062f121fc",
+   "n_msgs": 46,
+   "roster": [
+    "blacksmith",
+    "critic",
+    "fiddler",
+    "new-1",
+    "new-2",
+    "new-3",
+    "new-4",
+    "poet",
+    "singer",
+    "writer"
+   ],
+   "cold_entry_seq": 24,
+   "schedule_family": "D family: newcomer entry @24",
+   "deterministic_replay_identical": true
+  },
+  "T5c": {
+   "file": "night-T5c.jsonl",
+   "sha256": "a78eb3fd194ba28f912e32f870f66c016be40b6d325ac8a04ea514a12910e31b",
+   "stripped_md5": "18b2474f68bc5766f75529a8b9e89c20",
+   "n_msgs": 46,
+   "roster": [
+    "cartographer",
+    "critic",
+    "engineer",
+    "new-1",
+    "new-3",
+    "new-4",
+    "poet",
+    "singer",
+    "weaver"
+   ],
+   "cold_entry_seq": 24,
+   "schedule_family": "D-cold family: newcomer cold entry @24",
+   "deterministic_replay_identical": true
+  },
+  "T8": {
+   "file": "night-T8.jsonl",
+   "sha256": "e0ad2764906ceb20822888e8c5a4b5f43eaad1c32b99276e5e7f7914ac4a2590",
+   "stripped_md5": "4083992a474049f96fc2bad6bc6f8312",
+   "n_msgs": 28,
+   "roster": [
+    "barkeep",
+    "captain",
+    "essayist",
+    "fiddler",
+    "new-5",
+    "new-6",
+    "weaver"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "S3 family: late flip@20",
+   "deterministic_replay_identical": true
+  },
+  "T9": {
+   "file": "night-T9.jsonl",
+   "sha256": "4f699e21e6d4ca3a0204b2a6e29ab0ff3bab6f1a883abd72fd5b4083f67e5a66",
+   "stripped_md5": "5c099531f209a01fee66cc81cafd2c69",
+   "n_msgs": 20,
+   "roster": [
+    "barkeep",
+    "captain",
+    "essayist",
+    "fiddler",
+    "new-5",
+    "new-6",
+    "weaver"
+   ],
+   "cold_entry_seq": null,
+   "schedule_family": "S5 family: no-flip control",
+   "deterministic_replay_identical": true
+  }
+ }
+}
