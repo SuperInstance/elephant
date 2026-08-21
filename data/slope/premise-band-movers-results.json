@@ -1,0 +1,7074 @@
+{
+ "date": "2026-08-21",
+ "test": "E2/E3 premise band-movers (registered design E2E3-premise-band-movers-design-2026-08-21.md; topic.md addendum 2026-08-21)",
+ "channel": "canonical presence (primary); actual = sensitivity",
+ "guards": {
+  "gate_all_pass": true,
+  "gate_byte_identical": true,
+  "wave1": {
+   "corpus_sd": 0.23672602933417594,
+   "spread": 0.45557699366215904,
+   "drift": 0.7482774158546969
+  },
+  "gate_guards_w2": {
+   "drift": 0.795467769930404,
+   "cont_spread": 0.4883100984318604,
+   "icc": 0.9060897158208254,
+   "icc_ci": [
+    0.7809149190750708,
+    0.9109076669258844
+   ],
+   "icc_per_dial": {
+    "mood": 0.9815742438659601,
+    "volume": 0.9366598756397578,
+    "earnestness": 0.9041868941215363,
+    "cynicism": 0.8419089906779218,
+    "joke_landing": 0.831834540381587,
+    "panic": 0.9097158272782699,
+    "presence": 0.9367476387807445
+   }
+  }
+ },
+ "ladder": {
+  "wave2": {
+   "channel": "wave-2",
+   "R_pooled_fullnight": 0.5736704936438183,
+   "pooled_spread": 0.4786954780126136,
+   "pooled_drift": 0.8344432619709165,
+   "exact_anchor_global_spread": 0.4883100984318604,
+   "exact_anchor_global_drift": 0.795467769930404,
+   "exact_anchor_ratio": 0.6138653467689621,
+   "filed_channel": 0.6138653467689621,
+   "ok": true,
+   "exact_ok": true
+  },
+  "wave1": {
+   "channel": "wave-1",
+   "R_pooled_fullnight": 0.6490644977100432,
+   "pooled_spread": 0.4515214198503176,
+   "pooled_drift": 0.6956495409059115,
+   "exact_anchor_global_spread": 0.45557699366215904,
+   "exact_anchor_global_drift": 0.7482774158546969,
+   "exact_anchor_ratio": 0.6088343494127646,
+   "filed_channel": 0.6088,
+   "filed_seg_channel": 0.6853,
+   "ok": true,
+   "exact_ok": true
+  },
+  "anchor_v1": {
+   "R_pooled_real": 0.5409178029777487,
+   "R_pooled_grounded": 0.48449576464586824,
+   "pooled_real_o_mean": 0.41481368227506227,
+   "pooled_real_d_mean": 0.8127696825654543,
+   "n_real_cells": 31,
+   "exact_premise_real_ratio": 0.5599426323987404,
+   "exact_premise_grounded_ratio": 0.48976741800154805,
+   "target_real": 0.5599,
+   "target_grounded": 0.4898,
+   "ok_real": true,
+   "ok_grounded": true
+  }
+ },
+ "ladder_all_ok": true,
+ "primary_wave2": {
+  "label": "wave-2-primary",
+  "W": 12,
+  "presence": "canonical",
+  "class_residual": false,
+  "corpus_sd": 0.23672602933417586,
+  "n_readers": 21,
+  "A": {
+   "n_events": 17,
+   "A": 0.6470588235294118,
+   "p": 0.0013,
+   "null95": 0.45,
+   "null_mean": 0.24556429841443386,
+   "n_valid_draws": 10000,
+   "pos_ref": "center"
+  },
+  "A_up_mirror": {
+   "n_events": 43,
+   "A": 0.23255813953488372,
+   "p": 0.2218,
+   "null95": 0.32,
+   "null_mean": 0.17183829889684835,
+   "n_valid_draws": 10000,
+   "pos_ref": "center"
+  },
+  "A_start_ref_sensitivity": {
+   "n_events": 17,
+   "A": 0.0,
+   "p": 1.0,
+   "null95": 0.45,
+   "null_mean": 0.2464094019516775,
+   "n_valid_draws": 10000,
+   "pos_ref": "start"
+  },
+  "D": {
+   "D_signal": 0.4,
+   "k": 4,
+   "n_transitions": 10,
+   "ci_exact_binomial": [
+    0.12155225811982719,
+    0.7376219233930549
+   ],
+   "covered": [
+    1,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ],
+   "transitions": [
+    {
+     "night": "T1",
+     "boundary": 20
+    },
+    {
+     "night": "T2",
+     "boundary": 8
+    },
+    {
+     "night": "T3",
+     "boundary": 20
+    },
+    {
+     "night": "T4a",
+     "boundary": 12
+    },
+    {
+     "night": "T4a",
+     "boundary": 20
+    },
+    {
+     "night": "T4b",
+     "boundary": 20
+    },
+    {
+     "night": "T4b",
+     "boundary": 28
+    },
+    {
+     "night": "T5",
+     "boundary": 24
+    },
+    {
+     "night": "T5c",
+     "boundary": 24
+    },
+    {
+     "night": "T8",
+     "boundary": 20
+    }
+   ],
+   "D_null": 0.0,
+   "null_pseudo": [
+    {
+     "night": "T9",
+     "midpoint": 10,
+     "covered": 0
+    }
+   ],
+   "signal_rn_crossing_rate": 0.2153846153846154,
+   "null_rn_crossing_rate": 0.0,
+   "signal_rn_hits": 14,
+   "signal_rn_total": 65,
+   "null_rn_hits": 0,
+   "null_rn_total": 7
+  },
+  "P": {
+   "P_trans": 0.9940217497428615,
+   "P_rest": 0.9935313290945559,
+   "trans_ci": [
+    0.9909750866090694,
+    0.9957803532127633
+   ],
+   "rest_ci": [
+    0.9904924685495361,
+    0.9967858388241592
+   ],
+   "half_rest_ci": [
+    0.49524623427476805,
+    0.4983929194120796
+   ],
+   "holds_at_half": true,
+   "mechanism_kill": false,
+   "trans_events": [
+    {
+     "night": "T1",
+     "boundary": 20,
+     "n_readers": 9,
+     "cos": 0.9964192009663125
+    },
+    {
+     "night": "T3",
+     "boundary": 20,
+     "n_readers": 7,
+     "cos": 0.997072913635978
+    },
+    {
+     "night": "T4a",
+     "boundary": 12,
+     "n_readers": 7,
+     "cos": 0.9800334192773551
+    },
+    {
+     "night": "T4a",
+     "boundary": 20,
+     "n_readers": 7,
+     "cos": 0.9918179004780991
+    },
+    {
+     "night": "T4b",
+     "boundary": 20,
+     "n_readers": 9,
+     "cos": 0.9952701716844462
+    },
+    {
+     "night": "T4b",
+     "boundary": 28,
+     "n_readers": 9,
+     "cos": 0.9951590433083689
+    },
+    {
+     "night": "T5",
+     "boundary": 24,
+     "n_readers": 10,
+     "cos": 0.9931108528334109
+    },
+    {
+     "night": "T5c",
+     "boundary": 24,
+     "n_readers": 9,
+     "cos": 0.9939878662763724
+    }
+   ],
+   "rest_events": [
+    {
+     "night": "T4a",
+     "stratum": "cynical",
+     "n_readers": 7,
+     "cos": 0.9967858388241592
+    },
+    {
+     "night": "T5",
+     "stratum": "pre",
+     "n_readers": 10,
+     "cos": 0.9911521646830916
+    },
+    {
+     "night": "T5c",
+     "stratum": "pre",
+     "n_readers": 9,
+     "cos": 0.9904924685495361
+    }
+   ],
+   "dropped": [
+    {
+     "night": "T2",
+     "boundary": 8,
+     "reason": "pre/post window does not fit"
+    },
+    {
+     "night": "T8",
+     "boundary": 20,
+     "reason": "pre/post window does not fit"
+    }
+   ]
+  },
+  "S": {
+   "cells": [
+    {
+     "reader": "blacksmith",
+     "night": "T1",
+     "score": 1.8984619435300487,
+     "x": 0.6551
+    },
+    {
+     "reader": "captain",
+     "night": "T1",
+     "score": 0.7120032871984097,
+     "x": 0.6551
+    },
+    {
+     "reader": "cartographer",
+     "night": "T1",
+     "score": 1.85298333426981,
+     "x": 0.6551
+    },
+    {
+     "reader": "lamplighter",
+     "night": "T1",
+     "score": 0.768833833336027,
+     "x": 0.6551
+    },
+    {
+     "reader": "new-4",
+     "night": "T1",
+     "score": 1.8396595303280345,
+     "x": 0.6551
+    },
+    {
+     "reader": "new-5",
+     "night": "T1",
+     "score": 1.9120849821701162,
+     "x": 0.6551
+    },
+    {
+     "reader": "new-6",
+     "night": "T1",
+     "score": 4.3311697692478806,
+     "x": 0.6551
+    },
+    {
+     "reader": "poet",
+     "night": "T1",
+     "score": 3.247736250131334,
+     "x": 0.6551
+    },
+    {
+     "reader": "singer",
+     "night": "T1",
+     "score": 3.6985215874959207,
+     "x": 0.6551
+    },
+    {
+     "reader": "drifter",
+     "night": "T2",
+     "score": 0.9516442371330254,
+     "x": 0.3187
+    },
+    {
+     "reader": "engineer",
+     "night": "T2",
+     "score": 1.3490484449596145,
+     "x": 0.3187
+    },
+    {
+     "reader": "lamplighter",
+     "night": "T2",
+     "score": 0.9928463879831473,
+     "x": 0.3187
+    },
+    {
+     "reader": "new-1",
+     "night": "T2",
+     "score": 0.9234150277639287,
+     "x": 0.3187
+    },
+    {
+     "reader": "new-2",
+     "night": "T2",
+     "score": 0.7955938053543953,
+     "x": 0.3187
+    },
+    {
+     "reader": "tinker",
+     "night": "T2",
+     "score": 1.2420969746446737,
+     "x": 0.3187
+    },
+    {
+     "reader": "writer",
+     "night": "T2",
+     "score": 1.0259818830454288,
+     "x": 0.3187
+    },
+    {
+     "reader": "barkeep",
+     "night": "T3",
+     "score": 0.7967270031555039,
+     "x": 0.6551
+    },
+    {
+     "reader": "blacksmith",
+     "night": "T3",
+     "score": 2.435049897275435,
+     "x": 0.6551
+    },
+    {
+     "reader": "cartographer",
+     "night": "T3",
+     "score": 1.629389189611004,
+     "x": 0.6551
+    },
+    {
+     "reader": "critic",
+     "night": "T3",
+     "score": 1.57326473853787,
+     "x": 0.6551
+    },
+    {
+     "reader": "new-6",
+     "night": "T3",
+     "score": 4.233376358397996,
+     "x": 0.6551
+    },
+    {
+     "reader": "singer",
+     "night": "T3",
+     "score": 2.9485982890683298,
+     "x": 0.6551
+    },
+    {
+     "reader": "tinker",
+     "night": "T3",
+     "score": 3.106870799261954,
+     "x": 0.6551
+    },
+    {
+     "reader": "drifter",
+     "night": "T4a",
+     "score": 1.8390084900106092,
+     "x": 0.4465
+    },
+    {
+     "reader": "engineer",
+     "night": "T4a",
+     "score": 1.8178304207859808,
+     "x": 0.4465
+    },
+    {
+     "reader": "lamplighter",
+     "night": "T4a",
+     "score": 1.330969395768233,
+     "x": 0.4465
+    },
+    {
+     "reader": "new-1",
+     "night": "T4a",
+     "score": 1.8693585022357013,
+     "x": 0.4465
+    },
+    {
+     "reader": "new-2",
+     "night": "T4a",
+     "score": 1.129099362344069,
+     "x": 0.4465
+    },
+    {
+     "reader": "tinker",
+     "night": "T4a",
+     "score": 2.2701086345840857,
+     "x": 0.4465
+    },
+    {
+     "reader": "writer",
+     "night": "T4a",
+     "score": 2.199611898407374,
+     "x": 0.4465
+    },
+    {
+     "reader": "blacksmith",
+     "night": "T4b",
+     "score": 2.1719043780193727,
+     "x": 0.6319
+    },
+    {
+     "reader": "cartographer",
+     "night": "T4b",
+     "score": 2.3081933260647696,
+     "x": 0.6319
+    },
+    {
+     "reader": "critic",
+     "night": "T4b",
+     "score": 2.200053452933597,
+     "x": 0.6319
+    },
+    {
+     "reader": "drifter",
+     "night": "T4b",
+     "score": 1.6955966770549047,
+     "x": 0.6319
+    },
+    {
+     "reader": "essayist",
+     "night": "T4b",
+     "score": 1.4577379761796663,
+     "x": 0.6319
+    },
+    {
+     "reader": "new-2",
+     "night": "T4b",
+     "score": 1.449608562541155,
+     "x": 0.6319
+    },
+    {
+     "reader": "new-3",
+     "night": "T4b",
+     "score": 2.0398390719878274,
+     "x": 0.6319
+    },
+    {
+     "reader": "new-5",
+     "night": "T4b",
+     "score": 2.325445487168883,
+     "x": 0.6319
+    },
+    {
+     "reader": "poet",
+     "night": "T4b",
+     "score": 3.138676650146873,
+     "x": 0.6319
+    },
+    {
+     "reader": "blacksmith",
+     "night": "T5",
+     "score": 1.8408124774359156,
+     "x": 0.6293
+    },
+    {
+     "reader": "critic",
+     "night": "T5",
+     "score": 2.2970226646797944,
+     "x": 0.6293
+    },
+    {
+     "reader": "fiddler",
+     "night": "T5",
+     "score": 3.0179094188304045,
+     "x": 0.6293
+    },
+    {
+     "reader": "new-1",
+     "night": "T5",
+     "score": 1.7251933641754524,
+     "x": 0.6293
+    },
+    {
+     "reader": "new-2",
+     "night": "T5",
+     "score": 1.7463631969868083,
+     "x": 0.6293
+    },
+    {
+     "reader": "new-3",
+     "night": "T5",
+     "score": 1.9486710228017907,
+     "x": 0.6293
+    },
+    {
+     "reader": "new-4",
+     "night": "T5",
+     "score": 2.1664506528401923,
+     "x": 0.6293
+    },
+    {
+     "reader": "poet",
+     "night": "T5",
+     "score": 2.665556777254409,
+     "x": 0.6293
+    },
+    {
+     "reader": "singer",
+     "night": "T5",
+     "score": 3.9310465183721903,
+     "x": 0.6293
+    },
+    {
+     "reader": "writer",
+     "night": "T5",
+     "score": 2.193494866024145,
+     "x": 0.6293
+    },
+    {
+     "reader": "cartographer",
+     "night": "T5c",
+     "score": 1.865727412967329,
+     "x": 0.6293
+    },
+    {
+     "reader": "critic",
+     "night": "T5c",
+     "score": 1.7798960472687653,
+     "x": 0.6293
+    },
+    {
+     "reader": "engineer",
+     "night": "T5c",
+     "score": 1.3309334086267752,
+     "x": 0.6293
+    },
+    {
+     "reader": "new-1",
+     "night": "T5c",
+     "score": 1.236907620096775,
+     "x": 0.6293
+    },
+    {
+     "reader": "new-3",
+     "night": "T5c",
+     "score": 2.7986779820402155,
+     "x": 0.6293
+    },
+    {
+     "reader": "new-4",
+     "night": "T5c",
+     "score": 1.8926316060133208,
+     "x": 0.6293
+    },
+    {
+     "reader": "poet",
+     "night": "T5c",
+     "score": 3.5096829016595117,
+     "x": 0.6293
+    },
+    {
+     "reader": "singer",
+     "night": "T5c",
+     "score": 2.5723755490313343,
+     "x": 0.6293
+    },
+    {
+     "reader": "weaver",
+     "night": "T5c",
+     "score": 1.4916014997147575,
+     "x": 0.6293
+    },
+    {
+     "reader": "barkeep",
+     "night": "T8",
+     "score": 0.5446772897389214,
+     "x": 0.7409
+    },
+    {
+     "reader": "captain",
+     "night": "T8",
+     "score": 0.6266236791054746,
+     "x": 0.7409
+    },
+    {
+     "reader": "essayist",
+     "night": "T8",
+     "score": 0.9485629240359298,
+     "x": 0.7409
+    },
+    {
+     "reader": "fiddler",
+     "night": "T8",
+     "score": 2.7848672201856637,
+     "x": 0.7409
+    },
+    {
+     "reader": "new-5",
+     "night": "T8",
+     "score": 1.5199666487419696,
+     "x": 0.7409
+    },
+    {
+     "reader": "new-6",
+     "night": "T8",
+     "score": 3.9072745664719126,
+     "x": 0.7409
+    },
+    {
+     "reader": "weaver",
+     "night": "T8",
+     "score": 0.9306646162153417,
+     "x": 0.7409
+    }
+   ],
+   "n_cells": 65,
+   "n_readers": 21,
+   "slope_x": 1.41032617887822,
+   "slope_ci": [
+    -0.3129915763864635,
+    2.7970095137216013
+   ],
+   "contains_0": true,
+   "delta_rss_x_beyond_competitor": 0.485466157714038,
+   "nested_perm_p": 0.3842,
+   "beats_competitor": false,
+   "x_invariant": true,
+   "competitor_covariates": {
+    "roster_size": {
+     "T1": 9,
+     "T2": 7,
+     "T3": 7,
+     "T4a": 7,
+     "T4b": 9,
+     "T5": 10,
+     "T5c": 9,
+     "T8": 7
+    },
+    "archwarm": {
+     "T1": 0.6969362466772302,
+     "T2": 0.37395124539585994,
+     "T3": 0.4572671416974912,
+     "T4a": 0.37395124539585994,
+     "T4b": 0.4345127956313355,
+     "T5": 0.4537633925368496,
+     "T5c": 0.5341886278267465,
+     "T8": 0.41312020099822444
+    }
+   },
+   "effective_draws": 2000
+  },
+  "trajectory": {
+   "T1": {
+    "Rt": [
+     0.7644,
+     1.1526,
+     1.8197,
+     1.9558,
+     1.7622,
+     1.4898,
+     1.7463,
+     2.0557,
+     1.8712,
+     2.1371,
+     2.2375,
+     1.7724,
+     1.3207,
+     1.0277,
+     0.8365,
+     0.8104,
+     0.933,
+     1.1919,
+     1.6333,
+     2.3395,
+     3.2993,
+     3.7465,
+     3.7438,
+     3.8409,
+     3.6042,
+     3.1579,
+     2.6973,
+     2.857,
+     3.0191
+    ],
+    "boundaries": [
+     20
+    ],
+    "x": 0.6551
+   },
+   "T2": {
+    "Rt": [
+     0.4467,
+     0.5138,
+     0.4204,
+     0.4685,
+     0.5629,
+     0.6841,
+     1.0985,
+     1.8753,
+     1.2059,
+     1.0852,
+     1.0066,
+     0.9062,
+     1.2825,
+     1.9403,
+     2.1051,
+     2.0064,
+     1.883
+    ],
+    "boundaries": [
+     8
+    ],
+    "x": 0.3187
+   },
+   "T3": {
+    "Rt": [
+     0.7033,
+     0.9617,
+     2.158,
+     2.3858,
+     1.7586,
+     1.3092,
+     1.6448,
+     2.1175,
+     1.6158,
+     1.6525,
+     1.4425,
+     1.0522,
+     0.7848,
+     0.6278,
+     0.5278,
+     0.5225,
+     0.6083,
+     0.8004,
+     1.1623,
+     1.9229,
+     4.009,
+     5.541,
+     4.3825,
+     4.2542,
+     3.7204,
+     3.0032,
+     2.4305,
+     2.646,
+     2.8887
+    ],
+    "boundaries": [
+     20
+    ],
+    "x": 0.6551
+   },
+   "T4a": {
+    "Rt": [
+     0.5783,
+     0.9047,
+     1.4371,
+     1.2408,
+     1.0854,
+     0.9093,
+     0.763,
+     0.7943,
+     0.8929,
+     0.9387,
+     1.0112,
+     1.1709,
+     1.3947,
+     1.5582,
+     1.6356,
+     1.9064,
+     2.0551,
+     1.8899,
+     2.1551,
+     2.5043,
+     3.6837,
+     4.3394,
+     3.9474,
+     2.9733,
+     2.5657,
+     2.1986,
+     2.1693,
+     2.3453,
+     2.5047,
+     2.6508,
+     3.2563,
+     3.3215,
+     2.7721,
+     2.8342,
+     2.891
+    ],
+    "boundaries": [
+     12,
+     20
+    ],
+    "x": 0.4465
+   },
+   "T4b": {
+    "Rt": [
+     0.7696,
+     1.1585,
+     2.1086,
+     2.2388,
+     1.8356,
+     1.4654,
+     1.8068,
+     2.2463,
+     1.926,
+     2.079,
+     1.7826,
+     1.223,
+     0.8934,
+     0.7025,
+     0.5796,
+     0.565,
+     0.6477,
+     0.8163,
+     1.1075,
+     1.6099,
+     2.5767,
+     3.5384,
+     3.4884,
+     3.372,
+     3.2457,
+     3.0888,
+     2.7079,
+     2.3427,
+     2.0156,
+     2.2173,
+     2.4052,
+     2.7345,
+     3.1686,
+     3.5637
+    ],
+    "boundaries": [
+     20,
+     28
+    ],
+    "x": 0.6319
+   },
+   "T5": {
+    "Rt": [
+     0.8655,
+     1.1869,
+     2.1986,
+     2.2768,
+     1.9197,
+     1.5617,
+     1.9351,
+     2.3724,
+     2.008,
+     2.3479,
+     2.6254,
+     2.0208,
+     1.519,
+     1.14,
+     0.8932,
+     0.8306,
+     0.9003,
+     1.0473,
+     1.2449,
+     1.5963,
+     2.1091,
+     2.4404,
+     2.463,
+     2.4779,
+     2.5497,
+     2.8524,
+     3.0075,
+     2.8542,
+     2.5375,
+     2.2014,
+     2.3818,
+     2.5712,
+     2.973,
+     3.4467,
+     3.9254
+    ],
+    "boundaries": [
+     24
+    ],
+    "x": 0.6293
+   },
+   "T5c": {
+    "Rt": [
+     0.9076,
+     1.1584,
+     2.0037,
+     2.0113,
+     1.68,
+     1.4015,
+     1.6951,
+     2.0586,
+     1.814,
+     1.9317,
+     1.7316,
+     1.2629,
+     0.9498,
+     0.7413,
+     0.6054,
+     0.5786,
+     0.6409,
+     0.7777,
+     0.9868,
+     1.3832,
+     2.1235,
+     2.8178,
+     2.7944,
+     2.7928,
+     2.8468,
+     3.1699,
+     3.3262,
+     3.1742,
+     2.8483,
+     2.491,
+     2.6757,
+     2.8601,
+     3.2356,
+     3.6495,
+     4.025
+    ],
+    "boundaries": [
+     24
+    ],
+    "x": 0.6293
+   },
+   "T8": {
+    "Rt": [
+     0.7765,
+     1.1974,
+     2.1845,
+     2.1545,
+     1.7004,
+     1.3382,
+     1.6203,
+     2.017,
+     1.7615,
+     2.0234,
+     1.8807,
+     1.2431,
+     0.8745,
+     0.6735,
+     0.5503,
+     0.5318,
+     0.6004
+    ],
+    "boundaries": [
+     20
+    ],
+    "x": 0.7409
+   }
+  },
+  "null_night_scores": {
+   "T9": {
+    "barkeep": 0.872,
+    "captain": 0.5713,
+    "essayist": 0.9966,
+    "fiddler": 3.3143,
+    "new-5": 1.7612,
+    "new-6": 2.2477,
+    "weaver": 1.072
+   }
+  },
+  "mean_d_by_phase": {
+   "d_transition_phase_mean": 0.3626811070477479,
+   "d_stable_phase_mean": 0.3167098567900284,
+   "n_transition_phase": 1355,
+   "n_stable_phase": 563
+  }
+ },
+ "replication_wave1": {
+  "label": "wave-1-replication",
+  "W": 12,
+  "presence": "canonical",
+  "class_residual": false,
+  "corpus_sd": 0.23672602933417594,
+  "n_readers": 15,
+  "A": {
+   "n_events": 19,
+   "A": 0.631578947368421,
+   "p": 0.0001,
+   "null95": 0.44,
+   "null_mean": 0.26620738692801754,
+   "n_valid_draws": 10000,
+   "pos_ref": "center"
+  },
+  "A_up_mirror": {
+   "n_events": 47,
+   "A": 0.3829787234042553,
+   "p": 0.0433,
+   "null95": 0.3793103448275862,
+   "null_mean": 0.23185994098132115,
+   "n_valid_draws": 10000,
+   "pos_ref": "center"
+  },
+  "A_start_ref_sensitivity": {
+   "n_events": 19,
+   "A": 0.0,
+   "p": 1.0,
+   "null95": 0.44,
+   "null_mean": 0.2672718509285717,
+   "n_valid_draws": 10000,
+   "pos_ref": "start"
+  },
+  "D": {
+   "D_signal": 0.5,
+   "k": 5,
+   "n_transitions": 10,
+   "ci_exact_binomial": [
+    0.18708602844739855,
+    0.8129139715526015
+   ],
+   "covered": [
+    1,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    1,
+    0
+   ],
+   "transitions": [
+    {
+     "night": "A",
+     "boundary": 20
+    },
+    {
+     "night": "D",
+     "boundary": 24
+    },
+    {
+     "night": "D-cold",
+     "boundary": 24
+    },
+    {
+     "night": "S1",
+     "boundary": 20
+    },
+    {
+     "night": "S2",
+     "boundary": 8
+    },
+    {
+     "night": "S3",
+     "boundary": 20
+    },
+    {
+     "night": "S4a",
+     "boundary": 12
+    },
+    {
+     "night": "S4a",
+     "boundary": 20
+    },
+    {
+     "night": "S4b",
+     "boundary": 20
+    },
+    {
+     "night": "S4b",
+     "boundary": 28
+    }
+   ],
+   "D_null": 0.0,
+   "null_pseudo": [
+    {
+     "night": "S5",
+     "midpoint": 10,
+     "covered": 0
+    }
+   ],
+   "signal_rn_crossing_rate": 0.23076923076923078,
+   "null_rn_crossing_rate": 0.0,
+   "signal_rn_hits": 15,
+   "signal_rn_total": 65,
+   "null_rn_hits": 0,
+   "null_rn_total": 8
+  },
+  "P": {
+   "P_trans": 0.9948402789537649,
+   "P_rest": 0.9961628734206828,
+   "trans_ci": [
+    0.9911641718838528,
+    0.9969480341990341
+   ],
+   "rest_ci": [
+    0.9943321451980898,
+    0.9979479513623565
+   ],
+   "half_rest_ci": [
+    0.4971660725990449,
+    0.49897397568117824
+   ],
+   "holds_at_half": true,
+   "mechanism_kill": false,
+   "trans_events": [
+    {
+     "night": "A",
+     "boundary": 20,
+     "n_readers": 6,
+     "cos": 0.9980469550173477
+    },
+    {
+     "night": "D",
+     "boundary": 24,
+     "n_readers": 7,
+     "cos": 0.9961073039417783
+    },
+    {
+     "night": "D-cold",
+     "boundary": 24,
+     "n_readers": 6,
+     "cos": 0.995038885990315
+    },
+    {
+     "night": "S1",
+     "boundary": 20,
+     "n_readers": 9,
+     "cos": 0.9980250551732954
+    },
+    {
+     "night": "S4a",
+     "boundary": 12,
+     "n_readers": 8,
+     "cos": 0.9827628644580962
+    },
+    {
+     "night": "S4a",
+     "boundary": 20,
+     "n_readers": 8,
+     "cos": 0.9928588301404025
+    },
+    {
+     "night": "S4b",
+     "boundary": 20,
+     "n_readers": 9,
+     "cos": 0.9958126379210576
+    },
+    {
+     "night": "S4b",
+     "boundary": 28,
+     "n_readers": 9,
+     "cos": 0.9870018935448276
+    }
+   ],
+   "rest_events": [
+    {
+     "night": "D",
+     "stratum": "pre",
+     "n_readers": 7,
+     "cos": 0.9943321451980898
+    },
+    {
+     "night": "D-cold",
+     "stratum": "pre",
+     "n_readers": 6,
+     "cos": 0.9951451005954028
+    },
+    {
+     "night": "S4a",
+     "stratum": "cynical",
+     "n_readers": 9,
+     "cos": 0.9979479513623565
+    }
+   ],
+   "dropped": [
+    {
+     "night": "S2",
+     "boundary": 8,
+     "reason": "pre/post window does not fit"
+    },
+    {
+     "night": "S3",
+     "boundary": 20,
+     "reason": "pre/post window does not fit"
+    }
+   ]
+  },
+  "S": {
+   "cells": [
+    {
+     "reader": "captain",
+     "night": "A",
+     "score": 1.1072615609893486,
+     "x": 0.6551
+    },
+    {
+     "reader": "critic",
+     "night": "A",
+     "score": 1.8624325965063022,
+     "x": 0.6551
+    },
+    {
+     "reader": "engineer",
+     "night": "A",
+     "score": 2.253585435569243,
+     "x": 0.6551
+    },
+    {
+     "reader": "essayist",
+     "night": "A",
+     "score": 1.2818699898770258,
+     "x": 0.6551
+    },
+    {
+     "reader": "poet",
+     "night": "A",
+     "score": 2.752422989206595,
+     "x": 0.6551
+    },
+    {
+     "reader": "writer",
+     "night": "A",
+     "score": 2.259471278098322,
+     "x": 0.6551
+    },
+    {
+     "reader": "captain",
+     "night": "D",
+     "score": 0.9660345145903149,
+     "x": 0.6293
+    },
+    {
+     "reader": "critic",
+     "night": "D",
+     "score": 2.0500552854050174,
+     "x": 0.6293
+    },
+    {
+     "reader": "drifter",
+     "night": "D",
+     "score": 1.4824819517062773,
+     "x": 0.6293
+    },
+    {
+     "reader": "engineer",
+     "night": "D",
+     "score": 2.2723581915924735,
+     "x": 0.6293
+    },
+    {
+     "reader": "essayist",
+     "night": "D",
+     "score": 1.542782037500193,
+     "x": 0.6293
+    },
+    {
+     "reader": "poet",
+     "night": "D",
+     "score": 2.7735272661045336,
+     "x": 0.6293
+    },
+    {
+     "reader": "writer",
+     "night": "D",
+     "score": 3.2863835271477293,
+     "x": 0.6293
+    },
+    {
+     "reader": "captain",
+     "night": "D-cold",
+     "score": 0.957165499181401,
+     "x": 0.6293
+    },
+    {
+     "reader": "critic",
+     "night": "D-cold",
+     "score": 2.3732946019091035,
+     "x": 0.6293
+    },
+    {
+     "reader": "engineer",
+     "night": "D-cold",
+     "score": 2.3508193221723515,
+     "x": 0.6293
+    },
+    {
+     "reader": "essayist",
+     "night": "D-cold",
+     "score": 1.2818699898770258,
+     "x": 0.6293
+    },
+    {
+     "reader": "poet",
+     "night": "D-cold",
+     "score": 2.3532751303701893,
+     "x": 0.6293
+    },
+    {
+     "reader": "writer",
+     "night": "D-cold",
+     "score": 1.8447792488374923,
+     "x": 0.6293
+    },
+    {
+     "reader": "barkeep",
+     "night": "S1",
+     "score": 0.7741839242031979,
+     "x": 0.6551
+    },
+    {
+     "reader": "captain",
+     "night": "S1",
+     "score": 1.2002037997849875,
+     "x": 0.6551
+    },
+    {
+     "reader": "cartographer",
+     "night": "S1",
+     "score": 1.6792642397974928,
+     "x": 0.6551
+    },
+    {
+     "reader": "critic",
+     "night": "S1",
+     "score": 1.227927021995239,
+     "x": 0.6551
+    },
+    {
+     "reader": "engineer",
+     "night": "S1",
+     "score": 1.781210948493754,
+     "x": 0.6551
+    },
+    {
+     "reader": "essayist",
+     "night": "S1",
+     "score": 1.4944608881266215,
+     "x": 0.6551
+    },
+    {
+     "reader": "fiddler",
+     "night": "S1",
+     "score": 1.4802970842569498,
+     "x": 0.6551
+    },
+    {
+     "reader": "poet",
+     "night": "S1",
+     "score": 3.5600585679520838,
+     "x": 0.6551
+    },
+    {
+     "reader": "writer",
+     "night": "S1",
+     "score": 3.0214439523602423,
+     "x": 0.6551
+    },
+    {
+     "reader": "captain",
+     "night": "S2",
+     "score": 0.7600992637262671,
+     "x": 0.3187
+    },
+    {
+     "reader": "critic",
+     "night": "S2",
+     "score": 1.4498191094938848,
+     "x": 0.3187
+    },
+    {
+     "reader": "engineer",
+     "night": "S2",
+     "score": 1.3748715091966006,
+     "x": 0.3187
+    },
+    {
+     "reader": "essayist",
+     "night": "S2",
+     "score": 0.8549460962876607,
+     "x": 0.3187
+    },
+    {
+     "reader": "lamplighter",
+     "night": "S2",
+     "score": 0.8057073238224193,
+     "x": 0.3187
+    },
+    {
+     "reader": "poet",
+     "night": "S2",
+     "score": 1.6314316338144574,
+     "x": 0.3187
+    },
+    {
+     "reader": "singer",
+     "night": "S2",
+     "score": 1.0195509023778435,
+     "x": 0.3187
+    },
+    {
+     "reader": "tinker",
+     "night": "S2",
+     "score": 1.144898577756477,
+     "x": 0.3187
+    },
+    {
+     "reader": "writer",
+     "night": "S2",
+     "score": 0.9387297762391378,
+     "x": 0.3187
+    },
+    {
+     "reader": "barkeep",
+     "night": "S3",
+     "score": 0.7201291695919061,
+     "x": 0.7409
+    },
+    {
+     "reader": "blacksmith",
+     "night": "S3",
+     "score": 1.1882990975779308,
+     "x": 0.7409
+    },
+    {
+     "reader": "captain",
+     "night": "S3",
+     "score": 0.47838003008082597,
+     "x": 0.7409
+    },
+    {
+     "reader": "critic",
+     "night": "S3",
+     "score": 1.4823339833360523,
+     "x": 0.7409
+    },
+    {
+     "reader": "engineer",
+     "night": "S3",
+     "score": 1.7565906498473014,
+     "x": 0.7409
+    },
+    {
+     "reader": "essayist",
+     "night": "S3",
+     "score": 1.1536663386569512,
+     "x": 0.7409
+    },
+    {
+     "reader": "poet",
+     "night": "S3",
+     "score": 2.577284928742716,
+     "x": 0.7409
+    },
+    {
+     "reader": "weaver",
+     "night": "S3",
+     "score": 0.9982412427814984,
+     "x": 0.7409
+    },
+    {
+     "reader": "writer",
+     "night": "S3",
+     "score": 1.9347579102043764,
+     "x": 0.7409
+    },
+    {
+     "reader": "captain",
+     "night": "S4a",
+     "score": 1.2832327374708978,
+     "x": 0.4465
+    },
+    {
+     "reader": "critic",
+     "night": "S4a",
+     "score": 1.2994669167777428,
+     "x": 0.4465
+    },
+    {
+     "reader": "drifter",
+     "night": "S4a",
+     "score": 1.5014549785155964,
+     "x": 0.4465
+    },
+    {
+     "reader": "engineer",
+     "night": "S4a",
+     "score": 1.4656651849213367,
+     "x": 0.4465
+    },
+    {
+     "reader": "essayist",
+     "night": "S4a",
+     "score": 1.422416219853488,
+     "x": 0.4465
+    },
+    {
+     "reader": "fiddler",
+     "night": "S4a",
+     "score": 2.1197201821035487,
+     "x": 0.4465
+    },
+    {
+     "reader": "poet",
+     "night": "S4a",
+     "score": 3.239365247274072,
+     "x": 0.4465
+    },
+    {
+     "reader": "singer",
+     "night": "S4a",
+     "score": 2.011955935067008,
+     "x": 0.4465
+    },
+    {
+     "reader": "writer",
+     "night": "S4a",
+     "score": 2.3217598564299458,
+     "x": 0.4465
+    },
+    {
+     "reader": "blacksmith",
+     "night": "S4b",
+     "score": 1.400715190400047,
+     "x": 0.6319
+    },
+    {
+     "reader": "captain",
+     "night": "S4b",
+     "score": 1.1718552329123733,
+     "x": 0.6319
+    },
+    {
+     "reader": "cartographer",
+     "night": "S4b",
+     "score": 2.820857463479848,
+     "x": 0.6319
+    },
+    {
+     "reader": "critic",
+     "night": "S4b",
+     "score": 2.3948504432820554,
+     "x": 0.6319
+    },
+    {
+     "reader": "drifter",
+     "night": "S4b",
+     "score": 0.6326721985997295,
+     "x": 0.6319
+    },
+    {
+     "reader": "engineer",
+     "night": "S4b",
+     "score": 2.382765094238997,
+     "x": 0.6319
+    },
+    {
+     "reader": "essayist",
+     "night": "S4b",
+     "score": 1.634101255433516,
+     "x": 0.6319
+    },
+    {
+     "reader": "poet",
+     "night": "S4b",
+     "score": 2.5165225761808214,
+     "x": 0.6319
+    },
+    {
+     "reader": "tinker",
+     "night": "S4b",
+     "score": 1.8810212946727556,
+     "x": 0.6319
+    },
+    {
+     "reader": "writer",
+     "night": "S4b",
+     "score": 1.958955081722407,
+     "x": 0.6319
+    }
+   ],
+   "n_cells": 65,
+   "n_readers": 15,
+   "slope_x": 1.236750928489233,
+   "slope_ci": [
+    0.3341245825639226,
+    1.9794449654701354
+   ],
+   "contains_0": false,
+   "delta_rss_x_beyond_competitor": 0.23697747233414646,
+   "nested_perm_p": 0.5208,
+   "beats_competitor": false,
+   "x_invariant": false,
+   "competitor_covariates": {
+    "roster_size": {
+     "A": 6,
+     "D": 7,
+     "D-cold": 6,
+     "S1": 9,
+     "S2": 9,
+     "S3": 9,
+     "S4a": 9,
+     "S4b": 10
+    },
+    "archwarm": {
+     "A": 0.5717850989003699,
+     "D": 0.3786124818807937,
+     "D-cold": 0.5717850989003699,
+     "S1": 0.3604343954165822,
+     "S2": 0.648958137492178,
+     "S3": 0.43770038310090686,
+     "S4a": 0.36708151065765715,
+     "S4b": 0.5046556710888993
+    }
+   },
+   "effective_draws": 2000
+  },
+  "trajectory": {
+   "A": {
+    "Rt": [
+     0.7929,
+     1.22,
+     1.8344,
+     1.8803,
+     1.7461,
+     1.4578,
+     1.7517,
+     2.0608,
+     1.8863,
+     2.3707,
+     2.5788,
+     1.822,
+     1.3296,
+     1.0163,
+     0.8067,
+     0.7783,
+     0.9073,
+     1.1875,
+     1.7227,
+     2.7116,
+     4.0138,
+     3.1401,
+     2.9274,
+     2.8739,
+     2.5614,
+     2.2207,
+     1.9127,
+     2.0253,
+     2.1388
+    ],
+    "boundaries": [
+     20
+    ],
+    "x": 0.6551
+   },
+   "D": {
+    "Rt": [
+     0.7679,
+     1.1793,
+     1.8045,
+     1.8781,
+     1.7829,
+     1.5152,
+     1.822,
+     2.1148,
+     1.9784,
+     2.5231,
+     2.6605,
+     1.7853,
+     1.2839,
+     0.9333,
+     0.7198,
+     0.6745,
+     0.7533,
+     0.9244,
+     1.2127,
+     2.0397,
+     4.2484,
+     4.0672,
+     3.2976,
+     2.9609,
+     2.7291,
+     2.8238,
+     2.6798,
+     2.3755,
+     2.0703,
+     1.8049,
+     1.9314,
+     2.0625,
+     2.3349,
+     2.652,
+     2.9877
+    ],
+    "boundaries": [
+     24
+    ],
+    "x": 0.6293
+   },
+   "D-cold": {
+    "Rt": [
+     0.7929,
+     1.22,
+     1.8344,
+     1.8803,
+     1.7461,
+     1.4578,
+     1.7517,
+     2.0608,
+     1.8863,
+     2.3707,
+     2.5788,
+     1.822,
+     1.3296,
+     0.9723,
+     0.7471,
+     0.6988,
+     0.7706,
+     0.917,
+     1.1302,
+     1.5215,
+     2.0507,
+     2.2983,
+     2.2241,
+     2.2038,
+     2.2127,
+     2.4166,
+     2.4587,
+     2.2744,
+     2.0021,
+     1.734,
+     1.8502,
+     1.9663,
+     2.2163,
+     2.5062,
+     2.8025
+    ],
+    "boundaries": [
+     24
+    ],
+    "x": 0.6293
+   },
+   "S1": {
+    "Rt": [
+     0.8681,
+     1.1971,
+     2.0217,
+     2.0398,
+     1.7585,
+     1.4034,
+     1.7057,
+     2.0657,
+     1.7771,
+     2.1351,
+     1.8493,
+     1.1498,
+     0.7943,
+     0.6041,
+     0.489,
+     0.4784,
+     0.5605,
+     0.7496,
+     1.1293,
+     1.9637,
+     3.813,
+     3.2491,
+     2.6974,
+     2.6253,
+     2.4074,
+     2.1291,
+     1.8601,
+     1.9759,
+     2.0962
+    ],
+    "boundaries": [
+     20
+    ],
+    "x": 0.6551
+   },
+   "S2": {
+    "Rt": [
+     0.4706,
+     0.5546,
+     0.4583,
+     0.519,
+     0.6237,
+     0.7509,
+     1.1667,
+     1.8254,
+     1.4281,
+     1.2794,
+     1.1927,
+     1.0744,
+     1.4608,
+     1.9721,
+     1.8685,
+     1.7912,
+     1.6976
+    ],
+    "boundaries": [
+     8
+    ],
+    "x": 0.3187
+   },
+   "S3": {
+    "Rt": [
+     0.6915,
+     1.062,
+     1.735,
+     1.8326,
+     1.6249,
+     1.3093,
+     1.5983,
+     1.9455,
+     1.6977,
+     2.0647,
+     1.9453,
+     1.2751,
+     0.9061,
+     0.6954,
+     0.563,
+     0.5506,
+     0.6427
+    ],
+    "boundaries": [
+     20
+    ],
+    "x": 0.7409
+   },
+   "S4a": {
+    "Rt": [
+     0.9131,
+     1.5296,
+     1.7269,
+     1.431,
+     1.306,
+     1.0848,
+     0.8534,
+     0.9418,
+     1.1581,
+     1.2156,
+     1.2735,
+     1.4588,
+     1.3962,
+     1.515,
+     1.5088,
+     1.7307,
+     1.8768,
+     1.7289,
+     2.0585,
+     2.5502,
+     4.2593,
+     4.7141,
+     3.6737,
+     2.5809,
+     2.3171,
+     2.05,
+     2.0717,
+     2.2101,
+     2.3336,
+     2.446,
+     2.722,
+     2.6665,
+     2.3526,
+     2.4107,
+     2.465
+    ],
+    "boundaries": [
+     12,
+     20
+    ],
+    "x": 0.4465
+   },
+   "S4b": {
+    "Rt": [
+     0.7224,
+     1.1188,
+     1.8123,
+     1.966,
+     1.8031,
+     1.4637,
+     1.7736,
+     2.1039,
+     1.8478,
+     2.2593,
+     2.2744,
+     1.5766,
+     1.1364,
+     0.866,
+     0.6928,
+     0.6744,
+     0.7928,
+     1.0037,
+     1.3717,
+     2.0101,
+     3.1885,
+     4.0571,
+     3.5813,
+     3.4674,
+     3.2706,
+     2.943,
+     2.4234,
+     1.9836,
+     1.2712,
+     1.4263,
+     1.5916,
+     1.8485,
+     2.164,
+     2.4988
+    ],
+    "boundaries": [
+     20,
+     28
+    ],
+    "x": 0.6319
+   }
+  },
+  "null_night_scores": {
+   "S5": {
+    "captain": 0.477,
+    "critic": 2.8744,
+    "engineer": 1.8387,
+    "essayist": 1.1054,
+    "lamplighter": 0.5362,
+    "poet": 2.2243,
+    "weaver": 1.0266,
+    "writer": 1.646
+   }
+  },
+  "mean_d_by_phase": {
+   "d_transition_phase_mean": 0.35223890575215056,
+   "d_stable_phase_mean": 0.29732982565073546,
+   "n_transition_phase": 1310,
+   "n_stable_phase": 501
+  }
+ },
+ "sensitivities": {
+  "W8": {
+   "wave2": {
+    "label": "wave-2 W=8",
+    "W": 8,
+    "presence": "canonical",
+    "class_residual": false,
+    "corpus_sd": 0.23672602933417586,
+    "n_readers": 21,
+    "A": {
+     "n_events": 12,
+     "A": 0.9166666666666666,
+     "p": 0.0,
+     "null95": 0.47368421052631576,
+     "null_mean": 0.25081571591635055,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_up_mirror": {
+     "n_events": 56,
+     "A": 0.14285714285714285,
+     "p": 0.6075,
+     "null95": 0.3333333333333333,
+     "null_mean": 0.1702924395029197,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_start_ref_sensitivity": {
+     "n_events": 12,
+     "A": 0.0,
+     "p": 1.0,
+     "null95": 0.47058823529411764,
+     "null_mean": 0.2500888610911792,
+     "n_valid_draws": 10000,
+     "pos_ref": "start"
+    },
+    "D": {
+     "D_signal": 0.5,
+     "k": 5,
+     "n_transitions": 10,
+     "ci_exact_binomial": [
+      0.18708602844739855,
+      0.8129139715526015
+     ],
+     "covered": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1
+     ],
+     "transitions": [
+      {
+       "night": "T1",
+       "boundary": 20
+      },
+      {
+       "night": "T2",
+       "boundary": 8
+      },
+      {
+       "night": "T3",
+       "boundary": 20
+      },
+      {
+       "night": "T4a",
+       "boundary": 12
+      },
+      {
+       "night": "T4a",
+       "boundary": 20
+      },
+      {
+       "night": "T4b",
+       "boundary": 20
+      },
+      {
+       "night": "T4b",
+       "boundary": 28
+      },
+      {
+       "night": "T5",
+       "boundary": 24
+      },
+      {
+       "night": "T5c",
+       "boundary": 24
+      },
+      {
+       "night": "T8",
+       "boundary": 20
+      }
+     ],
+     "D_null": 0.0,
+     "null_pseudo": [
+      {
+       "night": "T9",
+       "midpoint": 10,
+       "covered": 0
+      }
+     ],
+     "signal_rn_crossing_rate": 0.15384615384615385,
+     "null_rn_crossing_rate": 0.0,
+     "signal_rn_hits": 10,
+     "signal_rn_total": 65,
+     "null_rn_hits": 0,
+     "null_rn_total": 7
+    },
+    "P": {
+     "P_trans": 0.9957100784209971,
+     "P_rest": 0.9961312464176177,
+     "trans_ci": [
+      0.9923528620279891,
+      0.9972120992730598
+     ],
+     "rest_ci": [
+      0.9931648217186683,
+      0.9977712480073873
+     ],
+     "half_rest_ci": [
+      0.49658241085933413,
+      0.49888562400369363
+     ],
+     "holds_at_half": true,
+     "mechanism_kill": false,
+     "trans_events": [
+      {
+       "night": "T1",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9974334862458618
+      },
+      {
+       "night": "T2",
+       "boundary": 8,
+       "n_readers": 7,
+       "cos": 0.9604827309731229
+      },
+      {
+       "night": "T3",
+       "boundary": 20,
+       "n_readers": 7,
+       "cos": 0.9974721836216311
+      },
+      {
+       "night": "T4a",
+       "boundary": 12,
+       "n_readers": 7,
+       "cos": 0.9929074162689729
+      },
+      {
+       "night": "T4a",
+       "boundary": 20,
+       "n_readers": 7,
+       "cos": 0.9965808393437102
+      },
+      {
+       "night": "T4b",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9975531919686632
+      },
+      {
+       "night": "T4b",
+       "boundary": 28,
+       "n_readers": 9,
+       "cos": 0.9971654558132529
+      },
+      {
+       "night": "T5",
+       "boundary": 24,
+       "n_readers": 10,
+       "cos": 0.9945400164814812
+      },
+      {
+       "night": "T5c",
+       "boundary": 24,
+       "n_readers": 9,
+       "cos": 0.9953017499346547
+      },
+      {
+       "night": "T8",
+       "boundary": 20,
+       "n_readers": 7,
+       "cos": 0.9981198876416504
+      }
+     ],
+     "rest_events": [
+      {
+       "night": "T1",
+       "stratum": "warm",
+       "n_readers": 9,
+       "cos": 0.9863664115758922
+      },
+      {
+       "night": "T1",
+       "stratum": "cynical",
+       "n_readers": 9,
+       "cos": 0.9980658911993934
+      },
+      {
+       "night": "T2",
+       "stratum": "cynical",
+       "n_readers": 7,
+       "cos": 0.9970351624776173
+      },
+      {
+       "night": "T3",
+       "stratum": "warm",
+       "n_readers": 7,
+       "cos": 0.9834811815111999
+      },
+      {
+       "night": "T3",
+       "stratum": "cynical",
+       "n_readers": 7,
+       "cos": 0.9991637217386895
+      },
+      {
+       "night": "T4a",
+       "stratum": "cynical",
+       "n_readers": 7,
+       "cos": 0.9973666772312958
+      },
+      {
+       "night": "T4b",
+       "stratum": "warm",
+       "n_readers": 9,
+       "cos": 0.9883084780947514
+      },
+      {
+       "night": "T4b",
+       "stratum": "cynical-entry",
+       "n_readers": 9,
+       "cos": 0.9988353760067845
+      },
+      {
+       "night": "T5",
+       "stratum": "pre",
+       "n_readers": 10,
+       "cos": 0.9893464391326696
+      },
+      {
+       "night": "T5",
+       "stratum": "post",
+       "n_readers": 10,
+       "cos": 0.9987695281124092
+      },
+      {
+       "night": "T5c",
+       "stratum": "pre",
+       "n_readers": 9,
+       "cos": 0.9900000870124374
+      },
+      {
+       "night": "T5c",
+       "stratum": "post",
+       "n_readers": 9,
+       "cos": 0.9990173750833237
+      },
+      {
+       "night": "T8",
+       "stratum": "warm",
+       "n_readers": 7,
+       "cos": 0.9929462493022244
+      }
+     ],
+     "dropped": []
+    },
+    "S": {
+     "cells": [
+      {
+       "reader": "blacksmith",
+       "night": "T1",
+       "score": 1.9927676772720442,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "T1",
+       "score": 0.8240199397495285,
+       "x": 0.6551
+      },
+      {
+       "reader": "cartographer",
+       "night": "T1",
+       "score": 2.5181908106940494,
+       "x": 0.6551
+      },
+      {
+       "reader": "lamplighter",
+       "night": "T1",
+       "score": 0.8065195708490832,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-4",
+       "night": "T1",
+       "score": 3.050717531466944,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-5",
+       "night": "T1",
+       "score": 2.885786501362203,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-6",
+       "night": "T1",
+       "score": 5.403546398757848,
+       "x": 0.6551
+      },
+      {
+       "reader": "poet",
+       "night": "T1",
+       "score": 4.13324740981512,
+       "x": 0.6551
+      },
+      {
+       "reader": "singer",
+       "night": "T1",
+       "score": 4.752522368349899,
+       "x": 0.6551
+      },
+      {
+       "reader": "drifter",
+       "night": "T2",
+       "score": 1.1119049429009356,
+       "x": 0.3187
+      },
+      {
+       "reader": "engineer",
+       "night": "T2",
+       "score": 1.5702239683834027,
+       "x": 0.3187
+      },
+      {
+       "reader": "lamplighter",
+       "night": "T2",
+       "score": 1.201209838495754,
+       "x": 0.3187
+      },
+      {
+       "reader": "new-1",
+       "night": "T2",
+       "score": 1.0940613747844863,
+       "x": 0.3187
+      },
+      {
+       "reader": "new-2",
+       "night": "T2",
+       "score": 0.8932954661332625,
+       "x": 0.3187
+      },
+      {
+       "reader": "tinker",
+       "night": "T2",
+       "score": 1.1566874551586888,
+       "x": 0.3187
+      },
+      {
+       "reader": "writer",
+       "night": "T2",
+       "score": 1.0924100179253597,
+       "x": 0.3187
+      },
+      {
+       "reader": "barkeep",
+       "night": "T3",
+       "score": 1.3799805141703645,
+       "x": 0.6551
+      },
+      {
+       "reader": "blacksmith",
+       "night": "T3",
+       "score": 2.9103046766294813,
+       "x": 0.6551
+      },
+      {
+       "reader": "cartographer",
+       "night": "T3",
+       "score": 2.5972397979458397,
+       "x": 0.6551
+      },
+      {
+       "reader": "critic",
+       "night": "T3",
+       "score": 2.4185232412826703,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-6",
+       "night": "T3",
+       "score": 6.6898768231579,
+       "x": 0.6551
+      },
+      {
+       "reader": "singer",
+       "night": "T3",
+       "score": 4.555219968332177,
+       "x": 0.6551
+      },
+      {
+       "reader": "tinker",
+       "night": "T3",
+       "score": 3.812792833916272,
+       "x": 0.6551
+      },
+      {
+       "reader": "drifter",
+       "night": "T4a",
+       "score": 2.8708530776371806,
+       "x": 0.4465
+      },
+      {
+       "reader": "engineer",
+       "night": "T4a",
+       "score": 2.9663178270509216,
+       "x": 0.4465
+      },
+      {
+       "reader": "lamplighter",
+       "night": "T4a",
+       "score": 1.6664192509174338,
+       "x": 0.4465
+      },
+      {
+       "reader": "new-1",
+       "night": "T4a",
+       "score": 2.8350032534808935,
+       "x": 0.4465
+      },
+      {
+       "reader": "new-2",
+       "night": "T4a",
+       "score": 1.8221796746964842,
+       "x": 0.4465
+      },
+      {
+       "reader": "tinker",
+       "night": "T4a",
+       "score": 2.292411214989849,
+       "x": 0.4465
+      },
+      {
+       "reader": "writer",
+       "night": "T4a",
+       "score": 2.2417425313850847,
+       "x": 0.4465
+      },
+      {
+       "reader": "blacksmith",
+       "night": "T4b",
+       "score": 2.606731010193202,
+       "x": 0.6319
+      },
+      {
+       "reader": "cartographer",
+       "night": "T4b",
+       "score": 3.2498346642076474,
+       "x": 0.6319
+      },
+      {
+       "reader": "critic",
+       "night": "T4b",
+       "score": 2.8540182728595793,
+       "x": 0.6319
+      },
+      {
+       "reader": "drifter",
+       "night": "T4b",
+       "score": 2.2432368334074524,
+       "x": 0.6319
+      },
+      {
+       "reader": "essayist",
+       "night": "T4b",
+       "score": 2.1952995197352347,
+       "x": 0.6319
+      },
+      {
+       "reader": "new-2",
+       "night": "T4b",
+       "score": 2.0127171674744258,
+       "x": 0.6319
+      },
+      {
+       "reader": "new-3",
+       "night": "T4b",
+       "score": 3.238837511683382,
+       "x": 0.6319
+      },
+      {
+       "reader": "new-5",
+       "night": "T4b",
+       "score": 3.365359832308499,
+       "x": 0.6319
+      },
+      {
+       "reader": "poet",
+       "night": "T4b",
+       "score": 4.027774229491448,
+       "x": 0.6319
+      },
+      {
+       "reader": "blacksmith",
+       "night": "T5",
+       "score": 2.126383277624757,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "T5",
+       "score": 3.180216141548159,
+       "x": 0.6293
+      },
+      {
+       "reader": "fiddler",
+       "night": "T5",
+       "score": 4.16530175634755,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-1",
+       "night": "T5",
+       "score": 2.38526253266308,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-2",
+       "night": "T5",
+       "score": 2.264512621523169,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-3",
+       "night": "T5",
+       "score": 2.6137445869858946,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-4",
+       "night": "T5",
+       "score": 3.1961607873108515,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "T5",
+       "score": 3.573949342163658,
+       "x": 0.6293
+      },
+      {
+       "reader": "singer",
+       "night": "T5",
+       "score": 5.223328006283625,
+       "x": 0.6293
+      },
+      {
+       "reader": "writer",
+       "night": "T5",
+       "score": 2.838663622488515,
+       "x": 0.6293
+      },
+      {
+       "reader": "cartographer",
+       "night": "T5c",
+       "score": 2.812802690749805,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "T5c",
+       "score": 2.2404200764826583,
+       "x": 0.6293
+      },
+      {
+       "reader": "engineer",
+       "night": "T5c",
+       "score": 2.0734531552241364,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-1",
+       "night": "T5c",
+       "score": 1.8234622559142801,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-3",
+       "night": "T5c",
+       "score": 4.029280029196581,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-4",
+       "night": "T5c",
+       "score": 2.7776393318354065,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "T5c",
+       "score": 4.645189742707773,
+       "x": 0.6293
+      },
+      {
+       "reader": "singer",
+       "night": "T5c",
+       "score": 3.721226252088078,
+       "x": 0.6293
+      },
+      {
+       "reader": "weaver",
+       "night": "T5c",
+       "score": 2.14142968757816,
+       "x": 0.6293
+      },
+      {
+       "reader": "barkeep",
+       "night": "T8",
+       "score": 0.6401879304161038,
+       "x": 0.7409
+      },
+      {
+       "reader": "captain",
+       "night": "T8",
+       "score": 0.89323824762324,
+       "x": 0.7409
+      },
+      {
+       "reader": "essayist",
+       "night": "T8",
+       "score": 1.2098704128340538,
+       "x": 0.7409
+      },
+      {
+       "reader": "fiddler",
+       "night": "T8",
+       "score": 2.9958665637464863,
+       "x": 0.7409
+      },
+      {
+       "reader": "new-5",
+       "night": "T8",
+       "score": 1.7568263130413158,
+       "x": 0.7409
+      },
+      {
+       "reader": "new-6",
+       "night": "T8",
+       "score": 5.400821904069498,
+       "x": 0.7409
+      },
+      {
+       "reader": "weaver",
+       "night": "T8",
+       "score": 1.145711703609699,
+       "x": 0.7409
+      }
+     ],
+     "n_cells": 65,
+     "n_readers": 21,
+     "slope_x": 2.0401778157605643,
+     "slope_ci": [
+      -0.8077859569702716,
+      3.986842885762268
+     ],
+     "contains_0": true,
+     "delta_rss_x_beyond_competitor": 1.2710078888231884,
+     "nested_perm_p": 0.4779,
+     "beats_competitor": false,
+     "x_invariant": true,
+     "competitor_covariates": {
+      "roster_size": {
+       "T1": 9,
+       "T2": 7,
+       "T3": 7,
+       "T4a": 7,
+       "T4b": 9,
+       "T5": 10,
+       "T5c": 9,
+       "T8": 7
+      },
+      "archwarm": {
+       "T1": 0.6969362466772302,
+       "T2": 0.37395124539585994,
+       "T3": 0.4572671416974912,
+       "T4a": 0.37395124539585994,
+       "T4b": 0.4345127956313355,
+       "T5": 0.4537633925368496,
+       "T5c": 0.5341886278267465,
+       "T8": 0.41312020099822444
+      }
+     },
+     "effective_draws": 2000
+    },
+    "mean_d_by_phase": {
+     "d_transition_phase_mean": 0.2820886292530727,
+     "d_stable_phase_mean": 0.28813730740065124,
+     "n_transition_phase": 1507,
+     "n_stable_phase": 671
+    }
+   },
+   "wave1": {
+    "label": "wave-1 W=8",
+    "W": 8,
+    "presence": "canonical",
+    "class_residual": false,
+    "corpus_sd": 0.23672602933417594,
+    "n_readers": 15,
+    "A": {
+     "n_events": 10,
+     "A": 0.9,
+     "p": 0.0,
+     "null95": 0.47058823529411764,
+     "null_mean": 0.25051339042020926,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_up_mirror": {
+     "n_events": 60,
+     "A": 0.18333333333333332,
+     "p": 0.3996,
+     "null95": 0.3181818181818182,
+     "null_mean": 0.16717192631371988,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_start_ref_sensitivity": {
+     "n_events": 10,
+     "A": 0.0,
+     "p": 1.0,
+     "null95": 0.47058823529411764,
+     "null_mean": 0.24989530338512536,
+     "n_valid_draws": 10000,
+     "pos_ref": "start"
+    },
+    "D": {
+     "D_signal": 0.5,
+     "k": 5,
+     "n_transitions": 10,
+     "ci_exact_binomial": [
+      0.18708602844739855,
+      0.8129139715526015
+     ],
+     "covered": [
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+     ],
+     "transitions": [
+      {
+       "night": "A",
+       "boundary": 20
+      },
+      {
+       "night": "D",
+       "boundary": 24
+      },
+      {
+       "night": "D-cold",
+       "boundary": 24
+      },
+      {
+       "night": "S1",
+       "boundary": 20
+      },
+      {
+       "night": "S2",
+       "boundary": 8
+      },
+      {
+       "night": "S3",
+       "boundary": 20
+      },
+      {
+       "night": "S4a",
+       "boundary": 12
+      },
+      {
+       "night": "S4a",
+       "boundary": 20
+      },
+      {
+       "night": "S4b",
+       "boundary": 20
+      },
+      {
+       "night": "S4b",
+       "boundary": 28
+      }
+     ],
+     "D_null": 0.0,
+     "null_pseudo": [
+      {
+       "night": "S5",
+       "midpoint": 10,
+       "covered": 0
+      }
+     ],
+     "signal_rn_crossing_rate": 0.13846153846153847,
+     "null_rn_crossing_rate": 0.0,
+     "signal_rn_hits": 9,
+     "signal_rn_total": 65,
+     "null_rn_hits": 0,
+     "null_rn_total": 8
+    },
+    "P": {
+     "P_trans": 0.9943978813763511,
+     "P_rest": 0.9961746768763188,
+     "trans_ci": [
+      0.9900172222284139,
+      0.996778092384897
+     ],
+     "rest_ci": [
+      0.9931619583931356,
+      0.997793250832203
+     ],
+     "half_rest_ci": [
+      0.4965809791965678,
+      0.4988966254161015
+     ],
+     "holds_at_half": true,
+     "mechanism_kill": false,
+     "trans_events": [
+      {
+       "night": "A",
+       "boundary": 20,
+       "n_readers": 6,
+       "cos": 0.9981823668234812
+      },
+      {
+       "night": "D",
+       "boundary": 24,
+       "n_readers": 7,
+       "cos": 0.9959940759813034
+      },
+      {
+       "night": "D-cold",
+       "boundary": 24,
+       "n_readers": 6,
+       "cos": 0.9952639807989467
+      },
+      {
+       "night": "S1",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9981430708722825
+      },
+      {
+       "night": "S2",
+       "boundary": 8,
+       "n_readers": 9,
+       "cos": 0.9628598441707887
+      },
+      {
+       "night": "S3",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9974036489405932
+      },
+      {
+       "night": "S4a",
+       "boundary": 12,
+       "n_readers": 8,
+       "cos": 0.9887683505578967
+      },
+      {
+       "night": "S4a",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9892278884292337
+      },
+      {
+       "night": "S4b",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9971266259788272
+      },
+      {
+       "night": "S4b",
+       "boundary": 28,
+       "n_readers": 9,
+       "cos": 0.9860656110146668
+      }
+     ],
+     "rest_events": [
+      {
+       "night": "A",
+       "stratum": "warm",
+       "n_readers": 6,
+       "cos": 0.992003798521962
+      },
+      {
+       "night": "A",
+       "stratum": "cynical",
+       "n_readers": 6,
+       "cos": 0.9992952797484818
+      },
+      {
+       "night": "D",
+       "stratum": "pre",
+       "n_readers": 7,
+       "cos": 0.991111422466102
+      },
+      {
+       "night": "D",
+       "stratum": "post",
+       "n_readers": 7,
+       "cos": 0.9989552772476326
+      },
+      {
+       "night": "D-cold",
+       "stratum": "pre",
+       "n_readers": 6,
+       "cos": 0.992003798521962
+      },
+      {
+       "night": "D-cold",
+       "stratum": "post",
+       "n_readers": 6,
+       "cos": 0.998675372221737
+      },
+      {
+       "night": "S1",
+       "stratum": "warm",
+       "n_readers": 9,
+       "cos": 0.9919324690337878
+      },
+      {
+       "night": "S1",
+       "stratum": "cynical",
+       "n_readers": 9,
+       "cos": 0.9994029967531365
+      },
+      {
+       "night": "S2",
+       "stratum": "cynical",
+       "n_readers": 9,
+       "cos": 0.998370987736307
+      },
+      {
+       "night": "S3",
+       "stratum": "warm",
+       "n_readers": 9,
+       "cos": 0.989054293485826
+      },
+      {
+       "night": "S4a",
+       "stratum": "cynical",
+       "n_readers": 9,
+       "cos": 0.9981967066544248
+      },
+      {
+       "night": "S4b",
+       "stratum": "warm",
+       "n_readers": 9,
+       "cos": 0.9875159270495101
+      },
+      {
+       "night": "S4b",
+       "stratum": "cynical-entry",
+       "n_readers": 10,
+       "cos": 0.9854677002427161
+      }
+     ],
+     "dropped": []
+    },
+    "S": {
+     "cells": [
+      {
+       "reader": "captain",
+       "night": "A",
+       "score": 1.0518512354825549,
+       "x": 0.6551
+      },
+      {
+       "reader": "critic",
+       "night": "A",
+       "score": 2.3855336483520984,
+       "x": 0.6551
+      },
+      {
+       "reader": "engineer",
+       "night": "A",
+       "score": 2.896112524138378,
+       "x": 0.6551
+      },
+      {
+       "reader": "essayist",
+       "night": "A",
+       "score": 1.9348373949607671,
+       "x": 0.6551
+      },
+      {
+       "reader": "poet",
+       "night": "A",
+       "score": 3.6082389233474363,
+       "x": 0.6551
+      },
+      {
+       "reader": "writer",
+       "night": "A",
+       "score": 2.755697453278833,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "D",
+       "score": 1.242881815769607,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "D",
+       "score": 2.661436210567299,
+       "x": 0.6293
+      },
+      {
+       "reader": "drifter",
+       "night": "D",
+       "score": 2.0880111494113716,
+       "x": 0.6293
+      },
+      {
+       "reader": "engineer",
+       "night": "D",
+       "score": 3.133090542111366,
+       "x": 0.6293
+      },
+      {
+       "reader": "essayist",
+       "night": "D",
+       "score": 2.1267031149198283,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "D",
+       "score": 3.855177112798991,
+       "x": 0.6293
+      },
+      {
+       "reader": "writer",
+       "night": "D",
+       "score": 3.3086679256989435,
+       "x": 0.6293
+      },
+      {
+       "reader": "captain",
+       "night": "D-cold",
+       "score": 1.2032838865055213,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "D-cold",
+       "score": 2.975162771533618,
+       "x": 0.6293
+      },
+      {
+       "reader": "engineer",
+       "night": "D-cold",
+       "score": 2.891963939510706,
+       "x": 0.6293
+      },
+      {
+       "reader": "essayist",
+       "night": "D-cold",
+       "score": 1.7044258132842858,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "D-cold",
+       "score": 3.1740200589413057,
+       "x": 0.6293
+      },
+      {
+       "reader": "writer",
+       "night": "D-cold",
+       "score": 2.517027381405516,
+       "x": 0.6293
+      },
+      {
+       "reader": "barkeep",
+       "night": "S1",
+       "score": 1.1447848053724328,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "S1",
+       "score": 1.3659044262916462,
+       "x": 0.6551
+      },
+      {
+       "reader": "cartographer",
+       "night": "S1",
+       "score": 2.0082644778940923,
+       "x": 0.6551
+      },
+      {
+       "reader": "critic",
+       "night": "S1",
+       "score": 1.5884507593967006,
+       "x": 0.6551
+      },
+      {
+       "reader": "engineer",
+       "night": "S1",
+       "score": 2.471789973600235,
+       "x": 0.6551
+      },
+      {
+       "reader": "essayist",
+       "night": "S1",
+       "score": 2.3353638062314883,
+       "x": 0.6551
+      },
+      {
+       "reader": "fiddler",
+       "night": "S1",
+       "score": 1.9645174186097787,
+       "x": 0.6551
+      },
+      {
+       "reader": "poet",
+       "night": "S1",
+       "score": 4.58739079452809,
+       "x": 0.6551
+      },
+      {
+       "reader": "writer",
+       "night": "S1",
+       "score": 3.403419213303193,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "S2",
+       "score": 1.0536116453149176,
+       "x": 0.3187
+      },
+      {
+       "reader": "critic",
+       "night": "S2",
+       "score": 1.7903659877869833,
+       "x": 0.3187
+      },
+      {
+       "reader": "engineer",
+       "night": "S2",
+       "score": 1.6015078880235427,
+       "x": 0.3187
+      },
+      {
+       "reader": "essayist",
+       "night": "S2",
+       "score": 1.1406350695995153,
+       "x": 0.3187
+      },
+      {
+       "reader": "lamplighter",
+       "night": "S2",
+       "score": 0.931223383863064,
+       "x": 0.3187
+      },
+      {
+       "reader": "poet",
+       "night": "S2",
+       "score": 1.6755901226481507,
+       "x": 0.3187
+      },
+      {
+       "reader": "singer",
+       "night": "S2",
+       "score": 1.425973064880361,
+       "x": 0.3187
+      },
+      {
+       "reader": "tinker",
+       "night": "S2",
+       "score": 1.1310596192718712,
+       "x": 0.3187
+      },
+      {
+       "reader": "writer",
+       "night": "S2",
+       "score": 1.0784607913989521,
+       "x": 0.3187
+      },
+      {
+       "reader": "barkeep",
+       "night": "S3",
+       "score": 0.8365170796779846,
+       "x": 0.7409
+      },
+      {
+       "reader": "blacksmith",
+       "night": "S3",
+       "score": 1.3880083769580926,
+       "x": 0.7409
+      },
+      {
+       "reader": "captain",
+       "night": "S3",
+       "score": 0.6337830933670426,
+       "x": 0.7409
+      },
+      {
+       "reader": "critic",
+       "night": "S3",
+       "score": 1.8896613280773904,
+       "x": 0.7409
+      },
+      {
+       "reader": "engineer",
+       "night": "S3",
+       "score": 2.1166117336856827,
+       "x": 0.7409
+      },
+      {
+       "reader": "essayist",
+       "night": "S3",
+       "score": 1.4390728864830848,
+       "x": 0.7409
+      },
+      {
+       "reader": "poet",
+       "night": "S3",
+       "score": 2.7732736221336007,
+       "x": 0.7409
+      },
+      {
+       "reader": "weaver",
+       "night": "S3",
+       "score": 1.2045771026817675,
+       "x": 0.7409
+      },
+      {
+       "reader": "writer",
+       "night": "S3",
+       "score": 2.60942163628054,
+       "x": 0.7409
+      },
+      {
+       "reader": "captain",
+       "night": "S4a",
+       "score": 1.4795409991140889,
+       "x": 0.4465
+      },
+      {
+       "reader": "critic",
+       "night": "S4a",
+       "score": 2.10309075737386,
+       "x": 0.4465
+      },
+      {
+       "reader": "drifter",
+       "night": "S4a",
+       "score": 1.9440902505303261,
+       "x": 0.4465
+      },
+      {
+       "reader": "engineer",
+       "night": "S4a",
+       "score": 2.076194922989981,
+       "x": 0.4465
+      },
+      {
+       "reader": "essayist",
+       "night": "S4a",
+       "score": 2.0476261144756207,
+       "x": 0.4465
+      },
+      {
+       "reader": "fiddler",
+       "night": "S4a",
+       "score": 2.593170603110763,
+       "x": 0.4465
+      },
+      {
+       "reader": "poet",
+       "night": "S4a",
+       "score": 3.608409296587894,
+       "x": 0.4465
+      },
+      {
+       "reader": "singer",
+       "night": "S4a",
+       "score": 2.5504425339037726,
+       "x": 0.4465
+      },
+      {
+       "reader": "writer",
+       "night": "S4a",
+       "score": 2.458678150582186,
+       "x": 0.4465
+      },
+      {
+       "reader": "blacksmith",
+       "night": "S4b",
+       "score": 1.728401623996692,
+       "x": 0.6319
+      },
+      {
+       "reader": "captain",
+       "night": "S4b",
+       "score": 1.5494276551100306,
+       "x": 0.6319
+      },
+      {
+       "reader": "cartographer",
+       "night": "S4b",
+       "score": 3.1770266009057972,
+       "x": 0.6319
+      },
+      {
+       "reader": "critic",
+       "night": "S4b",
+       "score": 3.00762026741158,
+       "x": 0.6319
+      },
+      {
+       "reader": "drifter",
+       "night": "S4b",
+       "score": 1.0016988994010458,
+       "x": 0.6319
+      },
+      {
+       "reader": "engineer",
+       "night": "S4b",
+       "score": 3.1596051323438403,
+       "x": 0.6319
+      },
+      {
+       "reader": "essayist",
+       "night": "S4b",
+       "score": 2.3437287661760773,
+       "x": 0.6319
+      },
+      {
+       "reader": "poet",
+       "night": "S4b",
+       "score": 3.4289156142837953,
+       "x": 0.6319
+      },
+      {
+       "reader": "tinker",
+       "night": "S4b",
+       "score": 2.5305648332242026,
+       "x": 0.6319
+      },
+      {
+       "reader": "writer",
+       "night": "S4b",
+       "score": 2.4920002669462598,
+       "x": 0.6319
+      }
+     ],
+     "n_cells": 65,
+     "n_readers": 15,
+     "slope_x": 1.8595359417877164,
+     "slope_ci": [
+      0.4463455014159561,
+      2.9841084054937843
+     ],
+     "contains_0": false,
+     "delta_rss_x_beyond_competitor": 0.7844165547416395,
+     "nested_perm_p": 0.4694,
+     "beats_competitor": false,
+     "x_invariant": false,
+     "competitor_covariates": {
+      "roster_size": {
+       "A": 6,
+       "D": 7,
+       "D-cold": 6,
+       "S1": 9,
+       "S2": 9,
+       "S3": 9,
+       "S4a": 9,
+       "S4b": 10
+      },
+      "archwarm": {
+       "A": 0.5717850989003699,
+       "D": 0.3786124818807937,
+       "D-cold": 0.5717850989003699,
+       "S1": 0.3604343954165822,
+       "S2": 0.648958137492178,
+       "S3": 0.43770038310090686,
+       "S4a": 0.36708151065765715,
+       "S4b": 0.5046556710888993
+      }
+     },
+     "effective_draws": 2000
+    },
+    "mean_d_by_phase": {
+     "d_transition_phase_mean": 0.28222086942195507,
+     "d_stable_phase_mean": 0.29798479461791627,
+     "n_transition_phase": 1471,
+     "n_stable_phase": 600
+    }
+   }
+  },
+  "W16": {
+   "wave2": {
+    "label": "wave-2 W=16",
+    "W": 16,
+    "presence": "canonical",
+    "class_residual": false,
+    "corpus_sd": 0.23672602933417586,
+    "n_readers": 21,
+    "A": {
+     "n_events": 27,
+     "A": 0.07407407407407407,
+     "p": 0.9936,
+     "null95": 0.4230769230769231,
+     "null_mean": 0.270299005673158,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_up_mirror": {
+     "n_events": 42,
+     "A": 0.23809523809523808,
+     "p": 0.4104,
+     "null95": 0.36666666666666664,
+     "null_mean": 0.22284006514934862,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_start_ref_sensitivity": {
+     "n_events": 27,
+     "A": 0.0,
+     "p": 1.0,
+     "null95": 0.41935483870967744,
+     "null_mean": 0.27059165917028916,
+     "n_valid_draws": 10000,
+     "pos_ref": "start"
+    },
+    "D": {
+     "D_signal": 0.1,
+     "k": 1,
+     "n_transitions": 10,
+     "ci_exact_binomial": [
+      0.0025285785444617848,
+      0.4450161170281954
+     ],
+     "covered": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "transitions": [
+      {
+       "night": "T1",
+       "boundary": 20
+      },
+      {
+       "night": "T2",
+       "boundary": 8
+      },
+      {
+       "night": "T3",
+       "boundary": 20
+      },
+      {
+       "night": "T4a",
+       "boundary": 12
+      },
+      {
+       "night": "T4a",
+       "boundary": 20
+      },
+      {
+       "night": "T4b",
+       "boundary": 20
+      },
+      {
+       "night": "T4b",
+       "boundary": 28
+      },
+      {
+       "night": "T5",
+       "boundary": 24
+      },
+      {
+       "night": "T5c",
+       "boundary": 24
+      },
+      {
+       "night": "T8",
+       "boundary": 20
+      }
+     ],
+     "D_null": 0.0,
+     "null_pseudo": [
+      {
+       "night": "T9",
+       "midpoint": 10,
+       "covered": 0
+      }
+     ],
+     "signal_rn_crossing_rate": 0.3384615384615385,
+     "null_rn_crossing_rate": 0.0,
+     "signal_rn_hits": 22,
+     "signal_rn_total": 65,
+     "null_rn_hits": 0,
+     "null_rn_total": 7
+    },
+    "P": {
+     "P_trans": 0.9922767672154259,
+     "P_rest": null,
+     "trans_ci": [
+      0.99031291491787,
+      0.9937661703079192
+     ],
+     "rest_ci": [
+      null,
+      null
+     ],
+     "half_rest_ci": [
+      null,
+      null
+     ],
+     "holds_at_half": false,
+     "mechanism_kill": false,
+     "trans_events": [
+      {
+       "night": "T1",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9935251113921596
+      },
+      {
+       "night": "T3",
+       "boundary": 20,
+       "n_readers": 7,
+       "cos": 0.9949620726415328
+      },
+      {
+       "night": "T4a",
+       "boundary": 20,
+       "n_readers": 7,
+       "cos": 0.9861421753999284
+      },
+      {
+       "night": "T4b",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9917948005219688
+      },
+      {
+       "night": "T4b",
+       "boundary": 28,
+       "n_readers": 9,
+       "cos": 0.9935203305551312
+      },
+      {
+       "night": "T5",
+       "boundary": 24,
+       "n_readers": 10,
+       "cos": 0.9913706717674543
+      },
+      {
+       "night": "T5c",
+       "boundary": 24,
+       "n_readers": 9,
+       "cos": 0.9921069537973869
+      }
+     ],
+     "rest_events": [],
+     "dropped": [
+      {
+       "night": "T2",
+       "boundary": 8,
+       "reason": "pre/post window does not fit"
+      },
+      {
+       "night": "T4a",
+       "boundary": 12,
+       "reason": "pre/post window does not fit"
+      },
+      {
+       "night": "T8",
+       "boundary": 20,
+       "reason": "pre/post window does not fit"
+      }
+     ]
+    },
+    "S": {
+     "cells": [
+      {
+       "reader": "blacksmith",
+       "night": "T1",
+       "score": 1.5734188825754594,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "T1",
+       "score": 0.6455910670011983,
+       "x": 0.6551
+      },
+      {
+       "reader": "cartographer",
+       "night": "T1",
+       "score": 1.0180669233546635,
+       "x": 0.6551
+      },
+      {
+       "reader": "lamplighter",
+       "night": "T1",
+       "score": 0.6175375960152781,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-4",
+       "night": "T1",
+       "score": 1.4454116790241522,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-5",
+       "night": "T1",
+       "score": 1.4252650815534056,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-6",
+       "night": "T1",
+       "score": 3.4859612628455396,
+       "x": 0.6551
+      },
+      {
+       "reader": "poet",
+       "night": "T1",
+       "score": 2.9392362803530268,
+       "x": 0.6551
+      },
+      {
+       "reader": "singer",
+       "night": "T1",
+       "score": 2.957458810411242,
+       "x": 0.6551
+      },
+      {
+       "reader": "drifter",
+       "night": "T2",
+       "score": 0.8727872313438332,
+       "x": 0.3187
+      },
+      {
+       "reader": "engineer",
+       "night": "T2",
+       "score": 1.2284863914359907,
+       "x": 0.3187
+      },
+      {
+       "reader": "lamplighter",
+       "night": "T2",
+       "score": 0.8346718544155702,
+       "x": 0.3187
+      },
+      {
+       "reader": "new-1",
+       "night": "T2",
+       "score": 0.8628254586564686,
+       "x": 0.3187
+      },
+      {
+       "reader": "new-2",
+       "night": "T2",
+       "score": 0.6456684841774613,
+       "x": 0.3187
+      },
+      {
+       "reader": "tinker",
+       "night": "T2",
+       "score": 1.3719449772660655,
+       "x": 0.3187
+      },
+      {
+       "reader": "writer",
+       "night": "T2",
+       "score": 1.0376880378986053,
+       "x": 0.3187
+      },
+      {
+       "reader": "barkeep",
+       "night": "T3",
+       "score": 0.521075685165427,
+       "x": 0.6551
+      },
+      {
+       "reader": "blacksmith",
+       "night": "T3",
+       "score": 2.117198428728436,
+       "x": 0.6551
+      },
+      {
+       "reader": "cartographer",
+       "night": "T3",
+       "score": 0.8589786026128498,
+       "x": 0.6551
+      },
+      {
+       "reader": "critic",
+       "night": "T3",
+       "score": 1.0489447067839937,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-6",
+       "night": "T3",
+       "score": 4.308802833011049,
+       "x": 0.6551
+      },
+      {
+       "reader": "singer",
+       "night": "T3",
+       "score": 2.1290217082797454,
+       "x": 0.6551
+      },
+      {
+       "reader": "tinker",
+       "night": "T3",
+       "score": 2.79641948770622,
+       "x": 0.6551
+      },
+      {
+       "reader": "drifter",
+       "night": "T4a",
+       "score": 1.627861498740545,
+       "x": 0.4465
+      },
+      {
+       "reader": "engineer",
+       "night": "T4a",
+       "score": 1.5280252060982373,
+       "x": 0.4465
+      },
+      {
+       "reader": "lamplighter",
+       "night": "T4a",
+       "score": 1.1162105013586845,
+       "x": 0.4465
+      },
+      {
+       "reader": "new-1",
+       "night": "T4a",
+       "score": 1.6539174854245535,
+       "x": 0.4465
+      },
+      {
+       "reader": "new-2",
+       "night": "T4a",
+       "score": 0.9129496553799531,
+       "x": 0.4465
+      },
+      {
+       "reader": "tinker",
+       "night": "T4a",
+       "score": 2.103081455318185,
+       "x": 0.4465
+      },
+      {
+       "reader": "writer",
+       "night": "T4a",
+       "score": 2.096420277278782,
+       "x": 0.4465
+      },
+      {
+       "reader": "blacksmith",
+       "night": "T4b",
+       "score": 1.8418570654985542,
+       "x": 0.6319
+      },
+      {
+       "reader": "cartographer",
+       "night": "T4b",
+       "score": 1.4877128117315013,
+       "x": 0.6319
+      },
+      {
+       "reader": "critic",
+       "night": "T4b",
+       "score": 1.5084508463050792,
+       "x": 0.6319
+      },
+      {
+       "reader": "drifter",
+       "night": "T4b",
+       "score": 1.2557815051792,
+       "x": 0.6319
+      },
+      {
+       "reader": "essayist",
+       "night": "T4b",
+       "score": 1.0713140727594375,
+       "x": 0.6319
+      },
+      {
+       "reader": "new-2",
+       "night": "T4b",
+       "score": 1.0569903856794183,
+       "x": 0.6319
+      },
+      {
+       "reader": "new-3",
+       "night": "T4b",
+       "score": 1.8880502015921183,
+       "x": 0.6319
+      },
+      {
+       "reader": "new-5",
+       "night": "T4b",
+       "score": 1.7941946224432601,
+       "x": 0.6319
+      },
+      {
+       "reader": "poet",
+       "night": "T4b",
+       "score": 2.7282109444573606,
+       "x": 0.6319
+      },
+      {
+       "reader": "blacksmith",
+       "night": "T5",
+       "score": 1.4776158655948353,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "T5",
+       "score": 1.631893248905431,
+       "x": 0.6293
+      },
+      {
+       "reader": "fiddler",
+       "night": "T5",
+       "score": 2.3850102837144296,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-1",
+       "night": "T5",
+       "score": 1.332568887523797,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-2",
+       "night": "T5",
+       "score": 1.258611145265956,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-3",
+       "night": "T5",
+       "score": 1.661543862846766,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-4",
+       "night": "T5",
+       "score": 1.7339903765099518,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "T5",
+       "score": 2.225673094648175,
+       "x": 0.6293
+      },
+      {
+       "reader": "singer",
+       "night": "T5",
+       "score": 2.979080407366443,
+       "x": 0.6293
+      },
+      {
+       "reader": "writer",
+       "night": "T5",
+       "score": 1.7986061837594876,
+       "x": 0.6293
+      },
+      {
+       "reader": "cartographer",
+       "night": "T5c",
+       "score": 1.0828149972324264,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "T5c",
+       "score": 1.0356332984886603,
+       "x": 0.6293
+      },
+      {
+       "reader": "engineer",
+       "night": "T5c",
+       "score": 1.0883573505743473,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-1",
+       "night": "T5c",
+       "score": 0.9092247971605285,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-3",
+       "night": "T5c",
+       "score": 2.332820070058572,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-4",
+       "night": "T5c",
+       "score": 1.2459256822308493,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "T5c",
+       "score": 2.9434300268057068,
+       "x": 0.6293
+      },
+      {
+       "reader": "singer",
+       "night": "T5c",
+       "score": 1.9832782983011839,
+       "x": 0.6293
+      },
+      {
+       "reader": "weaver",
+       "night": "T5c",
+       "score": 1.1393858893642872,
+       "x": 0.6293
+      },
+      {
+       "reader": "barkeep",
+       "night": "T8",
+       "score": 0.5502148233676918,
+       "x": 0.7409
+      },
+      {
+       "reader": "captain",
+       "night": "T8",
+       "score": 0.6222443030599596,
+       "x": 0.7409
+      },
+      {
+       "reader": "essayist",
+       "night": "T8",
+       "score": 0.788368742106065,
+       "x": 0.7409
+      },
+      {
+       "reader": "fiddler",
+       "night": "T8",
+       "score": 2.500766955424267,
+       "x": 0.7409
+      },
+      {
+       "reader": "new-5",
+       "night": "T8",
+       "score": 1.2999984468506949,
+       "x": 0.7409
+      },
+      {
+       "reader": "new-6",
+       "night": "T8",
+       "score": 2.7728481088273824,
+       "x": 0.7409
+      },
+      {
+       "reader": "weaver",
+       "night": "T8",
+       "score": 0.8185234076813073,
+       "x": 0.7409
+      }
+     ],
+     "n_cells": 65,
+     "n_readers": 21,
+     "slope_x": 0.7426133283228966,
+     "slope_ci": [
+      -0.560442171744933,
+      1.8046367319848184
+     ],
+     "contains_0": true,
+     "delta_rss_x_beyond_competitor": 0.1919878916561668,
+     "nested_perm_p": 0.5594,
+     "beats_competitor": false,
+     "x_invariant": true,
+     "competitor_covariates": {
+      "roster_size": {
+       "T1": 9,
+       "T2": 7,
+       "T3": 7,
+       "T4a": 7,
+       "T4b": 9,
+       "T5": 10,
+       "T5c": 9,
+       "T8": 7
+      },
+      "archwarm": {
+       "T1": 0.6969362466772302,
+       "T2": 0.37395124539585994,
+       "T3": 0.4572671416974912,
+       "T4a": 0.37395124539585994,
+       "T4b": 0.4345127956313355,
+       "T5": 0.4537633925368496,
+       "T5c": 0.5341886278267465,
+       "T8": 0.41312020099822444
+      }
+     },
+     "effective_draws": 2000
+    },
+    "mean_d_by_phase": {
+     "d_transition_phase_mean": 0.4255997751588726,
+     "d_stable_phase_mean": 0.3974485771500532,
+     "n_transition_phase": 1116,
+     "n_stable_phase": 542
+    }
+   },
+   "wave1": {
+    "label": "wave-1 W=16",
+    "W": 16,
+    "presence": "canonical",
+    "class_residual": false,
+    "corpus_sd": 0.23672602933417594,
+    "n_readers": 15,
+    "A": {
+     "n_events": 23,
+     "A": 0.08695652173913043,
+     "p": 0.986,
+     "null95": 0.43333333333333335,
+     "null_mean": 0.27327324285980265,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_up_mirror": {
+     "n_events": 43,
+     "A": 0.23255813953488372,
+     "p": 0.3689,
+     "null95": 0.34615384615384615,
+     "null_mean": 0.2087886158901927,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_start_ref_sensitivity": {
+     "n_events": 23,
+     "A": 0.0,
+     "p": 1.0,
+     "null95": 0.43333333333333335,
+     "null_mean": 0.2751530143321958,
+     "n_valid_draws": 10000,
+     "pos_ref": "start"
+    },
+    "D": {
+     "D_signal": 0.2,
+     "k": 2,
+     "n_transitions": 10,
+     "ci_exact_binomial": [
+      0.02521072632683336,
+      0.5560954623076415
+     ],
+     "covered": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+     ],
+     "transitions": [
+      {
+       "night": "A",
+       "boundary": 20
+      },
+      {
+       "night": "D",
+       "boundary": 24
+      },
+      {
+       "night": "D-cold",
+       "boundary": 24
+      },
+      {
+       "night": "S1",
+       "boundary": 20
+      },
+      {
+       "night": "S2",
+       "boundary": 8
+      },
+      {
+       "night": "S3",
+       "boundary": 20
+      },
+      {
+       "night": "S4a",
+       "boundary": 12
+      },
+      {
+       "night": "S4a",
+       "boundary": 20
+      },
+      {
+       "night": "S4b",
+       "boundary": 20
+      },
+      {
+       "night": "S4b",
+       "boundary": 28
+      }
+     ],
+     "D_null": 0.0,
+     "null_pseudo": [
+      {
+       "night": "S5",
+       "midpoint": 10,
+       "covered": 0
+      }
+     ],
+     "signal_rn_crossing_rate": 0.2923076923076923,
+     "null_rn_crossing_rate": 0.0,
+     "signal_rn_hits": 19,
+     "signal_rn_total": 65,
+     "null_rn_hits": 0,
+     "null_rn_total": 8
+    },
+    "P": {
+     "P_trans": 0.9946188317726643,
+     "P_rest": null,
+     "trans_ci": [
+      0.9920220909045315,
+      0.9963422869727429
+     ],
+     "rest_ci": [
+      null,
+      null
+     ],
+     "half_rest_ci": [
+      null,
+      null
+     ],
+     "holds_at_half": false,
+     "mechanism_kill": false,
+     "trans_events": [
+      {
+       "night": "A",
+       "boundary": 20,
+       "n_readers": 6,
+       "cos": 0.9971085501600201
+      },
+      {
+       "night": "D",
+       "boundary": 24,
+       "n_readers": 7,
+       "cos": 0.9960180125245868
+      },
+      {
+       "night": "D-cold",
+       "boundary": 24,
+       "n_readers": 6,
+       "cos": 0.9948025968686219
+      },
+      {
+       "night": "S1",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9971542629536077
+      },
+      {
+       "night": "S4a",
+       "boundary": 20,
+       "n_readers": 8,
+       "cos": 0.9900156865943528
+      },
+      {
+       "night": "S4b",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9937479537419275
+      },
+      {
+       "night": "S4b",
+       "boundary": 28,
+       "n_readers": 9,
+       "cos": 0.9877441238153369
+      }
+     ],
+     "rest_events": [],
+     "dropped": [
+      {
+       "night": "S2",
+       "boundary": 8,
+       "reason": "pre/post window does not fit"
+      },
+      {
+       "night": "S3",
+       "boundary": 20,
+       "reason": "pre/post window does not fit"
+      },
+      {
+       "night": "S4a",
+       "boundary": 12,
+       "reason": "pre/post window does not fit"
+      }
+     ]
+    },
+    "S": {
+     "cells": [
+      {
+       "reader": "captain",
+       "night": "A",
+       "score": 0.8808930635300354,
+       "x": 0.6551
+      },
+      {
+       "reader": "critic",
+       "night": "A",
+       "score": 1.451953557438709,
+       "x": 0.6551
+      },
+      {
+       "reader": "engineer",
+       "night": "A",
+       "score": 1.861731630725575,
+       "x": 0.6551
+      },
+      {
+       "reader": "essayist",
+       "night": "A",
+       "score": 1.0179998555316132,
+       "x": 0.6551
+      },
+      {
+       "reader": "poet",
+       "night": "A",
+       "score": 2.934827317463707,
+       "x": 0.6551
+      },
+      {
+       "reader": "writer",
+       "night": "A",
+       "score": 2.221681344404179,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "D",
+       "score": 0.7125444516195253,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "D",
+       "score": 1.5409448275330566,
+       "x": 0.6293
+      },
+      {
+       "reader": "drifter",
+       "night": "D",
+       "score": 1.1742055471488801,
+       "x": 0.6293
+      },
+      {
+       "reader": "engineer",
+       "night": "D",
+       "score": 1.959629744341676,
+       "x": 0.6293
+      },
+      {
+       "reader": "essayist",
+       "night": "D",
+       "score": 1.1700776396356292,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "D",
+       "score": 2.513431562995333,
+       "x": 0.6293
+      },
+      {
+       "reader": "writer",
+       "night": "D",
+       "score": 2.365222109508926,
+       "x": 0.6293
+      },
+      {
+       "reader": "captain",
+       "night": "D-cold",
+       "score": 0.7787187938613336,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "D-cold",
+       "score": 1.77761267419718,
+       "x": 0.6293
+      },
+      {
+       "reader": "engineer",
+       "night": "D-cold",
+       "score": 1.9059159075422072,
+       "x": 0.6293
+      },
+      {
+       "reader": "essayist",
+       "night": "D-cold",
+       "score": 1.0233495653713613,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "D-cold",
+       "score": 1.9648910548423502,
+       "x": 0.6293
+      },
+      {
+       "reader": "writer",
+       "night": "D-cold",
+       "score": 1.638584393193818,
+       "x": 0.6293
+      },
+      {
+       "reader": "barkeep",
+       "night": "S1",
+       "score": 0.5391200686121955,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "S1",
+       "score": 1.096102030167959,
+       "x": 0.6551
+      },
+      {
+       "reader": "cartographer",
+       "night": "S1",
+       "score": 1.04779110922052,
+       "x": 0.6551
+      },
+      {
+       "reader": "critic",
+       "night": "S1",
+       "score": 0.9572115067024113,
+       "x": 0.6551
+      },
+      {
+       "reader": "engineer",
+       "night": "S1",
+       "score": 1.473668789771933,
+       "x": 0.6551
+      },
+      {
+       "reader": "essayist",
+       "night": "S1",
+       "score": 1.196906163394486,
+       "x": 0.6551
+      },
+      {
+       "reader": "fiddler",
+       "night": "S1",
+       "score": 1.1959455622450619,
+       "x": 0.6551
+      },
+      {
+       "reader": "poet",
+       "night": "S1",
+       "score": 3.6284935627421437,
+       "x": 0.6551
+      },
+      {
+       "reader": "writer",
+       "night": "S1",
+       "score": 2.83611505186729,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "S2",
+       "score": 0.6206867990077076,
+       "x": 0.3187
+      },
+      {
+       "reader": "critic",
+       "night": "S2",
+       "score": 1.2519819364759104,
+       "x": 0.3187
+      },
+      {
+       "reader": "engineer",
+       "night": "S2",
+       "score": 1.2668617827658861,
+       "x": 0.3187
+      },
+      {
+       "reader": "essayist",
+       "night": "S2",
+       "score": 0.7193348369857988,
+       "x": 0.3187
+      },
+      {
+       "reader": "lamplighter",
+       "night": "S2",
+       "score": 0.7018750122327578,
+       "x": 0.3187
+      },
+      {
+       "reader": "poet",
+       "night": "S2",
+       "score": 1.76977790646329,
+       "x": 0.3187
+      },
+      {
+       "reader": "singer",
+       "night": "S2",
+       "score": 0.8884385676052136,
+       "x": 0.3187
+      },
+      {
+       "reader": "tinker",
+       "night": "S2",
+       "score": 1.3277459590095677,
+       "x": 0.3187
+      },
+      {
+       "reader": "writer",
+       "night": "S2",
+       "score": 1.0752338193263153,
+       "x": 0.3187
+      },
+      {
+       "reader": "barkeep",
+       "night": "S3",
+       "score": 0.7645783212934323,
+       "x": 0.7409
+      },
+      {
+       "reader": "blacksmith",
+       "night": "S3",
+       "score": 1.246396373472462,
+       "x": 0.7409
+      },
+      {
+       "reader": "captain",
+       "night": "S3",
+       "score": 0.4795909954923522,
+       "x": 0.7409
+      },
+      {
+       "reader": "critic",
+       "night": "S3",
+       "score": 1.6909605956094673,
+       "x": 0.7409
+      },
+      {
+       "reader": "engineer",
+       "night": "S3",
+       "score": 1.502281700030886,
+       "x": 0.7409
+      },
+      {
+       "reader": "essayist",
+       "night": "S3",
+       "score": 0.9614629243581326,
+       "x": 0.7409
+      },
+      {
+       "reader": "poet",
+       "night": "S3",
+       "score": 2.4506735623750973,
+       "x": 0.7409
+      },
+      {
+       "reader": "weaver",
+       "night": "S3",
+       "score": 0.8758886385684167,
+       "x": 0.7409
+      },
+      {
+       "reader": "writer",
+       "night": "S3",
+       "score": 2.1171377375675298,
+       "x": 0.7409
+      },
+      {
+       "reader": "captain",
+       "night": "S4a",
+       "score": 1.0555650004676247,
+       "x": 0.4465
+      },
+      {
+       "reader": "critic",
+       "night": "S4a",
+       "score": 0.7487112640307816,
+       "x": 0.4465
+      },
+      {
+       "reader": "drifter",
+       "night": "S4a",
+       "score": 1.150273439777955,
+       "x": 0.4465
+      },
+      {
+       "reader": "engineer",
+       "night": "S4a",
+       "score": 1.2899684114484713,
+       "x": 0.4465
+      },
+      {
+       "reader": "essayist",
+       "night": "S4a",
+       "score": 1.1935326740761025,
+       "x": 0.4465
+      },
+      {
+       "reader": "fiddler",
+       "night": "S4a",
+       "score": 1.8251915414178093,
+       "x": 0.4465
+      },
+      {
+       "reader": "poet",
+       "night": "S4a",
+       "score": 2.721395702343662,
+       "x": 0.4465
+      },
+      {
+       "reader": "singer",
+       "night": "S4a",
+       "score": 1.522219271097201,
+       "x": 0.4465
+      },
+      {
+       "reader": "writer",
+       "night": "S4a",
+       "score": 2.359412620979985,
+       "x": 0.4465
+      },
+      {
+       "reader": "blacksmith",
+       "night": "S4b",
+       "score": 1.1882078473981421,
+       "x": 0.6319
+      },
+      {
+       "reader": "captain",
+       "night": "S4b",
+       "score": 0.9647346885812627,
+       "x": 0.6319
+      },
+      {
+       "reader": "cartographer",
+       "night": "S4b",
+       "score": 2.048570196542748,
+       "x": 0.6319
+      },
+      {
+       "reader": "critic",
+       "night": "S4b",
+       "score": 1.7930029869090438,
+       "x": 0.6319
+      },
+      {
+       "reader": "drifter",
+       "night": "S4b",
+       "score": 0.44783388380916744,
+       "x": 0.6319
+      },
+      {
+       "reader": "engineer",
+       "night": "S4b",
+       "score": 2.003363930584075,
+       "x": 0.6319
+      },
+      {
+       "reader": "essayist",
+       "night": "S4b",
+       "score": 1.247359404227155,
+       "x": 0.6319
+      },
+      {
+       "reader": "poet",
+       "night": "S4b",
+       "score": 2.372049133161035,
+       "x": 0.6319
+      },
+      {
+       "reader": "tinker",
+       "night": "S4b",
+       "score": 1.840940132479136,
+       "x": 0.6319
+      },
+      {
+       "reader": "writer",
+       "night": "S4b",
+       "score": 1.908616742635219,
+       "x": 0.6319
+      }
+     ],
+     "n_cells": 65,
+     "n_readers": 15,
+     "slope_x": 1.0755402386746638,
+     "slope_ci": [
+      0.3808949433818542,
+      1.6431530026617946
+     ],
+     "contains_0": false,
+     "delta_rss_x_beyond_competitor": 0.363981134600734,
+     "nested_perm_p": 0.2158,
+     "beats_competitor": false,
+     "x_invariant": false,
+     "competitor_covariates": {
+      "roster_size": {
+       "A": 6,
+       "D": 7,
+       "D-cold": 6,
+       "S1": 9,
+       "S2": 9,
+       "S3": 9,
+       "S4a": 9,
+       "S4b": 10
+      },
+      "archwarm": {
+       "A": 0.5717850989003699,
+       "D": 0.3786124818807937,
+       "D-cold": 0.5717850989003699,
+       "S1": 0.3604343954165822,
+       "S2": 0.648958137492178,
+       "S3": 0.43770038310090686,
+       "S4a": 0.36708151065765715,
+       "S4b": 0.5046556710888993
+      }
+     },
+     "effective_draws": 2000
+    },
+    "mean_d_by_phase": {
+     "d_transition_phase_mean": 0.40152541633274647,
+     "d_stable_phase_mean": 0.33795551268012086,
+     "n_transition_phase": 1077,
+     "n_stable_phase": 474
+    }
+   }
+  },
+  "actual_presence": {
+   "wave2": {
+    "label": "wave-2 actual",
+    "W": 12,
+    "presence": "actual",
+    "class_residual": false,
+    "corpus_sd": 0.23672602933417586,
+    "n_readers": 21,
+    "A": {
+     "n_events": 44,
+     "A": 0.5454545454545454,
+     "p": 0.0002,
+     "null95": 0.391304347826087,
+     "null_mean": 0.2565438234323608,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_up_mirror": {
+     "n_events": 86,
+     "A": 0.3488372093023256,
+     "p": 0.0682,
+     "null95": 0.3620689655172414,
+     "null_mean": 0.2336857064576695,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_start_ref_sensitivity": {
+     "n_events": 44,
+     "A": 0.0,
+     "p": 1.0,
+     "null95": 0.3958333333333333,
+     "null_mean": 0.2565579079204948,
+     "n_valid_draws": 10000,
+     "pos_ref": "start"
+    },
+    "D": {
+     "D_signal": 0.5,
+     "k": 5,
+     "n_transitions": 10,
+     "ci_exact_binomial": [
+      0.18708602844739855,
+      0.8129139715526015
+     ],
+     "covered": [
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+     ],
+     "transitions": [
+      {
+       "night": "T1",
+       "boundary": 20
+      },
+      {
+       "night": "T2",
+       "boundary": 8
+      },
+      {
+       "night": "T3",
+       "boundary": 20
+      },
+      {
+       "night": "T4a",
+       "boundary": 12
+      },
+      {
+       "night": "T4a",
+       "boundary": 20
+      },
+      {
+       "night": "T4b",
+       "boundary": 20
+      },
+      {
+       "night": "T4b",
+       "boundary": 28
+      },
+      {
+       "night": "T5",
+       "boundary": 24
+      },
+      {
+       "night": "T5c",
+       "boundary": 24
+      },
+      {
+       "night": "T8",
+       "boundary": 20
+      }
+     ],
+     "D_null": 0.0,
+     "null_pseudo": [
+      {
+       "night": "T9",
+       "midpoint": 10,
+       "covered": 0
+      }
+     ],
+     "signal_rn_crossing_rate": 0.4307692307692308,
+     "null_rn_crossing_rate": 0.0,
+     "signal_rn_hits": 28,
+     "signal_rn_total": 65,
+     "null_rn_hits": 0,
+     "null_rn_total": 7
+    },
+    "P": {
+     "P_trans": 0.9768773541066802,
+     "P_rest": 0.9878223910665574,
+     "trans_ci": [
+      0.959343912772878,
+      0.9855203417628787
+     ],
+     "rest_ci": [
+      0.9816844662546574,
+      0.9930796389800756
+     ],
+     "half_rest_ci": [
+      0.4908422331273287,
+      0.4965398194900378
+     ],
+     "holds_at_half": true,
+     "mechanism_kill": false,
+     "trans_events": [
+      {
+       "night": "T1",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.983085956808333
+      },
+      {
+       "night": "T3",
+       "boundary": 20,
+       "n_readers": 7,
+       "cos": 0.9887772099507685
+      },
+      {
+       "night": "T4a",
+       "boundary": 12,
+       "n_readers": 6,
+       "cos": 0.906918746456627
+      },
+      {
+       "night": "T4a",
+       "boundary": 20,
+       "n_readers": 6,
+       "cos": 0.9351091021030549
+      },
+      {
+       "night": "T4b",
+       "boundary": 20,
+       "n_readers": 8,
+       "cos": 0.9891457129335193
+      },
+      {
+       "night": "T4b",
+       "boundary": 28,
+       "n_readers": 8,
+       "cos": 0.9837963915541107
+      },
+      {
+       "night": "T5",
+       "boundary": 24,
+       "n_readers": 10,
+       "cos": 0.9780688197050018
+      },
+      {
+       "night": "T5c",
+       "boundary": 24,
+       "n_readers": 9,
+       "cos": 0.982163771434749
+      }
+     ],
+     "rest_events": [
+      {
+       "night": "T4a",
+       "stratum": "cynical",
+       "n_readers": 7,
+       "cos": 0.9816844662546574
+      },
+      {
+       "night": "T5",
+       "stratum": "pre",
+       "n_readers": 10,
+       "cos": 0.9857736364555868
+      },
+      {
+       "night": "T5c",
+       "stratum": "pre",
+       "n_readers": 9,
+       "cos": 0.9930796389800756
+      }
+     ],
+     "dropped": [
+      {
+       "night": "T2",
+       "boundary": 8,
+       "reason": "pre/post window does not fit"
+      },
+      {
+       "night": "T8",
+       "boundary": 20,
+       "reason": "pre/post window does not fit"
+      }
+     ]
+    },
+    "S": {
+     "cells": [
+      {
+       "reader": "blacksmith",
+       "night": "T1",
+       "score": 1.5942174368523838,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "T1",
+       "score": 1.7067171540539998,
+       "x": 0.6551
+      },
+      {
+       "reader": "cartographer",
+       "night": "T1",
+       "score": 1.4312421258777204,
+       "x": 0.6551
+      },
+      {
+       "reader": "lamplighter",
+       "night": "T1",
+       "score": 1.1277366162554998,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-4",
+       "night": "T1",
+       "score": 1.3456353249012412,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-5",
+       "night": "T1",
+       "score": 2.3969855869877197,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-6",
+       "night": "T1",
+       "score": 4.831215684756925,
+       "x": 0.6551
+      },
+      {
+       "reader": "poet",
+       "night": "T1",
+       "score": 3.191087884276246,
+       "x": 0.6551
+      },
+      {
+       "reader": "singer",
+       "night": "T1",
+       "score": 1.0573656231654982,
+       "x": 0.6551
+      },
+      {
+       "reader": "drifter",
+       "night": "T2",
+       "score": 0.9957049364931704,
+       "x": 0.3187
+      },
+      {
+       "reader": "engineer",
+       "night": "T2",
+       "score": 1.042092373843004,
+       "x": 0.3187
+      },
+      {
+       "reader": "lamplighter",
+       "night": "T2",
+       "score": 1.359857096075987,
+       "x": 0.3187
+      },
+      {
+       "reader": "new-1",
+       "night": "T2",
+       "score": 0.9918046771030977,
+       "x": 0.3187
+      },
+      {
+       "reader": "new-2",
+       "night": "T2",
+       "score": 0.8979977985417636,
+       "x": 0.3187
+      },
+      {
+       "reader": "tinker",
+       "night": "T2",
+       "score": 1.1704543714819733,
+       "x": 0.3187
+      },
+      {
+       "reader": "writer",
+       "night": "T2",
+       "score": 1.2375717872548355,
+       "x": 0.3187
+      },
+      {
+       "reader": "barkeep",
+       "night": "T3",
+       "score": 0.719518350283124,
+       "x": 0.6551
+      },
+      {
+       "reader": "blacksmith",
+       "night": "T3",
+       "score": 1.638146498742078,
+       "x": 0.6551
+      },
+      {
+       "reader": "cartographer",
+       "night": "T3",
+       "score": 1.2930453739170638,
+       "x": 0.6551
+      },
+      {
+       "reader": "critic",
+       "night": "T3",
+       "score": 0.9182806893222024,
+       "x": 0.6551
+      },
+      {
+       "reader": "new-6",
+       "night": "T3",
+       "score": 5.077264050660523,
+       "x": 0.6551
+      },
+      {
+       "reader": "singer",
+       "night": "T3",
+       "score": 1.1518807163837557,
+       "x": 0.6551
+      },
+      {
+       "reader": "tinker",
+       "night": "T3",
+       "score": 2.091624821402458,
+       "x": 0.6551
+      },
+      {
+       "reader": "drifter",
+       "night": "T4a",
+       "score": 3.167852857669691,
+       "x": 0.4465
+      },
+      {
+       "reader": "engineer",
+       "night": "T4a",
+       "score": 1.1154199878807471,
+       "x": 0.4465
+      },
+      {
+       "reader": "lamplighter",
+       "night": "T4a",
+       "score": 1.1391509467817136,
+       "x": 0.4465
+      },
+      {
+       "reader": "new-1",
+       "night": "T4a",
+       "score": 0.7703121833349792,
+       "x": 0.4465
+      },
+      {
+       "reader": "new-2",
+       "night": "T4a",
+       "score": 1.038561709419302,
+       "x": 0.4465
+      },
+      {
+       "reader": "tinker",
+       "night": "T4a",
+       "score": 2.4512581915888303,
+       "x": 0.4465
+      },
+      {
+       "reader": "writer",
+       "night": "T4a",
+       "score": 3.1237396414017797,
+       "x": 0.4465
+      },
+      {
+       "reader": "blacksmith",
+       "night": "T4b",
+       "score": 1.8548645433329845,
+       "x": 0.6319
+      },
+      {
+       "reader": "cartographer",
+       "night": "T4b",
+       "score": 1.9752077387468594,
+       "x": 0.6319
+      },
+      {
+       "reader": "critic",
+       "night": "T4b",
+       "score": 1.2418599977844416,
+       "x": 0.6319
+      },
+      {
+       "reader": "drifter",
+       "night": "T4b",
+       "score": 0.5202302728809678,
+       "x": 0.6319
+      },
+      {
+       "reader": "essayist",
+       "night": "T4b",
+       "score": 1.3500773442532203,
+       "x": 0.6319
+      },
+      {
+       "reader": "new-2",
+       "night": "T4b",
+       "score": 1.6421587578541326,
+       "x": 0.6319
+      },
+      {
+       "reader": "new-3",
+       "night": "T4b",
+       "score": 2.754234640648425,
+       "x": 0.6319
+      },
+      {
+       "reader": "new-5",
+       "night": "T4b",
+       "score": 2.543225141028853,
+       "x": 0.6319
+      },
+      {
+       "reader": "poet",
+       "night": "T4b",
+       "score": 3.2639535914171427,
+       "x": 0.6319
+      },
+      {
+       "reader": "blacksmith",
+       "night": "T5",
+       "score": 1.814106383306989,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "T5",
+       "score": 1.2213759022547732,
+       "x": 0.6293
+      },
+      {
+       "reader": "fiddler",
+       "night": "T5",
+       "score": 1.4215532328080127,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-1",
+       "night": "T5",
+       "score": 0.6968606258585767,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-2",
+       "night": "T5",
+       "score": 1.911979413042804,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-3",
+       "night": "T5",
+       "score": 3.1823140490625716,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-4",
+       "night": "T5",
+       "score": 1.61574789949595,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "T5",
+       "score": 3.109213211492914,
+       "x": 0.6293
+      },
+      {
+       "reader": "singer",
+       "night": "T5",
+       "score": 1.6055676135603425,
+       "x": 0.6293
+      },
+      {
+       "reader": "writer",
+       "night": "T5",
+       "score": 2.2183815323798326,
+       "x": 0.6293
+      },
+      {
+       "reader": "cartographer",
+       "night": "T5c",
+       "score": 1.7285698003887329,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "T5c",
+       "score": 0.9554227521255055,
+       "x": 0.6293
+      },
+      {
+       "reader": "engineer",
+       "night": "T5c",
+       "score": 1.3610932653630137,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-1",
+       "night": "T5c",
+       "score": 0.7299579708256168,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-3",
+       "night": "T5c",
+       "score": 3.7970161037104897,
+       "x": 0.6293
+      },
+      {
+       "reader": "new-4",
+       "night": "T5c",
+       "score": 1.331770391626973,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "T5c",
+       "score": 3.865338806007406,
+       "x": 0.6293
+      },
+      {
+       "reader": "singer",
+       "night": "T5c",
+       "score": 1.248550739629193,
+       "x": 0.6293
+      },
+      {
+       "reader": "weaver",
+       "night": "T5c",
+       "score": 1.9624639895483775,
+       "x": 0.6293
+      },
+      {
+       "reader": "barkeep",
+       "night": "T8",
+       "score": 0.45897271521172006,
+       "x": 0.7409
+      },
+      {
+       "reader": "captain",
+       "night": "T8",
+       "score": 0.7184853523217516,
+       "x": 0.7409
+      },
+      {
+       "reader": "essayist",
+       "night": "T8",
+       "score": 0.8027362012229069,
+       "x": 0.7409
+      },
+      {
+       "reader": "fiddler",
+       "night": "T8",
+       "score": 0.7200254582245192,
+       "x": 0.7409
+      },
+      {
+       "reader": "new-5",
+       "night": "T8",
+       "score": 1.4419400460212854,
+       "x": 0.7409
+      },
+      {
+       "reader": "new-6",
+       "night": "T8",
+       "score": 4.301323877183619,
+       "x": 0.7409
+      },
+      {
+       "reader": "weaver",
+       "night": "T8",
+       "score": 1.2488800455849383,
+       "x": 0.7409
+      }
+     ],
+     "n_cells": 65,
+     "n_readers": 21,
+     "slope_x": 0.00475192242320312,
+     "slope_ci": [
+      -1.9775001126999963,
+      1.3000675851423418
+     ],
+     "contains_0": true,
+     "delta_rss_x_beyond_competitor": 0.10219307146644319,
+     "nested_perm_p": 0.7192,
+     "beats_competitor": false,
+     "x_invariant": true,
+     "competitor_covariates": {
+      "roster_size": {
+       "T1": 9,
+       "T2": 7,
+       "T3": 7,
+       "T4a": 7,
+       "T4b": 9,
+       "T5": 10,
+       "T5c": 9,
+       "T8": 7
+      },
+      "archwarm": {
+       "T1": 0.6969362466772302,
+       "T2": 0.37395124539585994,
+       "T3": 0.4572671416974912,
+       "T4a": 0.37395124539585994,
+       "T4b": 0.4345127956313355,
+       "T5": 0.4537633925368496,
+       "T5c": 0.5341886278267465,
+       "T8": 0.41312020099822444
+      }
+     },
+     "effective_draws": 2000
+    },
+    "mean_d_by_phase": {
+     "d_transition_phase_mean": 0.6669934404069128,
+     "d_stable_phase_mean": 0.4436142236702932,
+     "n_transition_phase": 1325,
+     "n_stable_phase": 553
+    }
+   },
+   "wave1": {
+    "label": "wave-1 actual",
+    "W": 12,
+    "presence": "actual",
+    "class_residual": false,
+    "corpus_sd": 0.23672602933417594,
+    "n_readers": 15,
+    "A": {
+     "n_events": 38,
+     "A": 0.6842105263157895,
+     "p": 0.0,
+     "null95": 0.4318181818181818,
+     "null_mean": 0.2829403878037479,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_up_mirror": {
+     "n_events": 69,
+     "A": 0.42028985507246375,
+     "p": 0.0176,
+     "null95": 0.3829787234042553,
+     "null_mean": 0.25362546753120835,
+     "n_valid_draws": 10000,
+     "pos_ref": "center"
+    },
+    "A_start_ref_sensitivity": {
+     "n_events": 38,
+     "A": 0.0,
+     "p": 1.0,
+     "null95": 0.42857142857142855,
+     "null_mean": 0.28105135730951986,
+     "n_valid_draws": 10000,
+     "pos_ref": "start"
+    },
+    "D": {
+     "D_signal": 0.5,
+     "k": 5,
+     "n_transitions": 10,
+     "ci_exact_binomial": [
+      0.18708602844739855,
+      0.8129139715526015
+     ],
+     "covered": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0
+     ],
+     "transitions": [
+      {
+       "night": "A",
+       "boundary": 20
+      },
+      {
+       "night": "D",
+       "boundary": 24
+      },
+      {
+       "night": "D-cold",
+       "boundary": 24
+      },
+      {
+       "night": "S1",
+       "boundary": 20
+      },
+      {
+       "night": "S2",
+       "boundary": 8
+      },
+      {
+       "night": "S3",
+       "boundary": 20
+      },
+      {
+       "night": "S4a",
+       "boundary": 12
+      },
+      {
+       "night": "S4a",
+       "boundary": 20
+      },
+      {
+       "night": "S4b",
+       "boundary": 20
+      },
+      {
+       "night": "S4b",
+       "boundary": 28
+      }
+     ],
+     "D_null": 0.0,
+     "null_pseudo": [
+      {
+       "night": "S5",
+       "midpoint": 10,
+       "covered": 0
+      }
+     ],
+     "signal_rn_crossing_rate": 0.38461538461538464,
+     "null_rn_crossing_rate": 0.0,
+     "signal_rn_hits": 25,
+     "signal_rn_total": 65,
+     "null_rn_hits": 0,
+     "null_rn_total": 8
+    },
+    "P": {
+     "P_trans": 0.9843215517784613,
+     "P_rest": 0.9866940999137334,
+     "trans_ci": [
+      0.9780742151259545,
+      0.9893433660733827
+     ],
+     "rest_ci": [
+      0.9667268711497713,
+      0.9934819327239464
+     ],
+     "half_rest_ci": [
+      0.48336343557488565,
+      0.4967409663619732
+     ],
+     "holds_at_half": true,
+     "mechanism_kill": false,
+     "trans_events": [
+      {
+       "night": "A",
+       "boundary": 20,
+       "n_readers": 6,
+       "cos": 0.9931464829844743
+      },
+      {
+       "night": "D",
+       "boundary": 24,
+       "n_readers": 7,
+       "cos": 0.9810686139063503
+      },
+      {
+       "night": "D-cold",
+       "boundary": 24,
+       "n_readers": 6,
+       "cos": 0.9884532376068932
+      },
+      {
+       "night": "S1",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9928025684679059
+      },
+      {
+       "night": "S4a",
+       "boundary": 12,
+       "n_readers": 8,
+       "cos": 0.9765625960922788
+      },
+      {
+       "night": "S4a",
+       "boundary": 20,
+       "n_readers": 8,
+       "cos": 0.9824037667105068
+      },
+      {
+       "night": "S4b",
+       "boundary": 20,
+       "n_readers": 9,
+       "cos": 0.9712517908035565
+      },
+      {
+       "night": "S4b",
+       "boundary": 28,
+       "n_readers": 9,
+       "cos": 0.9716889417946712
+      }
+     ],
+     "rest_events": [
+      {
+       "night": "D",
+       "stratum": "pre",
+       "n_readers": 7,
+       "cos": 0.9891965778594569
+      },
+      {
+       "night": "D-cold",
+       "stratum": "pre",
+       "n_readers": 6,
+       "cos": 0.9934819327239464
+      },
+      {
+       "night": "S4a",
+       "stratum": "cynical",
+       "n_readers": 9,
+       "cos": 0.9667268711497713
+      }
+     ],
+     "dropped": [
+      {
+       "night": "S2",
+       "boundary": 8,
+       "reason": "pre/post window does not fit"
+      },
+      {
+       "night": "S3",
+       "boundary": 20,
+       "reason": "pre/post window does not fit"
+      }
+     ]
+    },
+    "S": {
+     "cells": [
+      {
+       "reader": "captain",
+       "night": "A",
+       "score": 1.5643028731698854,
+       "x": 0.6551
+      },
+      {
+       "reader": "critic",
+       "night": "A",
+       "score": 0.8480466497065116,
+       "x": 0.6551
+      },
+      {
+       "reader": "engineer",
+       "night": "A",
+       "score": 0.8756327418050927,
+       "x": 0.6551
+      },
+      {
+       "reader": "essayist",
+       "night": "A",
+       "score": 1.1494600537861326,
+       "x": 0.6551
+      },
+      {
+       "reader": "poet",
+       "night": "A",
+       "score": 3.396437467355847,
+       "x": 0.6551
+      },
+      {
+       "reader": "writer",
+       "night": "A",
+       "score": 2.1166049519568757,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "D",
+       "score": 1.9189048313318742,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "D",
+       "score": 0.9989635265644551,
+       "x": 0.6293
+      },
+      {
+       "reader": "drifter",
+       "night": "D",
+       "score": 0.39542854325534743,
+       "x": 0.6293
+      },
+      {
+       "reader": "engineer",
+       "night": "D",
+       "score": 1.0077765044150053,
+       "x": 0.6293
+      },
+      {
+       "reader": "essayist",
+       "night": "D",
+       "score": 1.5896793649739056,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "D",
+       "score": 3.639853834175994,
+       "x": 0.6293
+      },
+      {
+       "reader": "writer",
+       "night": "D",
+       "score": 2.640910293254156,
+       "x": 0.6293
+      },
+      {
+       "reader": "captain",
+       "night": "D-cold",
+       "score": 1.2924348741423521,
+       "x": 0.6293
+      },
+      {
+       "reader": "critic",
+       "night": "D-cold",
+       "score": 1.1699309828169107,
+       "x": 0.6293
+      },
+      {
+       "reader": "engineer",
+       "night": "D-cold",
+       "score": 0.9761241781680208,
+       "x": 0.6293
+      },
+      {
+       "reader": "essayist",
+       "night": "D-cold",
+       "score": 1.2590734690079635,
+       "x": 0.6293
+      },
+      {
+       "reader": "poet",
+       "night": "D-cold",
+       "score": 2.488047178878465,
+       "x": 0.6293
+      },
+      {
+       "reader": "writer",
+       "night": "D-cold",
+       "score": 1.7571730557864962,
+       "x": 0.6293
+      },
+      {
+       "reader": "barkeep",
+       "night": "S1",
+       "score": 0.4631975806356509,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "S1",
+       "score": 2.4088193051354536,
+       "x": 0.6551
+      },
+      {
+       "reader": "cartographer",
+       "night": "S1",
+       "score": 1.0533385488518248,
+       "x": 0.6551
+      },
+      {
+       "reader": "critic",
+       "night": "S1",
+       "score": 0.4390075145594281,
+       "x": 0.6551
+      },
+      {
+       "reader": "engineer",
+       "night": "S1",
+       "score": 1.0176004972137853,
+       "x": 0.6551
+      },
+      {
+       "reader": "essayist",
+       "night": "S1",
+       "score": 1.3735746692190778,
+       "x": 0.6551
+      },
+      {
+       "reader": "fiddler",
+       "night": "S1",
+       "score": 0.7232490046734922,
+       "x": 0.6551
+      },
+      {
+       "reader": "poet",
+       "night": "S1",
+       "score": 4.933842814825399,
+       "x": 0.6551
+      },
+      {
+       "reader": "writer",
+       "night": "S1",
+       "score": 3.3251694095353694,
+       "x": 0.6551
+      },
+      {
+       "reader": "captain",
+       "night": "S2",
+       "score": 1.7804702428801535,
+       "x": 0.3187
+      },
+      {
+       "reader": "critic",
+       "night": "S2",
+       "score": 0.8625467481646163,
+       "x": 0.3187
+      },
+      {
+       "reader": "engineer",
+       "night": "S2",
+       "score": 0.8491618139270807,
+       "x": 0.3187
+      },
+      {
+       "reader": "essayist",
+       "night": "S2",
+       "score": 1.0740553220340356,
+       "x": 0.3187
+      },
+      {
+       "reader": "lamplighter",
+       "night": "S2",
+       "score": 1.1068090177432979,
+       "x": 0.3187
+      },
+      {
+       "reader": "poet",
+       "night": "S2",
+       "score": 1.6243209045854914,
+       "x": 0.3187
+      },
+      {
+       "reader": "singer",
+       "night": "S2",
+       "score": 1.8343664828998305,
+       "x": 0.3187
+      },
+      {
+       "reader": "tinker",
+       "night": "S2",
+       "score": 1.1221423554097467,
+       "x": 0.3187
+      },
+      {
+       "reader": "writer",
+       "night": "S2",
+       "score": 1.02070873551503,
+       "x": 0.3187
+      },
+      {
+       "reader": "barkeep",
+       "night": "S3",
+       "score": 0.5599408478027655,
+       "x": 0.7409
+      },
+      {
+       "reader": "blacksmith",
+       "night": "S3",
+       "score": 1.2641956288251723,
+       "x": 0.7409
+      },
+      {
+       "reader": "captain",
+       "night": "S3",
+       "score": 0.7132342068344372,
+       "x": 0.7409
+      },
+      {
+       "reader": "critic",
+       "night": "S3",
+       "score": 0.9416447708923912,
+       "x": 0.7409
+      },
+      {
+       "reader": "engineer",
+       "night": "S3",
+       "score": 1.1850270240626273,
+       "x": 0.7409
+      },
+      {
+       "reader": "essayist",
+       "night": "S3",
+       "score": 1.1192435778555438,
+       "x": 0.7409
+      },
+      {
+       "reader": "poet",
+       "night": "S3",
+       "score": 3.1819468804413633,
+       "x": 0.7409
+      },
+      {
+       "reader": "weaver",
+       "night": "S3",
+       "score": 1.2922308587813014,
+       "x": 0.7409
+      },
+      {
+       "reader": "writer",
+       "night": "S3",
+       "score": 1.6149992810023608,
+       "x": 0.7409
+      },
+      {
+       "reader": "captain",
+       "night": "S4a",
+       "score": 4.022881775035869,
+       "x": 0.4465
+      },
+      {
+       "reader": "critic",
+       "night": "S4a",
+       "score": 0.6306892303688201,
+       "x": 0.4465
+      },
+      {
+       "reader": "drifter",
+       "night": "S4a",
+       "score": 1.1132139749527636,
+       "x": 0.4465
+      },
+      {
+       "reader": "engineer",
+       "night": "S4a",
+       "score": 0.7146295742882337,
+       "x": 0.4465
+      },
+      {
+       "reader": "essayist",
+       "night": "S4a",
+       "score": 2.028651589633933,
+       "x": 0.4465
+      },
+      {
+       "reader": "fiddler",
+       "night": "S4a",
+       "score": 0.6775424284754676,
+       "x": 0.4465
+      },
+      {
+       "reader": "poet",
+       "night": "S4a",
+       "score": 3.3244273852677755,
+       "x": 0.4465
+      },
+      {
+       "reader": "singer",
+       "night": "S4a",
+       "score": 0.687498884557768,
+       "x": 0.4465
+      },
+      {
+       "reader": "writer",
+       "night": "S4a",
+       "score": 3.766818547930618,
+       "x": 0.4465
+      },
+      {
+       "reader": "blacksmith",
+       "night": "S4b",
+       "score": 1.4919380336879247,
+       "x": 0.6319
+      },
+      {
+       "reader": "captain",
+       "night": "S4b",
+       "score": 2.2298634122697996,
+       "x": 0.6319
+      },
+      {
+       "reader": "cartographer",
+       "night": "S4b",
+       "score": 2.059530260420159,
+       "x": 0.6319
+      },
+      {
+       "reader": "critic",
+       "night": "S4b",
+       "score": 1.1588633938676118,
+       "x": 0.6319
+      },
+      {
+       "reader": "drifter",
+       "night": "S4b",
+       "score": 0.42334702108808075,
+       "x": 0.6319
+      },
+      {
+       "reader": "engineer",
+       "night": "S4b",
+       "score": 1.2904448920814677,
+       "x": 0.6319
+      },
+      {
+       "reader": "essayist",
+       "night": "S4b",
+       "score": 1.7699627962966464,
+       "x": 0.6319
+      },
+      {
+       "reader": "poet",
+       "night": "S4b",
+       "score": 2.764276266080966,
+       "x": 0.6319
+      },
+      {
+       "reader": "tinker",
+       "night": "S4b",
+       "score": 2.037336084439881,
+       "x": 0.6319
+      },
+      {
+       "reader": "writer",
+       "night": "S4b",
+       "score": 1.8226232150595596,
+       "x": 0.6319
+      }
+     ],
+     "n_cells": 65,
+     "n_readers": 15,
+     "slope_x": 0.2235851178252843,
+     "slope_ci": [
+      -1.4552864984504927,
+      1.8016437267705168
+     ],
+     "contains_0": true,
+     "delta_rss_x_beyond_competitor": 0.18331505633216594,
+     "nested_perm_p": 0.4917,
+     "beats_competitor": false,
+     "x_invariant": true,
+     "competitor_covariates": {
+      "roster_size": {
+       "A": 6,
+       "D": 7,
+       "D-cold": 6,
+       "S1": 9,
+       "S2": 9,
+       "S3": 9,
+       "S4a": 9,
+       "S4b": 10
+      },
+      "archwarm": {
+       "A": 0.5717850989003699,
+       "D": 0.3786124818807937,
+       "D-cold": 0.5717850989003699,
+       "S1": 0.3604343954165822,
+       "S2": 0.648958137492178,
+       "S3": 0.43770038310090686,
+       "S4a": 0.36708151065765715,
+       "S4b": 0.5046556710888993
+      }
+     },
+     "effective_draws": 2000
+    },
+    "mean_d_by_phase": {
+     "d_transition_phase_mean": 0.5577566207372152,
+     "d_stable_phase_mean": 0.3766323335701411,
+     "n_transition_phase": 1310,
+     "n_stable_phase": 501
+    }
+   }
+  },
+  "class_residual": {
+   "wave2_P": {
+    "P_trans": 0.9922407562466077,
+    "P_rest": 0.9689052659031908,
+    "trans_ci": [
+     0.9716886868906089,
+     0.9976492930724677
+    ],
+    "rest_ci": [
+     0.8935533573309928,
+     0.9845568856011377
+    ],
+    "half_rest_ci": [
+     0.4467766786654964,
+     0.49227844280056887
+    ],
+    "holds_at_half": true,
+    "mechanism_kill": false,
+    "trans_events": [
+     {
+      "night": "T1",
+      "boundary": 20,
+      "n_readers": 8,
+      "cos": 0.9961247609143679
+     },
+     {
+      "night": "T3",
+      "boundary": 20,
+      "n_readers": 6,
+      "cos": 0.9976738874794553
+     },
+     {
+      "night": "T4a",
+      "boundary": 12,
+      "n_readers": 2,
+      "cos": 0.7665710212813797
+     },
+     {
+      "night": "T4a",
+      "boundary": 20,
+      "n_readers": 2,
+      "cos": 0.9584155614414305
+     },
+     {
+      "night": "T4b",
+      "boundary": 20,
+      "n_readers": 6,
+      "cos": 0.9994797414232652
+     },
+     {
+      "night": "T4b",
+      "boundary": 28,
+      "n_readers": 6,
+      "cos": 0.999600524390445
+     },
+     {
+      "night": "T5",
+      "boundary": 24,
+      "n_readers": 7,
+      "cos": 0.9953074571944994
+     },
+     {
+      "night": "T5c",
+      "boundary": 24,
+      "n_readers": 5,
+      "cos": 0.9720298592934009
+     }
+    ],
+    "rest_events": [
+     {
+      "night": "T4a",
+      "stratum": "cynical",
+      "n_readers": 2,
+      "cos": 0.9845568856011377
+     },
+     {
+      "night": "T5",
+      "stratum": "pre",
+      "n_readers": 7,
+      "cos": 0.9821516855328338
+     },
+     {
+      "night": "T5c",
+      "stratum": "pre",
+      "n_readers": 5,
+      "cos": 0.8935533573309928
+     }
+    ],
+    "dropped": [
+     {
+      "night": "T2",
+      "boundary": 8,
+      "reason": "pre/post window does not fit"
+     },
+     {
+      "night": "T8",
+      "boundary": 20,
+      "reason": "pre/post window does not fit"
+     }
+    ]
+   },
+   "wave2_S": {
+    "cells": [
+     {
+      "reader": "blacksmith",
+      "night": "T1",
+      "score": 1.2237181401103907,
+      "x": 0.6551
+     },
+     {
+      "reader": "captain",
+      "night": "T1",
+      "score": 0.19932728136498723,
+      "x": 0.6551
+     },
+     {
+      "reader": "cartographer",
+      "night": "T1",
+      "score": 0.3631291005360702,
+      "x": 0.6551
+     },
+     {
+      "reader": "lamplighter",
+      "night": "T1",
+      "score": 0.16355312937409863,
+      "x": 0.6551
+     },
+     {
+      "reader": "new-4",
+      "night": "T1",
+      "score": 0.39999721687106965,
+      "x": 0.6551
+     },
+     {
+      "reader": "new-5",
+      "night": "T1",
+      "score": 0.27742062110894233,
+      "x": 0.6551
+     },
+     {
+      "reader": "new-6",
+      "night": "T1",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "poet",
+      "night": "T1",
+      "score": 1.064872426748722,
+      "x": 0.6551
+     },
+     {
+      "reader": "singer",
+      "night": "T1",
+      "score": 0.7422706813319185,
+      "x": 0.6551
+     },
+     {
+      "reader": "drifter",
+      "night": "T2",
+      "score": 0.030124879334264873,
+      "x": 0.3187
+     },
+     {
+      "reader": "engineer",
+      "night": "T2",
+      "score": 0.0,
+      "x": 0.3187
+     },
+     {
+      "reader": "lamplighter",
+      "night": "T2",
+      "score": 0.0,
+      "x": 0.3187
+     },
+     {
+      "reader": "new-1",
+      "night": "T2",
+      "score": 0.03166218430878128,
+      "x": 0.3187
+     },
+     {
+      "reader": "new-2",
+      "night": "T2",
+      "score": 0.0,
+      "x": 0.3187
+     },
+     {
+      "reader": "tinker",
+      "night": "T2",
+      "score": 0.0,
+      "x": 0.3187
+     },
+     {
+      "reader": "writer",
+      "night": "T2",
+      "score": 0.0,
+      "x": 0.3187
+     },
+     {
+      "reader": "barkeep",
+      "night": "T3",
+      "score": 0.3745643480413164,
+      "x": 0.6551
+     },
+     {
+      "reader": "blacksmith",
+      "night": "T3",
+      "score": 1.4318749256606282,
+      "x": 0.6551
+     },
+     {
+      "reader": "cartographer",
+      "night": "T3",
+      "score": 0.29366126746757576,
+      "x": 0.6551
+     },
+     {
+      "reader": "critic",
+      "night": "T3",
+      "score": 0.09887439221416691,
+      "x": 0.6551
+     },
+     {
+      "reader": "new-6",
+      "night": "T3",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "singer",
+      "night": "T3",
+      "score": 0.9162844314504005,
+      "x": 0.6551
+     },
+     {
+      "reader": "tinker",
+      "night": "T3",
+      "score": 0.9671187060467312,
+      "x": 0.6551
+     },
+     {
+      "reader": "drifter",
+      "night": "T4a",
+      "score": 0.059662912298987174,
+      "x": 0.4465
+     },
+     {
+      "reader": "engineer",
+      "night": "T4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "lamplighter",
+      "night": "T4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "new-1",
+      "night": "T4a",
+      "score": 0.059907725861195034,
+      "x": 0.4465
+     },
+     {
+      "reader": "new-2",
+      "night": "T4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "tinker",
+      "night": "T4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "writer",
+      "night": "T4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "blacksmith",
+      "night": "T4b",
+      "score": 1.2060508406595185,
+      "x": 0.6319
+     },
+     {
+      "reader": "cartographer",
+      "night": "T4b",
+      "score": 0.1899185651084527,
+      "x": 0.6319
+     },
+     {
+      "reader": "critic",
+      "night": "T4b",
+      "score": 0.19221809436072432,
+      "x": 0.6319
+     },
+     {
+      "reader": "drifter",
+      "night": "T4b",
+      "score": 0.0,
+      "x": 0.6319
+     },
+     {
+      "reader": "essayist",
+      "night": "T4b",
+      "score": 0.3303549292297677,
+      "x": 0.6319
+     },
+     {
+      "reader": "new-2",
+      "night": "T4b",
+      "score": 0.3322160863522968,
+      "x": 0.6319
+     },
+     {
+      "reader": "new-3",
+      "night": "T4b",
+      "score": 0.0,
+      "x": 0.6319
+     },
+     {
+      "reader": "new-5",
+      "night": "T4b",
+      "score": 0.0,
+      "x": 0.6319
+     },
+     {
+      "reader": "poet",
+      "night": "T4b",
+      "score": 0.992723965616451,
+      "x": 0.6319
+     },
+     {
+      "reader": "blacksmith",
+      "night": "T5",
+      "score": 1.1145948653075624,
+      "x": 0.6293
+     },
+     {
+      "reader": "critic",
+      "night": "T5",
+      "score": 0.7795748231487749,
+      "x": 0.6293
+     },
+     {
+      "reader": "fiddler",
+      "night": "T5",
+      "score": 0.6476608668744742,
+      "x": 0.6293
+     },
+     {
+      "reader": "new-1",
+      "night": "T5",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "new-2",
+      "night": "T5",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "new-3",
+      "night": "T5",
+      "score": 0.2418879819596451,
+      "x": 0.6293
+     },
+     {
+      "reader": "new-4",
+      "night": "T5",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "poet",
+      "night": "T5",
+      "score": 0.8785681886721344,
+      "x": 0.6293
+     },
+     {
+      "reader": "singer",
+      "night": "T5",
+      "score": 0.4637321178363572,
+      "x": 0.6293
+     },
+     {
+      "reader": "writer",
+      "night": "T5",
+      "score": 0.19908242591278777,
+      "x": 0.6293
+     },
+     {
+      "reader": "cartographer",
+      "night": "T5c",
+      "score": 0.4271750003490337,
+      "x": 0.6293
+     },
+     {
+      "reader": "critic",
+      "night": "T5c",
+      "score": 0.257110398964966,
+      "x": 0.6293
+     },
+     {
+      "reader": "engineer",
+      "night": "T5c",
+      "score": 0.1650679739181118,
+      "x": 0.6293
+     },
+     {
+      "reader": "new-1",
+      "night": "T5c",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "new-3",
+      "night": "T5c",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "new-4",
+      "night": "T5c",
+      "score": 0.20787506004691586,
+      "x": 0.6293
+     },
+     {
+      "reader": "poet",
+      "night": "T5c",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "singer",
+      "night": "T5c",
+      "score": 0.8852639973879081,
+      "x": 0.6293
+     },
+     {
+      "reader": "weaver",
+      "night": "T5c",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "barkeep",
+      "night": "T8",
+      "score": 0.35546916100031395,
+      "x": 0.7409
+     },
+     {
+      "reader": "captain",
+      "night": "T8",
+      "score": 0.0,
+      "x": 0.7409
+     },
+     {
+      "reader": "essayist",
+      "night": "T8",
+      "score": 0.1925468732749306,
+      "x": 0.7409
+     },
+     {
+      "reader": "fiddler",
+      "night": "T8",
+      "score": 0.8673046522942767,
+      "x": 0.7409
+     },
+     {
+      "reader": "new-5",
+      "night": "T8",
+      "score": 0.0,
+      "x": 0.7409
+     },
+     {
+      "reader": "new-6",
+      "night": "T8",
+      "score": 0.0,
+      "x": 0.7409
+     },
+     {
+      "reader": "weaver",
+      "night": "T8",
+      "score": 0.16931690542990216,
+      "x": 0.7409
+     }
+    ],
+    "n_cells": 65,
+    "n_readers": 21,
+    "slope_x": 0.6951305010105783,
+    "slope_ci": [
+     0.11943131815375986,
+     1.4730199189324253
+    ],
+    "contains_0": false,
+    "delta_rss_x_beyond_competitor": 0.15320059331050273,
+    "nested_perm_p": 0.1496,
+    "beats_competitor": false,
+    "x_invariant": false,
+    "competitor_covariates": {
+     "roster_size": {
+      "T1": 9,
+      "T2": 7,
+      "T3": 7,
+      "T4a": 7,
+      "T4b": 9,
+      "T5": 10,
+      "T5c": 9,
+      "T8": 7
+     },
+     "archwarm": {
+      "T1": 0.6969362466772302,
+      "T2": 0.37395124539585994,
+      "T3": 0.4572671416974912,
+      "T4a": 0.37395124539585994,
+      "T4b": 0.4345127956313355,
+      "T5": 0.4537633925368496,
+      "T5c": 0.5341886278267465,
+      "T8": 0.41312020099822444
+     }
+    },
+    "effective_draws": 2000
+   },
+   "wave1_P": {
+    "P_trans": 0.9923568473138373,
+    "P_rest": 0.9909626357565725,
+    "trans_ci": [
+     0.9757466304396305,
+     0.9976051427556757
+    ],
+    "rest_ci": [
+     0.9909626357565725,
+     0.9909626357565725
+    ],
+    "half_rest_ci": [
+     0.49548131787828625,
+     0.49548131787828625
+    ],
+    "holds_at_half": true,
+    "mechanism_kill": false,
+    "trans_events": [
+     {
+      "night": "S1",
+      "boundary": 20,
+      "n_readers": 4,
+      "cos": 0.988342463363043
+     },
+     {
+      "night": "S4a",
+      "boundary": 12,
+      "n_readers": 3,
+      "cos": 0.9554712448844543
+     },
+     {
+      "night": "S4a",
+      "boundary": 20,
+      "n_readers": 3,
+      "cos": 0.9810309134441716
+     },
+     {
+      "night": "S4b",
+      "boundary": 20,
+      "n_readers": 5,
+      "cos": 0.9982764909131764
+     },
+     {
+      "night": "S4b",
+      "boundary": 28,
+      "n_readers": 5,
+      "cos": 0.9984940449223202
+     }
+    ],
+    "rest_events": [
+     {
+      "night": "S4a",
+      "stratum": "cynical",
+      "n_readers": 3,
+      "cos": 0.9909626357565725
+     }
+    ],
+    "dropped": [
+     {
+      "night": "A",
+      "boundary": 20,
+      "reason": "<2 common readers (0)"
+     },
+     {
+      "night": "D",
+      "boundary": 24,
+      "reason": "<2 common readers (0)"
+     },
+     {
+      "night": "D-cold",
+      "boundary": 24,
+      "reason": "<2 common readers (0)"
+     },
+     {
+      "night": "S2",
+      "boundary": 8,
+      "reason": "pre/post window does not fit"
+     },
+     {
+      "night": "S3",
+      "boundary": 20,
+      "reason": "pre/post window does not fit"
+     }
+    ]
+   },
+   "wave1_S": {
+    "cells": [
+     {
+      "reader": "captain",
+      "night": "A",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "critic",
+      "night": "A",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "engineer",
+      "night": "A",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "essayist",
+      "night": "A",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "poet",
+      "night": "A",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "writer",
+      "night": "A",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "captain",
+      "night": "D",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "critic",
+      "night": "D",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "drifter",
+      "night": "D",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "engineer",
+      "night": "D",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "essayist",
+      "night": "D",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "poet",
+      "night": "D",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "writer",
+      "night": "D",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "captain",
+      "night": "D-cold",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "critic",
+      "night": "D-cold",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "engineer",
+      "night": "D-cold",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "essayist",
+      "night": "D-cold",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "poet",
+      "night": "D-cold",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "writer",
+      "night": "D-cold",
+      "score": 0.0,
+      "x": 0.6293
+     },
+     {
+      "reader": "barkeep",
+      "night": "S1",
+      "score": 0.5117677826319107,
+      "x": 0.6551
+     },
+     {
+      "reader": "captain",
+      "night": "S1",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "cartographer",
+      "night": "S1",
+      "score": 0.2910464773947602,
+      "x": 0.6551
+     },
+     {
+      "reader": "critic",
+      "night": "S1",
+      "score": 0.10638863551578052,
+      "x": 0.6551
+     },
+     {
+      "reader": "engineer",
+      "night": "S1",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "essayist",
+      "night": "S1",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "fiddler",
+      "night": "S1",
+      "score": 0.6583902305536334,
+      "x": 0.6551
+     },
+     {
+      "reader": "poet",
+      "night": "S1",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "writer",
+      "night": "S1",
+      "score": 0.0,
+      "x": 0.6551
+     },
+     {
+      "reader": "captain",
+      "night": "S2",
+      "score": 0.10132919253259534,
+      "x": 0.3187
+     },
+     {
+      "reader": "critic",
+      "night": "S2",
+      "score": 0.36810807048366667,
+      "x": 0.3187
+     },
+     {
+      "reader": "engineer",
+      "night": "S2",
+      "score": 0.0,
+      "x": 0.3187
+     },
+     {
+      "reader": "essayist",
+      "night": "S2",
+      "score": 0.0,
+      "x": 0.3187
+     },
+     {
+      "reader": "lamplighter",
+      "night": "S2",
+      "score": 0.10555127164277758,
+      "x": 0.3187
+     },
+     {
+      "reader": "poet",
+      "night": "S2",
+      "score": 0.12598005100533544,
+      "x": 0.3187
+     },
+     {
+      "reader": "singer",
+      "night": "S2",
+      "score": 0.3490861053872805,
+      "x": 0.3187
+     },
+     {
+      "reader": "tinker",
+      "night": "S2",
+      "score": 0.09024048436319984,
+      "x": 0.3187
+     },
+     {
+      "reader": "writer",
+      "night": "S2",
+      "score": 0.0,
+      "x": 0.3187
+     },
+     {
+      "reader": "barkeep",
+      "night": "S3",
+      "score": 0.1522447875730629,
+      "x": 0.7409
+     },
+     {
+      "reader": "blacksmith",
+      "night": "S3",
+      "score": 1.1049322716767034,
+      "x": 0.7409
+     },
+     {
+      "reader": "captain",
+      "night": "S3",
+      "score": 0.0,
+      "x": 0.7409
+     },
+     {
+      "reader": "critic",
+      "night": "S3",
+      "score": 0.2473834102460046,
+      "x": 0.7409
+     },
+     {
+      "reader": "engineer",
+      "night": "S3",
+      "score": 0.0,
+      "x": 0.7409
+     },
+     {
+      "reader": "essayist",
+      "night": "S3",
+      "score": 0.196702728261732,
+      "x": 0.7409
+     },
+     {
+      "reader": "poet",
+      "night": "S3",
+      "score": 0.9818670971126608,
+      "x": 0.7409
+     },
+     {
+      "reader": "weaver",
+      "night": "S3",
+      "score": 0.17550241004365616,
+      "x": 0.7409
+     },
+     {
+      "reader": "writer",
+      "night": "S3",
+      "score": 0.0,
+      "x": 0.7409
+     },
+     {
+      "reader": "captain",
+      "night": "S4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "critic",
+      "night": "S4a",
+      "score": 0.4700687289111976,
+      "x": 0.4465
+     },
+     {
+      "reader": "drifter",
+      "night": "S4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "engineer",
+      "night": "S4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "essayist",
+      "night": "S4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "fiddler",
+      "night": "S4a",
+      "score": 0.5787808037198872,
+      "x": 0.4465
+     },
+     {
+      "reader": "poet",
+      "night": "S4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "singer",
+      "night": "S4a",
+      "score": 0.7696293001511639,
+      "x": 0.4465
+     },
+     {
+      "reader": "writer",
+      "night": "S4a",
+      "score": 0.0,
+      "x": 0.4465
+     },
+     {
+      "reader": "blacksmith",
+      "night": "S4b",
+      "score": 1.562171221467087,
+      "x": 0.6319
+     },
+     {
+      "reader": "captain",
+      "night": "S4b",
+      "score": 0.0,
+      "x": 0.6319
+     },
+     {
+      "reader": "cartographer",
+      "night": "S4b",
+      "score": 0.17106575306590996,
+      "x": 0.6319
+     },
+     {
+      "reader": "critic",
+      "night": "S4b",
+      "score": 0.15327671429027173,
+      "x": 0.6319
+     },
+     {
+      "reader": "drifter",
+      "night": "S4b",
+      "score": 0.0,
+      "x": 0.6319
+     },
+     {
+      "reader": "engineer",
+      "night": "S4b",
+      "score": 0.0,
+      "x": 0.6319
+     },
+     {
+      "reader": "essayist",
+      "night": "S4b",
+      "score": 0.0,
+      "x": 0.6319
+     },
+     {
+      "reader": "poet",
+      "night": "S4b",
+      "score": 0.7535595213392166,
+      "x": 0.6319
+     },
+     {
+      "reader": "tinker",
+      "night": "S4b",
+      "score": 0.5064934025654118,
+      "x": 0.6319
+     },
+     {
+      "reader": "writer",
+      "night": "S4b",
+      "score": 0.0,
+      "x": 0.6319
+     }
+    ],
+    "n_cells": 65,
+    "n_readers": 15,
+    "slope_x": 0.11007151000474695,
+    "slope_ci": [
+     -0.3247921542635813,
+     0.592167243487822
+    ],
+    "contains_0": true,
+    "delta_rss_x_beyond_competitor": 0.04093590804738656,
+    "nested_perm_p": 0.0691,
+    "beats_competitor": false,
+    "x_invariant": true,
+    "competitor_covariates": {
+     "roster_size": {
+      "A": 6,
+      "D": 7,
+      "D-cold": 6,
+      "S1": 9,
+      "S2": 9,
+      "S3": 9,
+      "S4a": 9,
+      "S4b": 10
+     },
+     "archwarm": {
+      "A": 0.5717850989003699,
+      "D": 0.3786124818807937,
+      "D-cold": 0.5717850989003699,
+      "S1": 0.3604343954165822,
+      "S2": 0.648958137492178,
+      "S3": 0.43770038310090686,
+      "S4a": 0.36708151065765715,
+      "S4b": 0.5046556710888993
+     }
+    },
+    "effective_draws": 2000
+   }
+  }
+ },
+ "identity_propagation_booking": false,
+ "verdict": {
+  "void": true,
+  "void_reasons": [
+   "sec.5.3 only 17 counted down-crossings (< 20)"
+  ],
+  "branches": {
+   "A_fires": true,
+   "A_value": 0.6470588235294118,
+   "A_p": 0.0013,
+   "A_null95": 0.45,
+   "D_signal": 0.4,
+   "D_null": 0.0,
+   "D_signal_le_50pct": true,
+   "D_minus_D_null_ci_contains_0": false,
+   "D_fails": true,
+   "P_holds_at_half": true,
+   "P_mechanism_kill": false,
+   "P_trans": 0.9940217497428615,
+   "P_rest": 0.9935313290945559,
+   "S_x_coef_ci_excludes_0": false,
+   "S_beats_competitor": false,
+   "S_slope": 1.41032617887822,
+   "S_slope_ci": [
+    -0.3129915763864635,
+    2.7970095137216013
+   ]
+  },
+  "verdict": "VOID BY RULE \u2014 sec.5.3 only 17 counted down-crossings (< 20)"
+ },
+ "priors_updated": {
+  "A_fires": {
+   "prior": 0.55,
+   "posterior": 0.5714,
+   "observed": {
+    "A": 0.6470588235294118,
+    "p": 0.0013,
+    "null95": 0.45
+   }
+  },
+  "P_holds": {
+   "prior": 0.5,
+   "posterior": 0.5238,
+   "observed": {
+    "P_trans": 0.9940217497428615,
+    "P_rest": 0.9935313290945559
+   }
+  },
+  "x_invariance": {
+   "prior": 0.6,
+   "posterior": 0.619,
+   "observed": {
+    "slope": 1.41032617887822,
+    "ci": [
+     -0.3129915763864635,
+     2.7970095137216013
+    ]
+   }
+  },
+  "note": "Beta bookkeeping at the registered prior strength (concentration 20); one run moves priors modestly \u2014 the leg values carry the information."
+ },
+ "seeds": {
+  "main": 20260821,
+  "shift_null": 20260821,
+  "boot_P": 20260822,
+  "boot_S": 20260821,
+  "nested_perm": 20260822,
+  "variants": "SEED+10..90 (all 20260821-family)"
+ }
+}
