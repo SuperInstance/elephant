@@ -22,12 +22,16 @@ from scripts.riverbed_adapter import (NightFromFile, build_measurement,
                                       wave_cold)
 from scripts.riverbed_generator import (BRANCHES, ENTRANT_NAME,
                                         ENTRANT_SPEAKS, ENTRY_DWARMTH,
-                                        KAPPA_COLD, KAPPA_ENTRY_FACTOR,
-                                        KAPPA_WARM, NIGHT_FAMILIES,
+                                        E_SEG, E_SEG_BASE, E_SEG_ENTRY,
+                                        E_SEG_FLIP, KAPPA_COLD,
+                                        KAPPA_ENTRY_FACTOR, KAPPA_WARM,
+                                        NIGHT_FAMILIES, NIGHT_ORDER,
                                         SEALED_FIELDS, generate_night,
                                         generate_wave, load_personas,
-                                        persona_deviations, room_path,
-                                        room_schedule, unblind)
+                                        persona_deviations,
+                                        expected_logged_warmth_path,
+                                        room_path, room_schedule,
+                                        seg_schedule, unblind)
 from scripts.riverbed_wave_gate import run_gate
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -220,11 +224,17 @@ class TestG5Adapter:
 # G7 — realized ICC honesty (measured, not analytic)
 # --------------------------------------------------------------------------- #
 class TestG7RealizedICC:
-    def test_instrument_icc_in_filed_band(self, wave):
+    def test_instrument_icc_in_field_actual_band(self, wave):
+        """G6 re-verification (2026-08-21): the charisma-pull fiber
+        reproduces the FIELD's actual-presence ICC structure (field
+        0.7411 through the same registered Measurement). The old
+        [0.85, 0.96] bracket was the vMF-fiber calibration — re-banded
+        by the G6 registration addendum (memory/
+        wave3-registration-addendum-g6-2026-08-21.md)."""
         d, man = wave
         w = load_wave(os.path.join(d, "riverbed-manifest.json"))
         icc, _ = w["measurement"].icc()
-        assert 0.85 <= icc <= 0.96, f"realized ICC {icc:.4f}"
+        assert 0.60 <= icc <= 0.80, f"realized ICC {icc:.4f}"
 
 
 # --------------------------------------------------------------------------- #
@@ -475,3 +485,194 @@ class TestAdapterUnits:
         assert m.readers == ["cartographer", "singer"]
         assert len(m.readings["singer"]) == 2
         assert np.isfinite(m.drift_mean())
+
+
+# --------------------------------------------------------------------------- #
+# G6 — the noise-model rework (memory/research-g6-noise-2026-08-21.md):
+# (i) per-speak per-dial Gaussian noise at the field's within-stratum
+#     scales, era-scaled by the κ(t) channel; (ii) the emitted windowed z
+# keeps its magnitude (no unit-normalization; the fit channel is the
+# clamped dial reading); (iii) the reader fiber is the engine's
+# charisma-pull equation (replay_readings parity); plus the E_SEG
+# text-step schedule contrast (the field's real schedule geometry).
+# --------------------------------------------------------------------------- #
+class TestG6NoiseModel:
+    def test_seg_schedule_field_geometry(self):
+        # flip steps along E_SEG at the field-measured magnitude
+        seg = seg_schedule(NIGHT_FAMILIES["T1"], False)
+        assert abs(seg[19] - E_SEG_BASE) < 1e-12
+        assert seg[20] - seg[19] == pytest.approx(E_SEG_FLIP)
+        # entries stack partway (T4a: entry@12 then flip@20)
+        seg4 = seg_schedule(NIGHT_FAMILIES["T4a"], False)
+        assert seg4[12] - seg4[11] == pytest.approx(E_SEG_ENTRY)
+        assert seg4[20] - seg4[19] == pytest.approx(E_SEG_FLIP)
+        assert seg4[-1] == pytest.approx(E_SEG_BASE + E_SEG_ENTRY + E_SEG_FLIP)
+        # null mode: NO text steps (cohesion-only, no direction content)
+        segn = seg_schedule(NIGHT_FAMILIES["T2"], True)
+        assert (segn == E_SEG_BASE).all()
+
+    def test_e_seg_shape_cynicism_heavy(self):
+        # the text-step direction: cynicism/presence heavy, mood-light
+        # (rail-safe; the field's flip is a text step, not a warmth step)
+        e = E_SEG
+        assert e[3] == pytest.approx(max(abs(e)))          # cynicism max
+        assert abs(e[6]) > 0.4                             # presence heavy
+        assert abs(e[0]) < 0.1                             # mood light
+
+    def test_emission_unnormalized_with_noise(self):
+        # part (ii): the emitted windowed z KEEPS its magnitude (the
+        # engine logs the raw windowed reading, not its direction)
+        rp = room_path(NIGHT_FAMILIES["T1"], False, np.random.default_rng(0))
+        norms = [float(np.linalg.norm(z)) for z in rp["obs"]]
+        # NOT unit vectors: magnitudes spread around the baseline-anchored
+        # scale (~1.5 at the field's z-norm structure), well off 1.0
+        assert 0.6 < min(norms) and max(norms) < 2.1
+        assert float(np.mean(norms)) > 1.1
+        # part (i): per-speak per-dial noise — same seed, same emission
+        rp2 = room_path(NIGHT_FAMILIES["T1"], False, np.random.default_rng(0))
+        assert all(np.allclose(a, b) for a, b in zip(rp["obs"], rp2["obs"]))
+        # dial_noise=0 changes the emission (the noise is live)
+        rp0 = room_path(NIGHT_FAMILIES["T1"], False, np.random.default_rng(0),
+                        dial_noise=0.0)
+        assert any(not np.allclose(a, b)
+                   for a, b in zip(rp["obs"], rp0["obs"]))
+
+    def test_noise_is_per_dial_heterogeneous(self):
+        # the field's within-stratum shape: volume ~deterministic,
+        # joke_landing/presence loose (SIGMA_DIAL, G6 sec 2.1)
+        from scripts.riverbed_generator import SIGMA_DIAL
+        idx_vol, idx_joke = 1, 4
+        assert SIGMA_DIAL[idx_vol] < 0.05
+        assert SIGMA_DIAL[idx_joke] > 0.15
+        # era-scaled by kappa(t): a warm-era draw is quieter than the
+        # latent-sigma scale would give flat (spot: ratio present)
+        from scripts.riverbed_generator import KAPPA_COLD, KAPPA_WARM
+        assert (KAPPA_COLD / KAPPA_WARM) ** 0.5 < 0.8  # warm x0.68
+
+    def test_engine_charisma_pull_replay_parity(self, tmp_path):
+        """The fiber IS replay_readings: the registered replay on the
+        logged rows reproduces field_eff_to_reader exactly (T1 roster +
+        T4a staged entrant, cold entry path)."""
+        from scripts.e2_instrument import assert_replay_matches_log
+        import types
+        personas = load_personas()
+        roster = ["writer", "poet", "engineer", "critic", "captain", "essayist"]
+        anchors = persona_deviations(roster + [ENTRANT_NAME], personas)
+        for famname, family in (("T1", NIGHT_FAMILIES["T1"]),
+                                ("T4a", NIGHT_FAMILIES["T4a"])):
+            path, _ = generate_night(f"g6-{famname}", family, roster, personas,
+                                     anchors, {}, BRANCHES["instrument"], 7,
+                                     str(tmp_path), fam=famname)
+            rows = [json.loads(l) for l in open(path)]
+            nt = types.SimpleNamespace()
+            nt.path = path
+            nt.open = next(r for r in rows if r["type"] == "session_open")
+            nt.speaks = [r for r in rows if r["type"] == "speak"]
+            nt.v2 = True
+            nt.params = {n: dict(v) for n, v in nt.open["roster"].items()}
+            for n, v in nt.open.get("staged_entries", {}).items():
+                nt.params.setdefault(n, dict(v))
+            for n in nt.params:
+                nt.params[n]["dial_weights"] = np.asarray(
+                    nt.params[n]["dial_weights"], float)
+                nt.params[n]["vibe_start"] = np.asarray(
+                    nt.params[n]["vibe_start"], float)
+            nt.first_speak_seq = lambda reader: next(
+                (r["seq"] for r in nt.speaks if r["author"] == reader), None)
+            for name in nt.params:
+                assert_replay_matches_log(nt, name, cold=(name == ENTRANT_NAME))
+
+    def test_branch_lives_in_logged_vibe_start(self, tmp_path):
+        """Alpha enters ONLY through the logged persona anchor (persona
+        space — the coordinate firewall); the equation itself is
+        branch-free (engine parity for every branch)."""
+        personas = load_personas()
+        roster = ["writer", "poet", "engineer"]
+        anchors = persona_deviations(roster + [ENTRANT_NAME], personas)
+        kw = dict(family=NIGHT_FAMILIES["T1"], roster_names=roster,
+                  personas=personas, dev_anchors=anchors, ou_state={},
+                  seed=7, outdir=str(tmp_path), fam="T1")
+        p0, _ = generate_night("br0-T1", branch=BRANCHES["instrument"], **kw)
+        p1, _ = generate_night("br1-T1", branch=BRANCHES["collapse"], **kw)
+        r0 = next(json.loads(l) for l in open(p0) if '"session_open"' in l)
+        r1 = next(json.loads(l) for l in open(p1) if '"session_open"' in l)
+        v0 = r0["roster"]["writer"]["vibe_start"]
+        v1 = r1["roster"]["writer"]["vibe_start"]
+        assert v0 != v1, "the branch must move the logged persona anchor"
+
+    def test_calibration_snapshot_registered_seed(self, wave):
+        """The four re-verified G6 statistics at the registered seed on
+        the registered tags (bands carry the measured realization
+        spread; the G6 registration addendum holds the full table)."""
+        import types
+        from scripts.e2_instrument import W2_NIGHTS, logged_readings
+        d, man = wave
+        w = load_wave(os.path.join(d, "riverbed-manifest.json"))
+        sd = w["sd"]
+        assert 0.21 <= sd <= 0.30, f"corpus_sd {sd:.4f} (field 0.2367)"
+        # stable-d: night_windows W=12 split-half, windows wholly inside a
+        # stratum, normalized by the corpus's own corpus_sd (registered
+        # object; field actual-presence 0.376, floor 0.29)
+        ds = []
+        for tag, nt in w["nights"].items():
+            fam = next(m["family"] for t, m in man["nights"].items() if t == tag)
+            strata = W2_NIGHTS[fam][1]
+            for name in nt.params:
+                pairs = logged_readings(nt, name)
+                if len(pairs) < 12:
+                    continue
+                vecs = np.stack([v for _, v in pairs])
+                for t in range(len(vecs) - 12 + 1):
+                    if not any(lo <= t and t + 11 <= hi
+                               for _, lo, hi, _ in strata):
+                        continue
+                    a, b = vecs[t:t + 6].mean(0), vecs[t + 6:t + 12].mean(0)
+                    ds.append(np.linalg.norm(b - a) / sd)
+        dstat = float(np.mean(ds))
+        assert 0.28 <= dstat <= 0.48, f"stable-d {dstat:.3f}"
+        # logged kappa: warm/cold per-strata means — the field's 24/11
+        # band is reproduced in the COLD level and the warm/cold RATIO
+        # (the warm level carries a disclosed offset; G6 addendum)
+        kw, kc = [], []
+        for tag, nt in w["nights"].items():
+            fam = next(m["family"] for t, m in man["nights"].items() if t == tag)
+            flip = NIGHT_FAMILIES[fam][2]
+            if flip is None:
+                continue
+            for label, lo, hi, kind in W2_NIGHTS[fam][1]:
+                ks = [r["fit"]["kappa"] for r in nt.speaks
+                      if r.get("fit") and lo <= r["seq"] <= hi]
+                if not ks:
+                    continue
+                (kw if hi < flip else kc).append(float(np.mean(ks)))
+        kw_m, kc_m = float(np.mean(kw)), float(np.mean(kc))
+        assert 12 <= kc_m <= 24, f"cold kappa {kc_m:.1f} (field ~11-15)"
+        assert 1.7 <= kw_m / kc_m <= 2.6, f"kappa ratio {kw_m/kc_m:.2f} (field 2.18)"
+        # warmth residual vs the noise-free expected path: within the
+        # disclosed G6 band (the +-0.10 gate band holds on drops/levels;
+        # strata means carry the disclosed entry-era residual)
+        res = []
+        for tag, nt in w["nights"].items():
+            fam = next(m["family"] for t, m in man["nights"].items() if t == tag)
+            exp = expected_logged_warmth_path(NIGHT_FAMILIES[fam])
+            for label, lo, hi, kind in W2_NIGHTS[fam][1]:
+                if kind != "signal":
+                    continue
+                vals = [r["fit"]["warmth_vmf"] - exp[r["seq"]]
+                        for r in nt.speaks
+                        if r.get("fit") and exp[r["seq"]] is not None
+                        and lo <= r["seq"] <= hi]
+                if vals:
+                    res.append(abs(float(np.mean(vals))))
+        assert max(res) <= 0.16, f"max strata warmth residual {max(res):.3f}"
+
+    def test_noise_branch_icc_collapses(self, tmp_path_factory):
+        """The registered noise prediction (ICC < filed floor 0.667):
+        the noise branch redraws the WHOLE persona per night — anchors
+        AND the dial lens (the charisma-pull fiber's stable-constant
+        carrier is the lens, not a kappa_R draw)."""
+        d = tmp_path_factory.mktemp("rb-g6-noise")
+        generate_wave(str(d), branch_name="noise", seed=20260821)
+        w = load_wave(os.path.join(d, "riverbed-manifest.json"))
+        icc, _ = w["measurement"].icc()
+        assert icc < 0.667, f"noise-branch ICC {icc:.4f} must collapse"
