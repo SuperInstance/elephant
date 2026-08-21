@@ -1,0 +1,925 @@
+{
+ "date": "2026-08-21",
+ "test": "REG-1 W-vs-v* rotation test \u2014 generalized eigenproblem C_room v = lambda C_pers v on the filed waves 1+2",
+ "registration": [
+  "foundation-synthesis-2026-08-21.md (axiom 7 + Registered Experiment 1)",
+  "wave3-generation-plan-2026-08-21.md (\u00a72 REG-1 integration, S0 sequencing)",
+  "math-foundation-geometric-2026-08-21.md (\u00a73.4 the eigenproblem)"
+ ],
+ "W_z": {
+  "mood": 0.7171371656006361,
+  "volume": 0.23904572186687872,
+  "earnestness": 0.23904572186687872,
+  "cynicism": -0.35856858280031806,
+  "joke_landing": 0.35856858280031806,
+  "panic": -0.23904572186687872,
+  "presence": 0.23904572186687872
+ },
+ "W_mass_reliable_subspace": 0.828078671210825,
+ "method": {
+  "C_room": "within-reader between-night covariance of median baselines (baseline minus reader mean), z-space",
+  "C_pers": "between-reader covariance of reader offsets (reader mean minus roster mean), z-space",
+  "baselines": "per-(reader,night) median, canonical presence, e2_instrument.Measurement verbatim",
+  "primary_space": "full 7-dial z-space; reliable subspace {mood,volume,earnestness,pres} = sensitivity + branch-1 comparability",
+  "cosines": "|cos| (axes are sign-free)",
+  "solver": "floored-whitening generalized eigensolve (C_pers eigenvalue floor eps=1e-2 of its leading eigenvalue; eps-sensitivity reported)",
+  "bootstrap": {
+   "B": 2000,
+   "seed": 20260821,
+   "unit": "reader"
+  },
+  "branch_thresholds": {
+   "aligned_cos": 0.8,
+   "aligned_ci_lo": 0.6,
+   "pers_parallel_cos": 0.8,
+   "branch1_range": [
+    0.24,
+    0.4
+   ]
+  }
+ },
+ "waves": {
+  "wave1": {
+   "n_readers": 15,
+   "n_nights": 9,
+   "n_reader_nights": 73,
+   "corpus_sd": 0.23672602933417594,
+   "icc_aggregate": 0.7714018356572278,
+   "icc_per_dial": {
+    "mood": 0.9651507862075179,
+    "volume": 0.9765766180500269,
+    "earnestness": 0.9532706593358901,
+    "cynicism": 0.6405552702054303,
+    "joke_landing": 0.6485174910708407,
+    "panic": 0.30198248677645984,
+    "presence": 0.9137595379544282
+   },
+   "primary_full7": {
+    "dials": [
+     "mood",
+     "volume",
+     "earnestness",
+     "cynicism",
+     "joke_landing",
+     "panic",
+     "presence"
+    ],
+    "n_readers": 15,
+    "n_reader_nights": 73,
+    "gen_evals": [
+     1.8622961960005273,
+     0.8935416278791904,
+     0.20082199581877497,
+     0.020915141698670807,
+     0.006970688481142511,
+     0.004417060966290395,
+     0.0014746697817971022
+    ],
+    "lambda_star": 1.8622961960005273,
+    "v_star": {
+     "mood": 0.36682789237919644,
+     "volume": -0.03573680657582984,
+     "earnestness": 0.14572574642354977,
+     "cynicism": 0.6576744360666554,
+     "joke_landing": -0.5502524510912729,
+     "panic": 0.04656913539152065,
+     "presence": 0.3247184575890891
+    },
+    "v2": {
+     "mood": 0.025171905069184125,
+     "volume": -0.15142427413255743,
+     "earnestness": -0.08404431362636901,
+     "cynicism": -0.11669412605146838,
+     "joke_landing": -0.9530200155582961,
+     "panic": -0.001211556057169513,
+     "presence": -0.21796210856008427
+    },
+    "cos_W_vstar": 0.07727592601577421,
+    "cos_W_v2": 0.3899295311315068,
+    "cos_W_pc1_pers": 0.8568085824955535,
+    "cos_W_pc1_room": 0.4167326876498991,
+    "pc1_pers_eval_share": 0.6291586651108514,
+    "icc_along_vstar": 0.37690423028573805,
+    "icc_along_W": 0.9152580919123293,
+    "cond_pers": 310110.81280950183,
+    "n_pers_dirs_floored": 2,
+    "eps_floor": 0.01,
+    "pers_evals": [
+     0.10409148275014181,
+     0.046082595621375,
+     0.008029547004440533,
+     0.004841210750804383,
+     0.0015961561317188635,
+     0.0008041924614005781,
+     3.3565899172310607e-07
+    ],
+    "cos_W_vstar_eps_sensitivity": {
+     "eps=0.0001": 0.2507727831853497,
+     "eps=0.001": 0.19039323531215113,
+     "eps=0.01": 0.07727592601577421,
+     "eps=0.05": 0.09844137192369257
+    }
+   },
+   "reliable_subspace": {
+    "dials": [
+     "mood",
+     "volume",
+     "earnestness",
+     "presence"
+    ],
+    "n_readers": 15,
+    "n_reader_nights": 73,
+    "gen_evals": [
+     0.27298194371170836,
+     0.026916656378780747,
+     0.008568279335482305,
+     0.004701442860981958
+    ],
+    "lambda_star": 0.27298194371170836,
+    "v_star": {
+     "mood": 0.15894530576001145,
+     "volume": 0.6552312620467085,
+     "earnestness": 0.09131462018217577,
+     "presence": -0.7328506144873724
+    },
+    "v2": {
+     "mood": -0.24919740653474226,
+     "volume": 0.9667569745340094,
+     "earnestness": -0.03723469853428712,
+     "presence": 0.04353368800443778
+    },
+    "cos_W_vstar": 0.1416041558590479,
+    "cos_W_v2": 0.06508577676090127,
+    "cos_W_pc1_pers": 0.9763471208006141,
+    "cos_W_pc1_room": 0.46911494119533764,
+    "pc1_pers_eval_share": 0.5612168002391601,
+    "icc_along_vstar": 0.856163712154347,
+    "icc_along_W": 0.954357748473652,
+    "cond_pers": 45.99029769844379,
+    "n_pers_dirs_floored": 0,
+    "eps_floor": 0.01,
+    "pers_evals": [
+     0.06595877321314679,
+     0.04539457215619898,
+     0.0047406174188022706,
+     0.0014341888727408428
+    ],
+    "cos_W_vstar_eps_sensitivity": {
+     "eps=0.0001": 0.1416041558590479,
+     "eps=0.001": 0.1416041558590479,
+     "eps=0.01": 0.1416041558590479,
+     "eps=0.05": 0.10026711324245213
+    }
+   },
+   "bootstrap": {
+    "cos_W_vstar_ci": [
+     0.010535711563660307,
+     0.4344826332716865
+    ],
+    "cos_W_pc1_ci": [
+     0.6489098069398532,
+     0.8808408912981727
+    ],
+    "cos_W_vstar_ci_reliable": [
+     0.016834145120901162,
+     0.22688260399197452
+    ],
+    "cos_W_pc1_ci_reliable": [
+     0.2245294642865798,
+     0.9849482937940041
+    ],
+    "draws": 2000
+   },
+   "sensitivities": {
+    "night_mean_removed_full7": {
+     "dials": [
+      "mood",
+      "volume",
+      "earnestness",
+      "cynicism",
+      "joke_landing",
+      "panic",
+      "presence"
+     ],
+     "n_readers": 15,
+     "n_reader_nights": 73,
+     "gen_evals": [
+      1.2208640049191937,
+      0.46444915467785924,
+      0.10581435553843081,
+      0.05037422886776738,
+      0.017202329048578338,
+      0.011945582906974136,
+      0.0007960138614820215
+     ],
+     "lambda_star": 1.2208640049191937,
+     "v_star": {
+      "mood": -0.42410854692155675,
+      "volume": -0.2687659418259827,
+      "earnestness": -0.12040072789921093,
+      "cynicism": -0.7816874687944023,
+      "joke_landing": 0.09133910017893421,
+      "panic": -0.0316444045156505,
+      "presence": -0.33618592361217486
+     },
+     "v2": {
+      "mood": -0.09513177488680223,
+      "volume": 0.03451745295348957,
+      "earnestness": 0.059758862155521786,
+      "cynicism": 0.00037683086082695,
+      "joke_landing": 0.9636831260641722,
+      "panic": 0.02565046913767406,
+      "presence": 0.23842003525935485
+     },
+     "cos_W_vstar": 0.15693207642438883,
+     "cos_W_v2": 0.35058684599785195,
+     "cos_W_pc1_pers": 0.8440344777794084,
+     "cos_W_pc1_room": 0.4345795002830106,
+     "pc1_pers_eval_share": 0.6339668065796891,
+     "icc_along_vstar": 0.3579234522616252,
+     "icc_along_W": 0.9152580919123294,
+     "cond_pers": 348878.7334682802,
+     "n_pers_dirs_floored": 2,
+     "eps_floor": 0.01,
+     "pers_evals": [
+      0.08551530379403523,
+      0.03589712736705285,
+      0.007941681201004745,
+      0.0038491099384694344,
+      0.0011956210631932202,
+      0.0004901563629307178,
+      2.451146934176497e-07
+     ],
+     "cos_W_vstar_eps_sensitivity": {
+      "eps=0.0001": 0.17384852963793232,
+      "eps=0.001": 0.06386023988912937,
+      "eps=0.01": 0.15693207642438883,
+      "eps=0.05": 0.17372061032119634
+     }
+    },
+    "night_mean_removed_reliable": {
+     "dials": [
+      "mood",
+      "volume",
+      "earnestness",
+      "presence"
+     ],
+     "n_readers": 15,
+     "n_reader_nights": 73,
+     "gen_evals": [
+      0.1277296004050617,
+      0.05199768830495213,
+      0.017645246727164124,
+      0.012479454873162269
+     ],
+     "lambda_star": 0.1277296004050617,
+     "v_star": {
+      "mood": 0.11396837334752558,
+      "volume": 0.640495726452431,
+      "earnestness": 0.03681554839200454,
+      "presence": -0.7585651255293031
+     },
+     "v2": {
+      "mood": 0.48393267735574785,
+      "volume": -0.013328958054402503,
+      "earnestness": 0.6585603058799788,
+      "presence": -0.5761335141994
+     },
+     "cos_W_vstar": 0.07524354026414552,
+     "cos_W_v2": 0.4390448187337425,
+     "cos_W_pc1_pers": 0.9197176747363854,
+     "cos_W_pc1_room": 0.8640253340252964,
+     "pc1_pers_eval_share": 0.5779569585519537,
+     "icc_along_vstar": 0.834975914635876,
+     "icc_along_W": 0.9543577484736518,
+     "cond_pers": 46.132789267253706,
+     "n_pers_dirs_floored": 0,
+     "eps_floor": 0.01,
+     "pers_evals": [
+      0.0554673241888134,
+      0.03489550868914612,
+      0.004406201872469077,
+      0.0012023405709870112
+     ],
+     "cos_W_vstar_eps_sensitivity": {
+      "eps=0.0001": 0.07524354026414552,
+      "eps=0.001": 0.07524354026414552,
+      "eps=0.01": 0.07524354026414552,
+      "eps=0.05": 0.046733104867990274
+     }
+    },
+    "cell_level_C_room_full7": {
+     "dials": [
+      "mood",
+      "volume",
+      "earnestness",
+      "cynicism",
+      "joke_landing",
+      "panic",
+      "presence"
+     ],
+     "n_readers": 15,
+     "n_reader_nights": 162,
+     "gen_evals": [
+      3.883534375687044,
+      1.192037365835007,
+      0.6244054124687171,
+      0.06433637143363442,
+      0.030724516211534054,
+      0.009658718333934498,
+      0.0011003212273147467
+     ],
+     "lambda_star": 3.883534375687044,
+     "v_star": {
+      "mood": 0.21573446572041613,
+      "volume": -0.11357872437612142,
+      "earnestness": 0.0374603050043665,
+      "cynicism": 0.3995757959158143,
+      "joke_landing": -0.792846275965613,
+      "panic": 0.015562388140837491,
+      "presence": 0.38813273154870076
+     },
+     "v2": {
+      "mood": -0.2028595018849809,
+      "volume": -0.36179067912801555,
+      "earnestness": -0.04062780601359017,
+      "cynicism": -0.03241082699511622,
+      "joke_landing": 0.5308499610241934,
+      "panic": 0.020694449907972784,
+      "presence": 0.7369019645018599
+     },
+     "cos_W_vstar": 0.201988324965199,
+     "cos_W_v2": 0.13149945936944996,
+     "cos_W_pc1_pers": 0.8353767232025275,
+     "cos_W_pc1_room": 0.4049746094174284,
+     "pc1_pers_eval_share": 0.6382833133763199,
+     "icc_along_vstar": 0.24628145672410157,
+     "icc_along_W": 0.8891668537716388,
+     "cond_pers": 375253.87225803314,
+     "n_pers_dirs_floored": 3,
+     "eps_floor": 0.01,
+     "pers_evals": [
+      0.11170741428093063,
+      0.04653995059399697,
+      0.011554875024830685,
+      0.003837370860606588,
+      0.001008159333816296,
+      0.0003642064569917559,
+      2.9768490757678043e-07
+     ],
+     "cos_W_vstar_eps_sensitivity": {
+      "eps=0.0001": 0.35898744894853685,
+      "eps=0.001": 0.2858789769691642,
+      "eps=0.01": 0.201988324965199,
+      "eps=0.05": 0.11586081739942877
+     }
+    },
+    "roster_trajectory_C_room": {
+     "cos_W_vstar_traj": 0.3121109116708069,
+     "gen_evals": [
+      1.3246305198857569,
+      0.401988267711243,
+      0.08970387612721188,
+      0.017680309414494003,
+      0.004004575379194538,
+      0.0028028287757399673,
+      0.0002497308408216737
+     ],
+     "v_star": {
+      "mood": -0.1678783171060651,
+      "volume": 0.2686941580055846,
+      "earnestness": 0.014167137851716267,
+      "cynicism": -0.28336207991208295,
+      "joke_landing": 0.8705433201169717,
+      "panic": -0.0398829513038804,
+      "presence": -0.2443137776862087
+     }
+    },
+    "actual_presence_full7": {
+     "dials": [
+      "mood",
+      "volume",
+      "earnestness",
+      "cynicism",
+      "joke_landing",
+      "panic",
+      "presence"
+     ],
+     "n_readers": 15,
+     "n_reader_nights": 73,
+     "gen_evals": [
+      0.6180346409598917,
+      0.289672836330161,
+      0.08188021515243488,
+      0.04606736384135166,
+      0.013894200977478465,
+      0.0046473536233962035,
+      0.0007826993158066527
+     ],
+     "lambda_star": 0.6180346409598917,
+     "v_star": {
+      "mood": -0.10425896943167613,
+      "volume": 0.007242130093833093,
+      "earnestness": -0.11719778203115462,
+      "cynicism": -0.03779607809682284,
+      "joke_landing": -0.9867374644248219,
+      "panic": 0.014116716594780148,
+      "presence": -0.007978084060813061
+     },
+     "v2": {
+      "mood": -0.7142632022530667,
+      "volume": -0.19980510459165332,
+      "earnestness": -0.36136927213341247,
+      "cynicism": -0.4601060344904059,
+      "joke_landing": -0.3267265640539832,
+      "panic": 0.01395024054818332,
+      "presence": 0.025996680551957144
+     },
+     "cos_W_vstar": 0.4465946456457967,
+     "cos_W_v2": 0.5956656846983642,
+     "cos_W_pc1_pers": 0.6118198318508521,
+     "cos_W_pc1_room": 0.4166866790602635,
+     "pc1_pers_eval_share": 0.7396846936304678,
+     "icc_along_vstar": 0.4330872160494703,
+     "icc_along_W": 0.8247637913137456,
+     "cond_pers": 255455.15044720646,
+     "n_pers_dirs_floored": 3,
+     "eps_floor": 0.01,
+     "pers_evals": [
+      0.36809721923632044,
+      0.06972432536989319,
+      0.04090796384382608,
+      0.01457810002532014,
+      0.003010976082373348,
+      0.0013206887163226973,
+      1.4409465559488656e-06
+     ],
+     "cos_W_vstar_eps_sensitivity": {
+      "eps=0.0001": 0.24731209523330014,
+      "eps=0.001": 0.4553254602351418,
+      "eps=0.01": 0.4465946456457967,
+      "eps=0.05": 0.2654998843630523
+     }
+    }
+   },
+   "branch1_range_check": {
+    "range": [
+     0.24,
+     0.4
+    ],
+    "cos_W_vstar_reliable": 0.1416041558590479,
+    "in_range": false,
+    "note": "dated deviation filed (see run doc)"
+   },
+   "rotation": {
+    "angle_deg_W_to_vstar": 85.56799709349667,
+    "angle_deg_W_to_vstar_reliable": 81.85931752524549
+   },
+   "verdict_full7": "B: W does not align with v* and is parallel to the personality axis \u2014 warmth is reader personality"
+  },
+  "wave2": {
+   "n_readers": 21,
+   "n_nights": 9,
+   "n_reader_nights": 72,
+   "corpus_sd": 0.23672602933417586,
+   "icc_aggregate": 0.9076088526275571,
+   "icc_per_dial": {
+    "mood": 0.9832543813860019,
+    "volume": 0.9363130821643733,
+    "earnestness": 0.9052509115439329,
+    "cynicism": 0.8529113479451005,
+    "joke_landing": 0.8289193178562256,
+    "panic": 0.9100586872024432,
+    "presence": 0.9365542402948236
+   },
+   "primary_full7": {
+    "dials": [
+     "mood",
+     "volume",
+     "earnestness",
+     "cynicism",
+     "joke_landing",
+     "panic",
+     "presence"
+    ],
+    "n_readers": 21,
+    "n_reader_nights": 72,
+    "gen_evals": [
+     0.6970028647655229,
+     0.5307040858628724,
+     0.10591601532421624,
+     0.029160643364310335,
+     0.014019591532560528,
+     0.004290435680711545,
+     0.003164534562550557
+    ],
+    "lambda_star": 0.6970028647655229,
+    "v_star": {
+     "mood": 0.06078843144065863,
+     "volume": 0.19205152363121372,
+     "earnestness": 0.170687295159746,
+     "cynicism": 0.20127861943915365,
+     "joke_landing": 0.8990297103163963,
+     "panic": 0.062324206526908184,
+     "presence": 0.2786306098597915
+    },
+    "v2": {
+     "mood": 0.2308917934103603,
+     "volume": -0.11356643108094237,
+     "earnestness": -0.04523947220579601,
+     "cynicism": 0.22094900584805283,
+     "joke_landing": -0.9387669086483806,
+     "panic": -0.003963094797146406,
+     "presence": 0.04034299868595289
+    },
+    "cos_W_vstar": 0.4322035463440526,
+    "cos_W_v2": 0.27762729531333885,
+    "cos_W_pc1_pers": 0.8033064055555206,
+    "cos_W_pc1_room": 0.36383549976682034,
+    "pc1_pers_eval_share": 0.6002659569027999,
+    "icc_along_vstar": 0.49799765738464263,
+    "icc_along_W": 0.9673790556368607,
+    "cond_pers": 3123.0712080254816,
+    "n_pers_dirs_floored": 2,
+    "eps_floor": 0.01,
+    "pers_evals": [
+     0.13050617287304034,
+     0.05726646836869367,
+     0.016208460329501274,
+     0.010206695955213091,
+     0.002573377232499034,
+     0.0006109543755545032,
+     4.1787767290631644e-05
+    ],
+    "cos_W_vstar_eps_sensitivity": {
+     "eps=0.0001": 0.04100569010584405,
+     "eps=0.001": 0.15570261701271457,
+     "eps=0.01": 0.4322035463440526,
+     "eps=0.05": 0.2943374646526635
+    }
+   },
+   "reliable_subspace": {
+    "dials": [
+     "mood",
+     "volume",
+     "earnestness",
+     "presence"
+    ],
+    "n_readers": 21,
+    "n_reader_nights": 72,
+    "gen_evals": [
+     0.14993989998000504,
+     0.037133095433622934,
+     0.010337415142040163,
+     0.0035538135199856525
+    ],
+    "lambda_star": 0.14993989998000504,
+    "v_star": {
+     "mood": 0.08574521598645822,
+     "volume": 0.7106330004566312,
+     "earnestness": 0.0907779512150517,
+     "presence": -0.6923928510395229
+    },
+    "v2": {
+     "mood": -0.29030638053658525,
+     "volume": 0.7542362608077895,
+     "earnestness": -0.27666738596908985,
+     "presence": 0.5199086706754007
+    },
+    "cos_W_vstar": 0.10572835017051603,
+    "cos_W_v2": 0.036534264281191386,
+    "cos_W_pc1_pers": 0.7728748354701317,
+    "cos_W_pc1_room": 0.4708796345855876,
+    "pc1_pers_eval_share": 0.5378439458866143,
+    "icc_along_vstar": 0.7969241826511052,
+    "icc_along_W": 0.9808235938675619,
+    "cond_pers": 30.663384380203414,
+    "n_pers_dirs_floored": 0,
+    "eps_floor": 0.01,
+    "pers_evals": [
+     0.07097797018573335,
+     0.04815507882596389,
+     0.010519795792876954,
+     0.0023147467776439383
+    ],
+    "cos_W_vstar_eps_sensitivity": {
+     "eps=0.0001": 0.10572835017051603,
+     "eps=0.001": 0.10572835017051603,
+     "eps=0.01": 0.10572835017051603,
+     "eps=0.05": 0.10774226659809437
+    }
+   },
+   "bootstrap": {
+    "cos_W_vstar_ci": [
+     0.04821271372923367,
+     0.501866888961847
+    ],
+    "cos_W_pc1_ci": [
+     0.638254653032715,
+     0.834149035291321
+    ],
+    "cos_W_vstar_ci_reliable": [
+     0.006831385318693635,
+     0.3563804557140246
+    ],
+    "cos_W_pc1_ci_reliable": [
+     0.12249668814238782,
+     0.9801082567143028
+    ],
+    "draws": 2000
+   },
+   "sensitivities": {
+    "night_mean_removed_full7": {
+     "dials": [
+      "mood",
+      "volume",
+      "earnestness",
+      "cynicism",
+      "joke_landing",
+      "panic",
+      "presence"
+     ],
+     "n_readers": 21,
+     "n_reader_nights": 72,
+     "gen_evals": [
+      0.5319382676719511,
+      0.1838863972033276,
+      0.1301923303657602,
+      0.07835231359781974,
+      0.02126065260129134,
+      0.009930670435549013,
+      0.006925734611631534
+     ],
+     "lambda_star": 0.5319382676719511,
+     "v_star": {
+      "mood": -0.2681084374344684,
+      "volume": -0.47926286412453145,
+      "earnestness": -0.20506254688160036,
+      "cynicism": -0.408118691946629,
+      "joke_landing": -0.6973615011054476,
+      "panic": 0.05113471443580588,
+      "presence": -0.02975963295015539
+     },
+     "v2": {
+      "mood": -0.04849983108858064,
+      "volume": -0.6515343106354599,
+      "earnestness": 0.030787337684196975,
+      "cynicism": 0.044592805629298224,
+      "joke_landing": 0.21563200619732834,
+      "panic": -0.010986843345461038,
+      "presence": 0.7235997216349657
+     },
+     "cos_W_vstar": 0.478906418592267,
+     "cos_W_v2": 0.053761119805646046,
+     "cos_W_pc1_pers": 0.816363260176624,
+     "cos_W_pc1_room": 0.4050806877103616,
+     "pc1_pers_eval_share": 0.6482543252950875,
+     "icc_along_vstar": 0.566296557398038,
+     "icc_along_W": 0.9673790556368607,
+     "cond_pers": 3432.794095627534,
+     "n_pers_dirs_floored": 2,
+     "eps_floor": 0.01,
+     "pers_evals": [
+      0.12440970782088508,
+      0.04389580579972501,
+      0.013084971504079584,
+      0.008366158142727058,
+      0.0016401766536655608,
+      0.0004819061269631705,
+      3.6241529306797097e-05
+     ],
+     "cos_W_vstar_eps_sensitivity": {
+      "eps=0.0001": 0.018607610028749225,
+      "eps=0.001": 0.30529775755655225,
+      "eps=0.01": 0.478906418592267,
+      "eps=0.05": 0.3536847139675825
+     }
+    },
+    "night_mean_removed_reliable": {
+     "dials": [
+      "mood",
+      "volume",
+      "earnestness",
+      "presence"
+     ],
+     "n_readers": 21,
+     "n_reader_nights": 72,
+     "gen_evals": [
+      0.1987848849301833,
+      0.0793130286860391,
+      0.02109113473881486,
+      0.009951184074174899
+     ],
+     "lambda_star": 0.1987848849301833,
+     "v_star": {
+      "mood": 0.06818961895754574,
+      "volume": 0.7090360443584969,
+      "earnestness": 0.01276429666457231,
+      "presence": -0.7017514776596764
+     },
+     "v2": {
+      "mood": -0.1273857129357509,
+      "volume": -0.0019852646146149926,
+      "earnestness": -0.6225365516257141,
+      "presence": 0.7721510090352955
+     },
+     "cos_W_vstar": 0.06484155062151599,
+     "cos_W_v2": 0.06770238638134174,
+     "cos_W_pc1_pers": 0.8669866360098261,
+     "cos_W_pc1_room": 0.05790737047724318,
+     "pc1_pers_eval_share": 0.5673796065439253,
+     "icc_along_vstar": 0.7826661069044185,
+     "icc_along_W": 0.9808235938675619,
+     "cond_pers": 41.45813944468901,
+     "n_pers_dirs_floored": 0,
+     "eps_floor": 0.01,
+     "pers_evals": [
+      0.06682791406346617,
+      0.03963478155862584,
+      0.009708793539752542,
+      0.0016119371240145481
+     ],
+     "cos_W_vstar_eps_sensitivity": {
+      "eps=0.0001": 0.06484155062151599,
+      "eps=0.001": 0.06484155062151599,
+      "eps=0.01": 0.06484155062151599,
+      "eps=0.05": 0.030722663794325172
+     }
+    },
+    "cell_level_C_room_full7": {
+     "dials": [
+      "mood",
+      "volume",
+      "earnestness",
+      "cynicism",
+      "joke_landing",
+      "panic",
+      "presence"
+     ],
+     "n_readers": 21,
+     "n_reader_nights": 157,
+     "gen_evals": [
+      3.4789711502830825,
+      1.067427769991108,
+      0.4642414549463348,
+      0.11306126847993363,
+      0.047478335060892586,
+      0.021537667567853216,
+      0.007403836764697995
+     ],
+     "lambda_star": 3.4789711502830825,
+     "v_star": {
+      "mood": 0.35995290442474337,
+      "volume": 0.2987699632775402,
+      "earnestness": 0.20124483292897938,
+      "cynicism": 0.5826391756937943,
+      "joke_landing": 0.3543143929177287,
+      "panic": 0.3012788281507829,
+      "presence": 0.4299940726161283
+     },
+     "v2": {
+      "mood": 0.15981545296742375,
+      "volume": 0.09718965093455292,
+      "earnestness": -0.03770596631312888,
+      "cynicism": 0.05835041604554023,
+      "joke_landing": -0.8671711372139908,
+      "panic": -0.02567258313144795,
+      "presence": -0.4555675790199468
+     },
+     "cos_W_vstar": 0.32656073828247084,
+     "cos_W_v2": 0.30579859003267407,
+     "cos_W_pc1_pers": 0.8205047554369788,
+     "cos_W_pc1_room": 0.38732698137256083,
+     "pc1_pers_eval_share": 0.6028222561794165,
+     "icc_along_vstar": 0.27498774801874487,
+     "icc_along_W": 0.928907949309201,
+     "cond_pers": 4185.530681973225,
+     "n_pers_dirs_floored": 2,
+     "eps_floor": 0.01,
+     "pers_evals": [
+      0.12160345549904748,
+      0.05762217330993969,
+      0.01275814944617762,
+      0.007212137654017684,
+      0.001999513622049925,
+      0.00049908370241043,
+      2.905329448970132e-05
+     ],
+     "cos_W_vstar_eps_sensitivity": {
+      "eps=0.0001": 0.10214681971583936,
+      "eps=0.001": 0.04165187930764319,
+      "eps=0.01": 0.32656073828247084,
+      "eps=0.05": 0.2719644579779985
+     }
+    },
+    "roster_trajectory_C_room": {
+     "cos_W_vstar_traj": 0.36978289457036545,
+     "gen_evals": [
+      0.9172666298000782,
+      0.7836049253856553,
+      0.15650179855609594,
+      0.08156186453125162,
+      0.01996319960175648,
+      0.01042279673921437,
+      0.0038315236044307627
+     ],
+     "v_star": {
+      "mood": -0.07327175589006853,
+      "volume": 0.34498202775228753,
+      "earnestness": 0.11044924652842973,
+      "cynicism": -0.0051217725635284775,
+      "joke_landing": 0.9267870335171233,
+      "panic": 0.024411164925563927,
+      "presence": -0.06215521889047899
+     }
+    },
+    "actual_presence_full7": {
+     "dials": [
+      "mood",
+      "volume",
+      "earnestness",
+      "cynicism",
+      "joke_landing",
+      "panic",
+      "presence"
+     ],
+     "n_readers": 21,
+     "n_reader_nights": 72,
+     "gen_evals": [
+      0.8808333709530549,
+      0.7193679969561098,
+      0.04458165671969387,
+      0.034645271378492715,
+      0.010211919798933608,
+      0.0030690974114453823,
+      0.0013644900904405397
+     ],
+     "lambda_star": 0.8808333709530549,
+     "v_star": {
+      "mood": 0.4123660544091926,
+      "volume": 0.7275109933950673,
+      "earnestness": 0.3150766641632586,
+      "cynicism": 0.37538922928414326,
+      "joke_landing": 0.234466830594201,
+      "panic": 0.07419629210320607,
+      "presence": 0.003439402095316116
+     },
+     "v2": {
+      "mood": 0.10903135313579224,
+      "volume": -0.3093659840957809,
+      "earnestness": -0.09878363440046596,
+      "cynicism": 0.0005282825637790797,
+      "joke_landing": -0.9251699112204914,
+      "panic": -0.012066550504598539,
+      "presence": -0.16297668588231534
+     },
+     "cos_W_vstar": 0.4775046660273889,
+     "cos_W_v2": 0.38737669632815724,
+     "cos_W_pc1_pers": 0.6086815083679695,
+     "cos_W_pc1_room": 0.35097305789246347,
+     "pc1_pers_eval_share": 0.6648061735246925,
+     "icc_along_vstar": 0.5105838096286911,
+     "icc_along_W": 0.9142281430078005,
+     "cond_pers": 11976.630234215874,
+     "n_pers_dirs_floored": 2,
+     "eps_floor": 0.01,
+     "pers_evals": [
+      0.32045491333253895,
+      0.0892434578337469,
+      0.041099813163738695,
+      0.022458357574883455,
+      0.006022419777484976,
+      0.002721865152253044,
+      2.6756684231349374e-05
+     ],
+     "cos_W_vstar_eps_sensitivity": {
+      "eps=0.0001": 0.16610905503412526,
+      "eps=0.001": 0.23711766250898633,
+      "eps=0.01": 0.4775046660273889,
+      "eps=0.05": 0.410558646661687
+     }
+    }
+   },
+   "branch1_range_check": {
+    "range": [
+     0.24,
+     0.4
+    ],
+    "cos_W_vstar_reliable": 0.10572835017051603,
+    "in_range": false,
+    "note": "dated deviation filed (see run doc)"
+   },
+   "rotation": {
+    "angle_deg_W_to_vstar": 64.39251577978477,
+    "angle_deg_W_to_vstar_reliable": 83.93086845859712
+   },
+   "verdict_full7": "B: W does not align with v* and is parallel to the personality axis \u2014 warmth is reader personality"
+  }
+ },
+ "verdict": {
+  "wave1": "B: W does not align with v* and is parallel to the personality axis \u2014 warmth is reader personality",
+  "wave2": "B: W does not align with v* and is parallel to the personality axis \u2014 warmth is reader personality",
+  "waves_agree": true,
+  "overall": "B: W does not align with v* and is parallel to the personality axis \u2014 warmth is reader personality"
+ }
+}
