@@ -139,6 +139,16 @@ The core never knows what the space *is*. It only knows `Room`s,
 `Message`s, `SensorFrame`s, `DialBank`, and `RoomField`. Everything
 space-specific lives behind a thin adapter.
 
+**The cell-ledger bridge.** Every reading the elephant makes is a delta —
+the field *after* a message minus the field *before* it — and that is
+exactly the directed edge the quilt cell-ledger records.
+`quilt-rust/docs/field-edge-ledger-bridge.md` proves the identity
+`imbalance ≡ d_mu` (the cell-ledger's imbalance and the elephant's
+field-edge coincide, verified to 1e-12); `quilt-rust/docs/fleet-as-fractal-jepa.md`
+names the elephant's field-edge as one zoom of the same fractal edge.
+The elephant's half of the seam is documented in
+[docs/quilt-bridge.md](docs/quilt-bridge.md).
+
 ### The modules (all 21 `.py` files)
 
 | Module | One-line engineering description |
