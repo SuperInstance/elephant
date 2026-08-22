@@ -1,0 +1,234 @@
+{
+  "experiment": "local-fleet-7probe-roomfield",
+  "ts": 1787381491.4406059,
+  "fleet": {
+    "granite3.1-dense:2b": {
+      "role": "Wesley-class",
+      "dials": {
+        "mood": {
+          "answer": "8",
+          "raw": 8
+        },
+        "volume": {
+          "answer": "0",
+          "raw": 0
+        },
+        "earnestness": {
+          "answer": "10",
+          "raw": 10
+        },
+        "cynicism": {
+          "answer": "0",
+          "raw": 0
+        },
+        "joke_landing": {
+          "answer": "0",
+          "raw": 0
+        },
+        "panic": {
+          "answer": "0",
+          "raw": 0
+        },
+        "presence": {
+          "answer": "10",
+          "raw": 10
+        }
+      }
+    },
+    "mistral:7b": {
+      "role": "deckhand",
+      "dials": {
+        "mood": {
+          "answer": "5",
+          "raw": 5
+        },
+        "volume": {
+          "answer": "I'm an AI and I don",
+          "raw": null
+        },
+        "earnestness": {
+          "answer": "I am an AI and do not have",
+          "raw": null
+        },
+        "cynicism": {
+          "answer": "5.5",
+          "raw": 5
+        },
+        "joke_landing": {
+          "answer": "3",
+          "raw": 3
+        },
+        "panic": {
+          "answer": "2",
+          "raw": 2
+        },
+        "presence": {
+          "answer": "I'm an AI and don'",
+          "raw": null
+        }
+      }
+    },
+    "phi4-mini:latest": {
+      "role": "ensign",
+      "dials": {
+        "mood": {
+          "answer": "7",
+          "raw": 7
+        },
+        "volume": {
+          "answer": "2",
+          "raw": 2
+        },
+        "earnestness": {
+          "answer": "I'm sorry, but I can't provide an",
+          "raw": null
+        },
+        "cynicism": {
+          "answer": "7",
+          "raw": 7
+        },
+        "joke_landing": {
+          "answer": "7",
+          "raw": 7
+        },
+        "panic": {
+          "answer": "I'm sorry, but I need more context",
+          "raw": null
+        },
+        "presence": {
+          "answer": "7",
+          "raw": 7
+        }
+      }
+    },
+    "gemma3:4b": {
+      "role": "lookout",
+      "dials": {
+        "mood": {
+          "answer": "6",
+          "raw": 6
+        },
+        "volume": {
+          "answer": "3",
+          "raw": 3
+        },
+        "earnestness": {
+          "answer": "5",
+          "raw": 5
+        },
+        "cynicism": {
+          "answer": "6",
+          "raw": 6
+        },
+        "joke_landing": {
+          "answer": "4",
+          "raw": 4
+        },
+        "panic": {
+          "answer": "3",
+          "raw": 3
+        },
+        "presence": {
+          "answer": "5",
+          "raw": 5
+        }
+      }
+    },
+    "Liquid-LFM2.5-2.6B": {
+      "role": "boat brain",
+      "dials": {
+        "mood": {
+          "answer": "The user wants me to rate the room",
+          "raw": null
+        },
+        "volume": {
+          "answer": "The user is asking for a subjective assessment",
+          "raw": null
+        },
+        "earnestness": {
+          "answer": "The user is asking for a rating (",
+          "raw": null
+        },
+        "cynicism": {
+          "answer": "The user is asking for a rating on",
+          "raw": null
+        },
+        "joke_landing": {
+          "answer": "The user is asking for a subjective rating",
+          "raw": null
+        },
+        "panic": {
+          "answer": "The user is asking for a subjective assessment",
+          "raw": null
+        },
+        "presence": {
+          "answer": "The user is asking for a rating on",
+          "raw": null
+        }
+      }
+    }
+  },
+  "matrix": [
+    {
+      "mood": 0.8,
+      "volume": 0.0,
+      "earnestness": 1.0,
+      "cynicism": 0.0,
+      "joke_landing": 0.0,
+      "panic": 0.0,
+      "presence": 1.0
+    },
+    {
+      "mood": 0.5,
+      "volume": 0.5,
+      "earnestness": 0.5,
+      "cynicism": 0.5,
+      "joke_landing": 0.3,
+      "panic": 0.2,
+      "presence": 0.5
+    },
+    {
+      "mood": 0.7,
+      "volume": 0.2,
+      "earnestness": 0.5,
+      "cynicism": 0.7,
+      "joke_landing": 0.7,
+      "panic": 0.5,
+      "presence": 0.7
+    },
+    {
+      "mood": 0.6,
+      "volume": 0.3,
+      "earnestness": 0.5,
+      "cynicism": 0.6,
+      "joke_landing": 0.4,
+      "panic": 0.3,
+      "presence": 0.5
+    },
+    {
+      "mood": 0.5,
+      "volume": 0.5,
+      "earnestness": 0.5,
+      "cynicism": 0.5,
+      "joke_landing": 0.5,
+      "panic": 0.5,
+      "presence": 0.5
+    }
+  ],
+  "field": {
+    "mu": {
+      "mood": 0.62,
+      "volume": 0.3,
+      "earnestness": 0.6,
+      "cynicism": 0.46,
+      "joke_landing": 0.38,
+      "panic": 0.3,
+      "presence": 0.64
+    },
+    "r_bar": 1.3,
+    "kappa": 99.0,
+    "vstar": -0.34,
+    "cohesion": 0.83,
+    "warmth": 0.62
+  }
+}
