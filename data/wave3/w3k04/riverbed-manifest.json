@@ -1,0 +1,310 @@
+{
+ "generated_by": "scripts/riverbed_generator.py",
+ "kind": "riverbed-forward-model-sample-path",
+ "flip_size": 0.5,
+ "entry_dwarmth": 0.485,
+ "reader_schema": 2,
+ "noise_model": {
+  "dial_noise": 2.2,
+  "noise_era_exp": 0.25,
+  "sigma_dial": [
+   0.1163,
+   0.0101,
+   0.1449,
+   0.1488,
+   0.2021,
+   0.0284,
+   0.1981
+  ],
+  "emission": "unnormalized windowed z + era-position vectors + per-speak per-dial gaussian noise (era-scaled by kappa(t))",
+  "era_vectors": {
+   "z_warm_dev": [
+    -0.045,
+    -0.003,
+    0.068,
+    -0.946,
+    -0.035,
+    -0.05,
+    -0.321
+   ],
+   "z_flip": [
+    0.072,
+    0.004,
+    -0.123,
+    1.698,
+    0.061,
+    0.094,
+    0.529
+   ],
+   "z_entry": [
+    0.056,
+    0.003,
+    -0.121,
+    1.208,
+    0.015,
+    0.087,
+    0.477
+   ],
+   "baseline": 1.0,
+   "baseline_z": [
+    0.9646,
+    0.085,
+    0.8279,
+    0.9984,
+    0.2516,
+    0.0563,
+    0.6032
+   ],
+   "warmth_scale": 0.45
+  },
+  "reader_fiber": "engine-charisma-pull (replay_readings parity)"
+ },
+ "nights": {
+  "rb-w3k04-T1": {
+   "file": "night-rb-w3k04-T1.jsonl",
+   "family": "T1",
+   "sha256": "868eba2bfc97b05207512fad1076a718ab8878f5f292f421195f90eaa7e60908",
+   "stripped_md5": "d4815bac7c1d3dd29f8c416496864f5d",
+   "n_msgs": 40,
+   "roster": [
+    "blacksmith",
+    "captain",
+    "cartographer",
+    "lamplighter",
+    "new-4",
+    "new-5",
+    "new-6",
+    "poet",
+    "singer"
+   ],
+   "schedule": {
+    "base_warmth": 0.6551,
+    "flip_seq": 20,
+    "entry_seqs": []
+   },
+   "staged_entrant": null,
+   "entry_seq": null,
+   "entrant_is_attendance": null,
+   "deterministic_replay_identical": true
+  },
+  "rb-w3k04-T2": {
+   "file": "night-rb-w3k04-T2.jsonl",
+   "family": "T2",
+   "sha256": "d3553e5310b7fafa726dd1e4e51396c61ab276e990ac644b995bdf69a7b73346",
+   "stripped_md5": "4ad5e6e00a1d69992a60e170fc9f478d",
+   "n_msgs": 28,
+   "roster": [
+    "drifter",
+    "engineer",
+    "lamplighter",
+    "new-1",
+    "new-2",
+    "tinker",
+    "writer"
+   ],
+   "schedule": {
+    "base_warmth": 0.3187,
+    "flip_seq": 8,
+    "entry_seqs": []
+   },
+   "staged_entrant": null,
+   "entry_seq": null,
+   "entrant_is_attendance": null,
+   "deterministic_replay_identical": true
+  },
+  "rb-w3k04-T3": {
+   "file": "night-rb-w3k04-T3.jsonl",
+   "family": "T3",
+   "sha256": "1298ce13457514444ada6a95a6781eb45f3ffffb6ae9dbe03bc1c15baf302941",
+   "stripped_md5": "7bfb066515ae5d7e340dc3aab31de372",
+   "n_msgs": 40,
+   "roster": [
+    "barkeep",
+    "blacksmith",
+    "cartographer",
+    "critic",
+    "new-6",
+    "singer",
+    "tinker"
+   ],
+   "schedule": {
+    "base_warmth": 0.6551,
+    "flip_seq": 20,
+    "entry_seqs": []
+   },
+   "staged_entrant": null,
+   "entry_seq": null,
+   "entrant_is_attendance": null,
+   "deterministic_replay_identical": true
+  },
+  "rb-w3k04-T4a": {
+   "file": "night-rb-w3k04-T4a.jsonl",
+   "family": "T4a",
+   "sha256": "4252f630761d628480b9383f7cc2fc0ebb0d219dcf09213fc9281dde65d469da",
+   "stripped_md5": "58521b1131c2501511d32f12bd03f04a",
+   "n_msgs": 46,
+   "roster": [
+    "engineer",
+    "lamplighter",
+    "new-1",
+    "new-2",
+    "tinker",
+    "writer"
+   ],
+   "schedule": {
+    "base_warmth": 0.4465,
+    "flip_seq": 20,
+    "entry_seqs": [
+     12
+    ]
+   },
+   "staged_entrant": "drifter",
+   "entry_seq": 12,
+   "entrant_is_attendance": true,
+   "deterministic_replay_identical": true
+  },
+  "rb-w3k04-T4b": {
+   "file": "night-rb-w3k04-T4b.jsonl",
+   "family": "T4b",
+   "sha256": "cfcb5c963c9d2159fab7dc769d9486a50fe246e2d3a3a70e386d049a8a4ca4b2",
+   "stripped_md5": "11ff8c26286cb218094bb13508eebf69",
+   "n_msgs": 45,
+   "roster": [
+    "blacksmith",
+    "cartographer",
+    "critic",
+    "essayist",
+    "new-2",
+    "new-3",
+    "new-5",
+    "poet"
+   ],
+   "schedule": {
+    "base_warmth": 0.6319,
+    "flip_seq": 20,
+    "entry_seqs": [
+     28
+    ]
+   },
+   "staged_entrant": "drifter",
+   "entry_seq": 28,
+   "entrant_is_attendance": true,
+   "deterministic_replay_identical": true
+  },
+  "rb-w3k04-T5": {
+   "file": "night-rb-w3k04-T5.jsonl",
+   "family": "T5",
+   "sha256": "c5447557fc5eb5f61be624f9d01d2e93385340d5200dbd97fb7b726c412f0418",
+   "stripped_md5": "716ecec93c05b289fb6598c02ec44341",
+   "n_msgs": 46,
+   "roster": [
+    "blacksmith",
+    "critic",
+    "fiddler",
+    "new-1",
+    "new-2",
+    "new-3",
+    "new-4",
+    "poet",
+    "singer",
+    "writer"
+   ],
+   "schedule": {
+    "base_warmth": 0.6293,
+    "flip_seq": null,
+    "entry_seqs": [
+     24
+    ]
+   },
+   "staged_entrant": "drifter",
+   "entry_seq": 24,
+   "entrant_is_attendance": false,
+   "deterministic_replay_identical": true
+  },
+  "rb-w3k04-T5c": {
+   "file": "night-rb-w3k04-T5c.jsonl",
+   "family": "T5c",
+   "sha256": "8bfb9625e7a7d1ab203ee932bd90123b60d2b8155438435705f35612ebec6849",
+   "stripped_md5": "5c89b86adab799aef936f979f196b207",
+   "n_msgs": 46,
+   "roster": [
+    "cartographer",
+    "critic",
+    "engineer",
+    "new-1",
+    "new-3",
+    "new-4",
+    "poet",
+    "singer",
+    "weaver"
+   ],
+   "schedule": {
+    "base_warmth": 0.6293,
+    "flip_seq": null,
+    "entry_seqs": [
+     24
+    ]
+   },
+   "staged_entrant": "drifter",
+   "entry_seq": 24,
+   "entrant_is_attendance": false,
+   "deterministic_replay_identical": true
+  },
+  "rb-w3k04-T8": {
+   "file": "night-rb-w3k04-T8.jsonl",
+   "family": "T8",
+   "sha256": "3d3325acf9bbc918d71642fe9950c1531a5235f60a145d4fd21d812569cd2474",
+   "stripped_md5": "544d5ebb492cb0a1c09f3af10a7e7f24",
+   "n_msgs": 28,
+   "roster": [
+    "barkeep",
+    "captain",
+    "essayist",
+    "fiddler",
+    "new-5",
+    "new-6",
+    "weaver"
+   ],
+   "schedule": {
+    "base_warmth": 0.7409,
+    "flip_seq": 20,
+    "entry_seqs": []
+   },
+   "staged_entrant": null,
+   "entry_seq": null,
+   "entrant_is_attendance": null,
+   "deterministic_replay_identical": true
+  },
+  "rb-w3k04-T9": {
+   "file": "night-rb-w3k04-T9.jsonl",
+   "family": "T9",
+   "sha256": "2d03588fe0ea410f3dca7e4b2b20e78bbd1908fe8af5ca631493353b350663b4",
+   "stripped_md5": "ad043ce66733c063e496ad154b232ca7",
+   "n_msgs": 20,
+   "roster": [
+    "barkeep",
+    "captain",
+    "essayist",
+    "fiddler",
+    "new-5",
+    "new-6",
+    "weaver"
+   ],
+   "schedule": {
+    "base_warmth": 0.7589,
+    "flip_seq": null,
+    "entry_seqs": []
+   },
+   "staged_entrant": null,
+   "entry_seq": null,
+   "entrant_is_attendance": null,
+   "deterministic_replay_identical": true
+  }
+ },
+ "blinded": true,
+ "corpus_id": "w3k04",
+ "sealed": {
+  "file": "riverbed-sealed-w3k04.json",
+  "sha256": "a5cc62e809daaf7a22c45ad610fe70fef7046b4ea49cb4f042bb744cd0769d14"
+ }
+}

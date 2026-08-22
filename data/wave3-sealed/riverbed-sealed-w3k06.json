@@ -1,0 +1,23 @@
+{
+ "branch": "noise",
+ "alpha": 0.0,
+ "ou_phi": 0.0,
+ "kappa_R": 8.0,
+ "redraw_dev_per_night": true,
+ "null_mode": true,
+ "seed": 20260821,
+ "pair_seed": null,
+ "corpus_id": "w3k06",
+ "tag_prefix": "rb-w3k06",
+ "nights": {
+  "rb-w3k06-T1": "319f604b1165d6d111a186f2b756a717b1f451979cecf2df42a2385de170aa75",
+  "rb-w3k06-T2": "762fffa803065f5e71310feae5169b05e36af22007563cde21f7c97604a7c9fe",
+  "rb-w3k06-T3": "8ee6c257c73960c0c12ef691e388965e87740d6099b02ac9705d64b874d7a665",
+  "rb-w3k06-T4a": "0a490a5ceb08646b2558c4049cd36316afb18381506693064b2324578be3e6a9",
+  "rb-w3k06-T4b": "f4c9c1c6186f4bed31d341f004ca600146ab2f3bc408dc1d5d7025a6b49d9d00",
+  "rb-w3k06-T5": "d256634361013a2805822174342e16c723350d5789f93e311ac072a5a6b60020",
+  "rb-w3k06-T5c": "3790dfde9c25ebc39535ea5f9fe60c19b8300c03da70200bee92ca91acff5ea2",
+  "rb-w3k06-T8": "ae05378930b6f24dfb782ac2f082c62b2c8ed59dc21f5e52946c25fe962bae22",
+  "rb-w3k06-T9": "ec7ad63c38cac2a70da4dda360d8c8b2420d8ac4cd7e65e1a1f4c566cae420ed"
+ }
+}

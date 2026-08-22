@@ -1,0 +1,111 @@
+{
+ "gate": "riverbed-wave-gate",
+ "manifest": "data/wave3/w3q3m",
+ "all_pass": true,
+ "checks": [
+  {
+   "check": "9 nights (== 9 families)",
+   "pass": true
+  },
+  {
+   "check": "all 9 families present once",
+   "pass": true
+  },
+  {
+   "check": "every night file matches its manifest sha256",
+   "pass": true
+  },
+  {
+   "check": "logged rosters == designed ATTENDANCE (9/9)",
+   "pass": true
+  },
+  {
+   "check": "staged entrants: omitted pre-entry, present from entry_seq, cold first speak, staged_entries (never rostered)",
+   "pass": true
+  },
+  {
+   "check": "determinism re-run flags true (9/9)",
+   "pass": true
+  },
+  {
+   "check": "final levels within \u00b1(0.10+\u03c3_fit) + strata drops within \u00b10.1",
+   "pass": true
+  },
+  {
+   "check": "corpus_sd = 0.2479 (finite, > 0; used as normalization)",
+   "pass": true
+  },
+  {
+   "check": ">= 3 distinct x (15 distinct)",
+   "pass": true
+  },
+  {
+   "check": "Sxx = 0.1971 >= 0.19",
+   "pass": true
+  },
+  {
+   "check": "21 readers measured (21)",
+   "pass": true
+  },
+  {
+   "check": "every reader >= 3 logged nights",
+   "pass": true
+  },
+  {
+   "check": ">= 1 null-strata night present (['rb-w3q3m-T9'])",
+   "pass": true
+  }
+ ],
+ "warmth_residuals": {
+  "rb-w3q3m-T1/final": 0.011177588462234822,
+  "rb-w3q3m-T1/warm->cynical": 0.01866222093491563,
+  "rb-w3q3m-T2/final": 0.003713573706684681,
+  "rb-w3q3m-T3/final": 0.0077624230110945325,
+  "rb-w3q3m-T3/warm->cynical": 0.004759693646793037,
+  "rb-w3q3m-T4a/final": 0.020228319527203276,
+  "rb-w3q3m-T4a/warm-pre->warm-entry": 0.02824715729878788,
+  "rb-w3q3m-T4a/warm-entry->cynical": 0.005415030394728133,
+  "rb-w3q3m-T4b/final": 0.02804229632205113,
+  "rb-w3q3m-T4b/warm->cynical-pre": 0.02509382048891048,
+  "rb-w3q3m-T4b/cynical-pre->cynical-entry": 0.02275336764460402,
+  "rb-w3q3m-T5/final": 0.02622681241851088,
+  "rb-w3q3m-T5/pre->post": 0.005435664372325826,
+  "rb-w3q3m-T5c/final": 0.006745478348100464,
+  "rb-w3q3m-T5c/pre->post": 0.027983787256695924,
+  "rb-w3q3m-T8/final": 0.013265873631968628,
+  "rb-w3q3m-T8/warm->cynical": 0.015049533504851616,
+  "rb-w3q3m-T9/final": 0.014981570322703641,
+  "rb-w3q3m-T9/warm-a->warm-b": 0.011109650810229733
+ },
+ "corpus_sd": 0.24791413107657073,
+ "sxx": 0.19706657605820113,
+ "x_range": 0.2534666666666668,
+ "n_distinct_x": 15,
+ "sxx_realized_x": 0.0715826952572251,
+ "n_nights_per_reader": {
+  "barkeep": 3,
+  "blacksmith": 4,
+  "captain": 3,
+  "cartographer": 4,
+  "critic": 4,
+  "drifter": 3,
+  "engineer": 3,
+  "essayist": 3,
+  "fiddler": 3,
+  "lamplighter": 3,
+  "new-1": 4,
+  "new-2": 4,
+  "new-3": 3,
+  "new-4": 3,
+  "new-5": 4,
+  "new-6": 4,
+  "poet": 4,
+  "singer": 4,
+  "tinker": 3,
+  "weaver": 3,
+  "writer": 3
+ },
+ "null_nights": [
+  "rb-w3q3m-T9"
+ ]
+}

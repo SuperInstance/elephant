@@ -1,0 +1,23 @@
+{
+ "branch": "alpha-1",
+ "alpha": 1.0,
+ "ou_phi": 0.9,
+ "kappa_R": 40.0,
+ "redraw_dev_per_night": false,
+ "null_mode": false,
+ "seed": 20260821,
+ "pair_seed": null,
+ "corpus_id": "w3k05",
+ "tag_prefix": "rb-w3k05",
+ "nights": {
+  "rb-w3k05-T1": "5b2c88dcb8aec24673e94de194dd94788e74b05f253d9fc698f8363c85a702d7",
+  "rb-w3k05-T2": "d5b301052fdb755be10d1d9acc3329848a55f118955287b3242ce7fb9a211fc2",
+  "rb-w3k05-T3": "b04ac402ea0b7663014df4ed24106d2dd0e8101a226a0ba13c2a29a54bb9df4b",
+  "rb-w3k05-T4a": "71f18a85946d061354b6cf2341046887ba3463a27276192ca3c400eb43080259",
+  "rb-w3k05-T4b": "f08f8a4f56ca7f520f4c4460c33f32b633f091f461cb361457bb778fd11d859e",
+  "rb-w3k05-T5": "08ab235d1df858dd6d513f35ab599644ae49a2b109cc2e3f5e1a81bbd9ae9bab",
+  "rb-w3k05-T5c": "5e9becb2f29444d17808e10edb053c7a31f9b8dccc1f3008cef6baf65a0e9bd7",
+  "rb-w3k05-T8": "aa387986713ca3804add2a112405b7e74c8cc1dac180d8457ea2186351f89f26",
+  "rb-w3k05-T9": "afb2ae6f9101b4b695fec73af3487fc9a5148ff2a14d308a3dfcb9f4ae324ca0"
+ }
+}
