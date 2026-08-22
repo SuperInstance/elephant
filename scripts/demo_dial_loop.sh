@@ -11,8 +11,8 @@
 #   3. a slow drip of room events so the dials actually move
 #
 # Watch:  http://127.0.0.1:8787/dials   (the dial dashboard, 5s refresh)
-# Truth:  http://127.0.0.1:4073/field   (the elephant's own field)
-# Limb:   http://127.0.0.1:4073/relay   (chain heads + sent counts)
+# Truth:  http://127.0.0.1:4074/field   (the elephant's own field)
+# Limb:   http://127.0.0.1:4074/relay   (chain heads + sent counts)
 #
 # Usage: ./scripts/demo_dial_loop.sh [--fresh]   (--fresh wipes local D1)
 # Stop:  Ctrl-C (children die with the trap below)
@@ -51,28 +51,31 @@ curl -sf http://127.0.0.1:8787/health >/dev/null || {
   echo "wrangler dev did not come up — see /tmp/crab-traps-dev.log" >&2; exit 1; }
 echo "   relay up (log: /tmp/crab-traps-dev.log)"
 
-echo "== 2/3 elephant roomd (:4073 → relay :8787) =="
+echo "== 2/3 elephant roomd (:4074 → relay :8787) =="
+# NB: :4073 belongs to the systemd-supervised production roomd
+# (deploy/elephant-roomd.service, relay = the deployed worker). The demo
+# runs its own roomd on :4074 so the two loops never fight.
 cd "$HERE"
-python3 -m elephant.roomd --relay http://127.0.0.1:8787 --port 4073 \
+python3 -m elephant.roomd --relay http://127.0.0.1:8787 --port 4074 \
   --inbox "" >/tmp/roomd-demo.log 2>&1 &
 ROOMD_PID=$!
 for _ in $(seq 1 40); do
-  curl -sf http://127.0.0.1:4073/health >/dev/null 2>&1 && break
+  curl -sf http://127.0.0.1:4074/health >/dev/null 2>&1 && break
   sleep 0.25
 done
-curl -sf http://127.0.0.1:4073/health >/dev/null || {
+curl -sf http://127.0.0.1:4074/health >/dev/null || {
   echo "roomd did not come up — see /tmp/roomd-demo.log" >&2; exit 1; }
 echo "   roomd up (log: /tmp/roomd-demo.log)"
 
 echo "== 3/3 the room lives (event drip — the dials move) =="
-say() { curl -s -X POST http://127.0.0.1:4073/ingest \
+say() { curl -s -X POST http://127.0.0.1:4074/ingest \
   -H 'content-type: application/json' \
   -d "{\"room\":\"sauna\",\"author\":\"$1\",\"text\":\"$2\",\"ts\":$(date +%s)}" >/dev/null; }
 
 echo
 echo "  dials:      http://127.0.0.1:8787/dials"
-echo "  field:      http://127.0.0.1:4073/field"
-echo "  relay limb: http://127.0.0.1:4073/relay"
+echo "  field:      http://127.0.0.1:4074/field"
+echo "  relay limb: http://127.0.0.1:4074/relay"
 echo "  raw ledger: http://127.0.0.1:8787/edges?cell=room.field.sauna&verify=1"
 echo
 echo "  Ctrl-C to stop. The room warms, cools, panics — watch the meters."
@@ -87,6 +90,6 @@ while true; do
     2) say glm "no no — the bilge sensor lied before, this is fine, relax" ;;
     3) say opencode "!! FIRE IN THE GALLEY !! EVERYONE OUT NOW" ;;
   esac
-  curl -sf http://127.0.0.1:4073/field >/dev/null   # a read = a sealed ledger edge
+  curl -sf http://127.0.0.1:4074/field >/dev/null   # a read = a sealed ledger edge
   sleep 5
 done

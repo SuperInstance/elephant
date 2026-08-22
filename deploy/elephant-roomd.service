@@ -8,7 +8,12 @@ StartLimitIntervalSec=60
 Type=simple
 WorkingDirectory=/home/eileen/projects/elephant
 Environment=PYTHONPATH=/home/eileen/projects/elephant
-ExecStart=/usr/bin/python3 -m elephant.roomd --map /home/eileen/projects/fleet-rooms/demo/map.json --port 4073 --inbox /home/eileen/.hermes/cns_inbox --field-log /home/eileen/projects/elephant/data/roomd-field-log.jsonl
+# The crab-traps edge-ledger relay (POST /edge) — every sealed field read
+# lands in the shared D1 ledger the dial-dashboard (/dials) renders.
+# Override in ~/.config/elephant-roomd.env (ROOMD_RELAY=... to retarget,
+# e.g. http://127.0.0.1:8787 for a local wrangler dev relay).
+Environment=ROOMD_RELAY=https://crab-trap-funnel.casey-digennaro.workers.dev
+ExecStart=/usr/bin/python3 -m elephant.roomd --map /home/eileen/projects/fleet-rooms/demo/map.json --port 4073 --inbox /home/eileen/.hermes/cns_inbox --field-log /home/eileen/projects/elephant/data/roomd-field-log.jsonl --relay ${ROOMD_RELAY}
 Restart=always
 RestartSec=3
 MemoryMax=256M

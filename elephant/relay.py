@@ -143,7 +143,12 @@ class CrabTrapRelay:
         req = urllib.request.Request(
             f"{self.base_url}/edge",
             data=json.dumps(edge).encode(),
-            headers={"Content-Type": "application/json"},
+            headers={
+                "Content-Type": "application/json",
+                # urllib's default UA is edge-banned (CF error 1010) — the
+                # limb identifies itself instead.
+                "User-Agent": f"{ELEPHANT_CALLER}/0.1 (cell-ledger limb)",
+            },
             method="POST",
         )
         try:
