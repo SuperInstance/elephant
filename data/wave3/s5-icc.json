@@ -1,0 +1,210 @@
+{
+ "w3k01": {
+  "alpha": 0,
+  "icc": 0.877,
+  "per_dial": {
+   "mood": 0.982,
+   "volume": 0.958,
+   "earnestness": 0.913,
+   "cynicism": 0.814,
+   "joke_landing": 0.903,
+   "panic": 0.742,
+   "presence": 0.828
+  }
+ },
+ "w3k02": {
+  "alpha": 0.25,
+  "icc": 0.8794,
+  "per_dial": {
+   "mood": 0.981,
+   "volume": 0.901,
+   "earnestness": 0.899,
+   "cynicism": 0.817,
+   "joke_landing": 0.839,
+   "panic": 0.813,
+   "presence": 0.904
+  }
+ },
+ "w3k03": {
+  "alpha": 0.5,
+  "icc": 0.8741,
+  "per_dial": {
+   "mood": 0.981,
+   "volume": 0.958,
+   "earnestness": 0.906,
+   "cynicism": 0.83,
+   "joke_landing": 0.814,
+   "panic": 0.77,
+   "presence": 0.859
+  }
+ },
+ "w3k04": {
+  "alpha": 0.75,
+  "icc": 0.8388,
+  "per_dial": {
+   "mood": 0.981,
+   "volume": 0.958,
+   "earnestness": 0.909,
+   "cynicism": 0.818,
+   "joke_landing": 0.75,
+   "panic": 0.562,
+   "presence": 0.893
+  }
+ },
+ "w3k05": {
+  "alpha": 1,
+  "icc": 0.7923,
+  "per_dial": {
+   "mood": 0.981,
+   "volume": 0.489,
+   "earnestness": 0.913,
+   "cynicism": 0.8,
+   "joke_landing": 0.893,
+   "panic": 0.594,
+   "presence": 0.877
+  }
+ },
+ "w3k06": {
+  "alpha": "null",
+  "icc": 0.2598,
+  "per_dial": {
+   "mood": 0.22,
+   "volume": 0.309,
+   "earnestness": 0.179,
+   "cynicism": 0.423,
+   "joke_landing": 0.196,
+   "panic": 0.276,
+   "presence": 0.216
+  }
+ },
+ "w3q1m": {
+  "alpha": 0,
+  "icc": 0.7291,
+  "per_dial": {
+   "mood": 0.983,
+   "volume": 0.4,
+   "earnestness": 0.912,
+   "cynicism": 0.797,
+   "joke_landing": 0.859,
+   "panic": 0.252,
+   "presence": 0.902
+  }
+ },
+ "w3q1n": {
+  "alpha": 0.25,
+  "icc": 0.7292,
+  "per_dial": {
+   "mood": 0.982,
+   "volume": 0.404,
+   "earnestness": 0.912,
+   "cynicism": 0.796,
+   "joke_landing": 0.859,
+   "panic": 0.251,
+   "presence": 0.901
+  }
+ },
+ "w3q2m": {
+  "alpha": 0.25,
+  "icc": 0.8706,
+  "per_dial": {
+   "mood": 0.98,
+   "volume": 0.905,
+   "earnestness": 0.918,
+   "cynicism": 0.784,
+   "joke_landing": 0.745,
+   "panic": 0.86,
+   "presence": 0.903
+  }
+ },
+ "w3q2n": {
+  "alpha": 0.5,
+  "icc": 0.8706,
+  "per_dial": {
+   "mood": 0.98,
+   "volume": 0.909,
+   "earnestness": 0.918,
+   "cynicism": 0.782,
+   "joke_landing": 0.743,
+   "panic": 0.86,
+   "presence": 0.902
+  }
+ },
+ "w3q3m": {
+  "alpha": 0.5,
+  "icc": 0.7766,
+  "per_dial": {
+   "mood": 0.981,
+   "volume": 0.941,
+   "earnestness": 0.906,
+   "cynicism": 0.771,
+   "joke_landing": 0.843,
+   "panic": 0.262,
+   "presence": 0.733
+  }
+ },
+ "w3q3n": {
+  "alpha": 0.75,
+  "icc": 0.7752,
+  "per_dial": {
+   "mood": 0.98,
+   "volume": 0.941,
+   "earnestness": 0.906,
+   "cynicism": 0.763,
+   "joke_landing": 0.842,
+   "panic": 0.261,
+   "presence": 0.733
+  }
+ },
+ "w3q4m": {
+  "alpha": 0.75,
+  "icc": 0.8059,
+  "per_dial": {
+   "mood": 0.981,
+   "volume": 0.845,
+   "earnestness": 0.914,
+   "cynicism": 0.797,
+   "joke_landing": 0.751,
+   "panic": 0.463,
+   "presence": 0.89
+  }
+ },
+ "w3q4n": {
+  "alpha": 1,
+  "icc": 0.8053,
+  "per_dial": {
+   "mood": 0.981,
+   "volume": 0.845,
+   "earnestness": 0.914,
+   "cynicism": 0.795,
+   "joke_landing": 0.75,
+   "panic": 0.463,
+   "presence": 0.89
+  }
+ },
+ "w3q5m": {
+  "alpha": 0,
+  "icc": 0.7958,
+  "per_dial": {
+   "mood": 0.983,
+   "volume": 0.635,
+   "earnestness": 0.907,
+   "cynicism": 0.744,
+   "joke_landing": 0.899,
+   "panic": 0.502,
+   "presence": 0.9
+  }
+ },
+ "w3q5n": {
+  "alpha": 1,
+  "icc": 0.7906,
+  "per_dial": {
+   "mood": 0.983,
+   "volume": 0.62,
+   "earnestness": 0.907,
+   "cynicism": 0.727,
+   "joke_landing": 0.898,
+   "panic": 0.499,
+   "presence": 0.9
+  }
+ }
+}

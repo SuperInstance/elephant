@@ -1,0 +1,110 @@
+{
+ "step": "S5-unblinding",
+ "date": "2026-08-21",
+ "registration": "memory/wave3-registration-2026-08-21.md + G6 addendum",
+ "blinded_analysis": "memory/wave3-S4-analysis-2026-08-21.md (data/wave3/s4-blinded-summary.json)",
+ "unseal_procedure": "S3 run doc sec.3: sidecar copy-back + scripts/riverbed_generator.py --unblind; seal chain verified 16/16 (manifest pins sidecar sha256; sidecar pins all 9 night sha256s); zero tamper failures",
+ "alpha_truth": {
+  "w3k01": {"alpha": 0.0, "branch": "instrument", "null_mode": false, "pair_seed": null},
+  "w3k02": {"alpha": 0.25, "branch": "intermediate", "null_mode": false, "pair_seed": null},
+  "w3k03": {"alpha": 0.5, "branch": "intermediate", "null_mode": false, "pair_seed": null},
+  "w3k04": {"alpha": 0.75, "branch": "intermediate", "null_mode": false, "pair_seed": null},
+  "w3k05": {"alpha": 1.0, "branch": "collapse", "null_mode": false, "pair_seed": null},
+  "w3k06": {"alpha": null, "branch": "noise", "null_mode": true, "redraw_dev_per_night": true, "pair_seed": null},
+  "w3q1m": {"alpha": 0.0, "branch": "instrument", "pair_seed": 2101},
+  "w3q1n": {"alpha": 0.25, "branch": "intermediate", "pair_seed": 2101},
+  "w3q2m": {"alpha": 0.25, "branch": "intermediate", "pair_seed": 2102},
+  "w3q2n": {"alpha": 0.5, "branch": "intermediate", "pair_seed": 2102},
+  "w3q3m": {"alpha": 0.5, "branch": "intermediate", "pair_seed": 2103},
+  "w3q3n": {"alpha": 0.75, "branch": "intermediate", "pair_seed": 2103},
+  "w3q4m": {"alpha": 0.75, "branch": "intermediate", "pair_seed": 2104},
+  "w3q4n": {"alpha": 1.0, "branch": "collapse", "pair_seed": 2104},
+  "w3q5m": {"alpha": 0.0, "branch": "instrument", "pair_seed": 2105},
+  "w3q5n": {"alpha": 1.0, "branch": "collapse", "pair_seed": 2105}
+ },
+ "pairs": {
+  "P1": {"members": ["w3q1m", "w3q1n"], "alphas": [0.0, 0.25]},
+  "P2": {"members": ["w3q2m", "w3q2n"], "alphas": [0.25, 0.5]},
+  "P3": {"members": ["w3q3m", "w3q3n"], "alphas": [0.5, 0.75]},
+  "P4": {"members": ["w3q4m", "w3q4n"], "alphas": [0.75, 1.0]},
+  "P5": {"members": ["w3q5m", "w3q5n"], "alphas": [0.0, 1.0], "note": "endpoint pair"}
+ },
+ "pattern_vs_truth": {
+  "s4_census": {"instrument": 13, "mixed": 2, "noise": 1, "collapse": 0},
+  "truth_check": "All 13 instrument-pattern corpora include the three alpha=1 corpora (w3k05, w3q4n, w3q5n) -> collapse read as instrument by every content leg. The lone silent corpus w3k06 IS the null-mode corpus (seal-verified; S4 booked item 4 resolved affirmatively). Signal-vs-noise axis recovered 16/16; instrument-vs-collapse axis 0/3 (all collapse misread).",
+  "alpha1_corpora_s4_pattern": {"w3k05": "instrument (A .917 p~0, P .983 holds, S x-invariant)", "w3q4n": "instrument (A .774 p~0, P .989 holds, S x-invariant)", "w3q5n": "mixed->A fires (A .875 p~0; D null-uninformative)"}
+ },
+ "verdict_branch_tables": {
+  "leg_A": {
+   "instrument": "PASS (3/3 fire at p~0)",
+   "intermediate": "PASS on fire/no-fire (7/7 fire); ordering clause FAILED (no weakening trend: rates .68-.94 flat; within-pair A-rate gaps ~1% of between-corpus)",
+   "collapse": "KILL (3/3 fire strongly -> misread as instrument, the pre-stated KILL cell)",
+   "noise": "PASS (silent at center-ref in all 6 channels, p=.12-.89; lone start-ref p=.031 = 1/48 chance-level, disclosed)"
+  },
+  "leg_D": {
+   "instrument": "PASS (D_sig .7-.9 vs D_null 0.0)",
+   "intermediate": "PASS on above-null; 'decreasing with alpha' clause FAILED (flat, coarse)",
+   "collapse": "KILL 2/3 (w3k05/q4n D clearly above null); 1/3 uninformative (q5 pair: D_null=1.0 on n=1)",
+   "noise": "PASS (lowest D .4, tracks null)"
+  },
+  "leg_P": {
+   "instrument": "PASS (holds .986-.990 = 0.99-class)",
+   "intermediate": "PASS on hold; 'P_trans decreasing with alpha' clause FAILED (within-pair gaps ~2e-4, pure noise)",
+   "collapse": "KILL (3/3 hold -> 'offsets persist, misread as instrument', the pre-stated KILL cell; the registered instrument-vs-collapse headline discriminator falsified)",
+   "noise": "NON-DISCRIMINATOR confirmed (holds within-night, as pre-stated — carries no branch info)"
+  },
+  "leg_S": {
+   "instrument": "PASS (x-invariant, CI contains 0, competitor not beaten)",
+   "intermediate": "PASS on x-invariance; 'trending toward collapse' clause FAILED (slope sign-flips with W; no alpha trend)",
+   "collapse": "KILL (3/3 signature absent: CI contains 0 in every channel; the registered collapse signature fires nowhere corpus-wide)",
+   "noise": "PASS (x-invariant, inflated scatter)"
+  },
+  "leg_ICC_post_G6": {
+   "computed_at_unblinding": "scripts.riverbed_adapter.load_wave -> Measurement.icc(), registered adapter, presence=actual; data/wave3/s5-icc.json",
+   "values": {"w3k01": 0.877, "w3k02": 0.879, "w3k03": 0.874, "w3k04": 0.839, "w3k05": 0.792, "w3k06": 0.260, "w3q1m": 0.729, "w3q1n": 0.729, "w3q2m": 0.871, "w3q2n": 0.871, "w3q3m": 0.777, "w3q3n": 0.775, "w3q4m": 0.806, "w3q4n": 0.805, "w3q5m": 0.796, "w3q5n": 0.791},
+   "instrument": "PASS on the G6 re-band [0.60,0.80] instrument-vs-noise target (q1m .729, q5m .796; w3k01 .877 above re-band top, inside the superseded original bracket [0.85,0.96] — annotated)",
+   "intermediate": "PASS as predicted (within/near instrument; within-pair ICC gaps <= .0052 — no alpha ordering)",
+   "collapse": "NON-DISCRIMINATING per the G6 addendum's disclosed re-read (lens stable both branches: alpha=1 .791-.805 inside instrument range .729-.877; original-table KILL cell 'ICC stable, misread as instrument' — consistent with P/S)",
+   "noise": "PASS (0.260 collapses below every band — the prediction, not a void; G6's 0.228 draw-level confirmed at 0.260 on the registered corpus)"
+  },
+  "2AFC": {
+   "verdict": "FAIL (all legs)",
+   "truth": "m = lower-alpha member in ALL five pairs (sealed)",
+   "s4_blinded_majority_calls": {"q1": "m (correct)", "q3": "m (correct)", "q5": "m (correct)", "q2": "n-weak (wrong)", "q4": "none (wrong)"},
+   "score": "3/5 = chance (binomial p=0.5 at 3/5; registered bar >=8/10 unreachable); P_trans ranking 0/5 (n called more-instrument 5/5, truth is m 5/5); no pair separable at any channel; within-pair gaps 1-2 orders below between-corpus on every statistic"
+  },
+  "gradient_standalone": {
+   "verdict": "FAIL",
+   "truth_check": "alpha IS a total order (0<.25<.5<.75<1) yet the six pre-stated signed directions violate it at ~chance: spread alone 5/10 pairwise violations under the TRUE order; S-slope non-monotone (+.186,+.644,-.160,+.662,-.251); the statistics are alpha-invariant by construction, not merely unorderable"
+  }
+ },
+ "overall_verdict": {
+  "hypothesis": "H-GEN FALSIFIED — the registered apparatus does not discriminate the forward model's branches on the instrument-vs-collapse axis",
+  "confirmed_anti_hypothesis": "(ii) the honest negative — the apparatus cannot separate instrument from collapse even at endpoints; the Riverbed localizes which sufficient statistic the estimator is blind to",
+  "anti_hypothesis_i": "NOT TRIGGERED — (i) presupposes o/d-pipeline recovery with decoy disagreement; no pipeline recovered branches at all, so the failure is structural (channel invisibility), not estimator-specificity (contamination). Decoy gate itself: not-evaluable, moot",
+  "what_passed": "signal-vs-noise: A/D/ICC recover the noise endpoint 16/16 (all warmth-structured corpora fire, the null corpus silent/collapses); the matched-pair design performed exactly as registered (proved alpha-invisibility by holding rooms/rosters/rosters fixed)",
+  "alpha_verification_of_localization": "VERIFIED against true labels + generator source line 845 (vibe0 = CENTER + pool + (1-alpha)*dev): alpha enters ONLY the per-night persona anchor. The three alpha=1 corpora are indistinguishable from alpha=0 on every registered leg; pair members differing only in alpha are separated 1-2 orders below room-draw scatter on every statistic (A rate ~18x, P_trans ~16x, S slope ~10x, spread ~75x, ICC ~28x between/within ratios). The between-corpus trends that DO exist (spread clusters 1.34x, mild standalone ICC decline, S-slope scatter) are room-draw-carried — each evaporates inside the matched pairs. P is pinned by the within-night-constant charisma-pull fiber state (holds whether offsets are reader- or room-carried); S cannot reject x-invariance (anchor-scale variation vs per-speak noise at this n); A/D ride the alpha-invariant room path (kappa(t), latent draws)."
+ },
+ "deferred_items_adjudicated": {
+  "ICC": "computed at unblinding (above); PASS instrument-vs-noise, non-discriminating instrument-vs-collapse (G6-disclosed)",
+  "decoy_panel_v6": "NOT EVALUABLE, MOOT — S3 filed no decoy outputs (per-reader-detrending / mixed-effects); the S4 blinded window could not fire the rule; rule 6's only licensed action is voiding an apparatus-validation claim, and no validation claim exists (verdict is the honest negative). Protocol lesson booked: decoys must be filed S3-side or built blinded at S4 before verdict filing.",
+  "five_W8_low_count_cells_v3": {
+   "w3k05.W08.canonical": {"n": 19, "truth": "collapse", "ruling": "BRANCH HIT (pre-stated 'no void on low count')"},
+   "w3q1m.W08.canonical": {"n": 16, "truth": "instrument", "ruling": "FLOOR-VOID (floor applies; W8 sensitivity channel only)"},
+   "w3q1m.W08.actual": {"n": 18, "truth": "instrument", "ruling": "FLOOR-VOID (W8 sensitivity only)"},
+   "w3q1n.W08.canonical": {"n": 17, "truth": "intermediate", "ruling": "FLOOR-VOID (W8 sensitivity only)"},
+   "w3q1n.W08.actual": {"n": 18, "truth": "intermediate", "ruling": "FLOOR-VOID (W8 sensitivity only)"}
+  },
+  "note_primary_channel": "W=12 canonical min 23 crossings — zero primary voids anywhere; the S4 ruling stands",
+  "v2_sensitivity_void_w3k05_W8can": "blinded VOID ruling stands (conservative); post-unblinding annotation: w3k05 is collapse where A is not read, so the branch-consistent reading is branch-hit — the void annotation remains on the sensitivity cell only",
+  "booked_item4_silent_corpus": "RESOLVED: w3k06 is the null-mode corpus (seal-verified) — the signal-vs-noise pass stands",
+  "unexecuted_registered_expectation": "registration sec.2.5's generated-corpus calibration (cos(v_temp_hat, W_hat) >= 0.8 under instrument; the confound-annotation-vs-alpha calibration curve) was queued by the G6 addendum for S4 but never executed in the blinded window — disclosed as unexecuted; computable only post-hoc with disclosure now that labels are open; booked for the next registration"
+ },
+ "next_wave_generator_change": {
+  "diagnosis": "alpha is injected into a channel the registered legs cannot see: the per-night persona anchor is upstream of the charisma-pull fiber, whose within-night-constant state pins P and whose reading-level effect is below S's rejection power at this n; A/D read only the alpha-invariant room path",
+  "proposal_primary": "re-point alpha from the static anchor into the fiber's within-night TARGET TRAJECTORY: target_R(t) = pool + (1-alpha)*dev_R + alpha*room(t), where room(t) is the latent AR(1) tangent wobble already shared pairwise. At alpha=1 readings track the moving room (offsets room-carried AND time-varying -> P's pre/post cosine decorrelates, the registered collapse signature); at alpha=0 readings track the reader's dev (offsets reader-carried, persistent). Preserves the registered collapse semantics, stays in persona/field-measure space (coordinate firewall intact), and the 2AFC pair mode isolates it exactly (pairs share room(t) bit-for-bit).",
+  "proposal_secondary": "if the fiber rework is too heavy for wave-4, register an anchor-reading leg (roster-level between-night dispersion of reader baselines at the anchor timescale) as an apparatus EXTENSION in a fresh registration — never post-hoc on wave-3",
+  "rejected_alternative": "scaling room-path mu-step/kappa contrast by alpha (would make A/D fire on amplitude, not carrier — a semantic change confounding branch with event visibility; books a pass for the wrong reason)",
+  "keep": "matched-pair design (it is what proved alpha-invisibility); the sealed-sidecar protocol; decoys filed S3-side; the calibration curve registered pre-S4"
+ }
+}
