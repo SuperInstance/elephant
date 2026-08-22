@@ -92,8 +92,13 @@ class RoomDaemon:
         self.field_log_path = Path(field_log) if field_log else None
         self.field_log_lines = 0                    # bounded rotation counter
         self.map_temperature: Optional[float] = None
+        self._ledger = None                        # CellLedgerProducer (quilt seam); set via enable_ledger()
         if map_path:
             self.load_map(map_path)
+
+    def enable_ledger(self, producer: Any) -> None:
+        """Attach the quilt cell-ledger producer (synergy missing-link ②)."""
+        self._ledger = producer
 
     # -- map ----------------------------------------------------------- #
     def load_map(self, map_path: str) -> None:
@@ -146,13 +151,25 @@ class RoomDaemon:
         if room is None or not room.messages:
             return None
         field = read_field(room, self.bank)
-        return {
+        reading = {
             "room": name,
             "warmth": round(field.warmth(), 4),
             "kappa": round(field.concentration(), 4),
             "dials": {k: round(v, 4) for k, v in field.readings.items()},
             "messages": len(room.messages),
         }
+        # Cell-ledger bridge (quilt seam): seal every field read into the
+        # shared chain so the grid can consume the elephant's readings.
+        if self._ledger is not None:
+            sealed = self._ledger.record({
+                "cell_id": f"room.field.{name}",
+                "kind": "field",
+                "ts": time.time(),
+                "reading": reading,
+            })
+            reading["ledger"] = {"seq": sealed["seq"], "hash": sealed["hash"],
+                                 "prev_hash": sealed["prev_hash"]}
+        return reading
 
     def recompute(self) -> Dict:
         """Recompute every room + the map temperature; ring on crossings."""
