@@ -203,3 +203,58 @@ class TestEstimatorIntegration:
         assert 0.667 - 0.05 <= icc <= 0.810 + 0.05
         assert 0.07 <= q["q_trans"] <= 0.20
         assert ch.n_down_events(corpus, sd) >= 8
+
+
+# --------------------------------------------------------------------------- #
+# q_rule — red-team common-shift guard (wave-4 S1 unit-test obligation)
+# --------------------------------------------------------------------------- #
+class TestQRule:
+    def _fake_m(self, differential):
+        """One 60-speak night, two signal strata cut at 24, three readers
+        with stable per-reader offsets; the transition applies a COMMON
+        rigid step plus (if differential) per-reader idiosyncratic steps —
+        the exact adversarial pair the q-rule exists to separate."""
+        import types
+        readers = ["r0", "r1", "r2"]
+        base = np.zeros(7)
+        offs = {r: 0.30 * np.eye(7)[i + 1] for i, r in enumerate(readers)}
+        dsteps = {r: 0.50 * np.eye(7)[i + 4] for i, r in enumerate(readers)}
+        common = 0.40 * np.eye(7)[0]
+        n = 60
+        cut = 24   # both strata >= 2W=24 so rest events exist
+        speaks = [{"seq": t} for t in range(n)]
+        night = types.SimpleNamespace(
+            speaks=speaks,
+            strata=[("s0", 0, cut - 1, "signal"),
+                    ("s1", cut, n - 1, "signal")])
+        m = types.SimpleNamespace(
+            readers=readers, nights={"N": night}, readings={})
+        for r in readers:
+            seqd = {}
+            for t in range(n):
+                v = base + offs[r]
+                if t >= cut:
+                    v = v + common + (dsteps[r] if differential else 0.0)
+                seqd[t] = v
+            m.readings[r] = {"N": seqd}
+        return m
+
+    def test_common_rigid_step_is_uninformative(self):
+        res = ch.q_rule(self._fake_m(differential=False), sd=1.0,
+                        signal_nights=["N"])
+        assert res["verdict"] == "uninformative"
+        assert res["n_trans"] >= 1 and res["n_rest"] >= 1
+
+    def test_differential_step_flags_persistence_violated(self):
+        res = ch.q_rule(self._fake_m(differential=True), sd=1.0,
+                        signal_nights=["N"])
+        assert res["q_trans"] > 2.0 * res["q_rest"] + 0.02
+        assert res["verdict"] == "persistence_violated"
+
+    def test_q_rule_on_calibration_corpus_is_wellformed(self, corpus):
+        from scripts.e2_instrument import corpus_sd
+        m, sd = corpus, corpus_sd(list(corpus.nights.values()))[0]
+        res = ch.q_rule(m, sd)
+        assert set(res) >= {"q_trans", "q_rest", "n_trans", "n_rest",
+                            "verdict"}
+        assert res["verdict"] in ("uninformative", "persistence_violated")

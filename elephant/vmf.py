@@ -171,6 +171,37 @@ def vmf_fit(zs, B: int = 200, seed: int = 0) -> Optional[dict]:
     }
 
 
+def kl_sym(a, b) -> float:
+    """Symmetric vMF divergence between two vmf_fit dicts (REG-3 edge).
+
+    kl_sym(a,b) = KL(a‖b) + KL(b‖a) on S⁶ with the A₇ machinery: for
+    vMF(μ,κ) in d=7, log C(κ) = (7/2)·log(κ/2π) − log I_{5/2}(κ) and
+    E[x] = A₇(κ)·μ, so
+
+        KL(a‖b) = logC(κa) − logC(κb)
+                  + κa·A₇(κa) − κb·A₇(κa)·(μa·μb).
+
+    Purpose (REG-3, wave-4 draft §2.3): a PURE concentration change
+    (same μ̂, κ moves) gives d_mu = 0 — the chord gate is blind to it —
+    while kl_sym stays > 0. Symmetric by construction; 0 iff the fits
+    agree. log I_{5/2} rides scipy.special.ive (log-space, overflow-safe).
+    """
+    from scipy.special import ive
+    mu_a = np.asarray(a["mu_hat"], float)
+    mu_b = np.asarray(b["mu_hat"], float)
+    ka, kb = float(a["kappa"]), float(b["kappa"])
+
+    def log_norm(k):
+        return (D / 2.0) * (np.log(k) - np.log(2.0 * np.pi)) \
+            - (np.log(ive(D / 2.0 - 1.0, k)) + k)
+
+    aa, ab = A7(ka), A7(kb)
+    cos_ab = float(mu_a @ mu_b)
+    kl_ab = log_norm(ka) - log_norm(kb) + ka * aa - kb * aa * cos_ab
+    kl_ba = log_norm(kb) - log_norm(ka) + kb * ab - ka * ab * cos_ab
+    return float(kl_ab + kl_ba)
+
+
 def edge(fb: Optional[dict], fa: Optional[dict], db_factor: float = 2.0) -> Optional[dict]:
     """Field drift between two fits, with the jackknife-SE deadband.
 

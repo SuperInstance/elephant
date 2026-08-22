@@ -392,3 +392,50 @@ if __name__ == "__main__":
             fn()
             print(f"PASS {name}")
     print("\nAll vmf tests passed.")
+
+
+# --------------------------------------------------------------------------- #
+# kl_sym — REG-3 symmetric vMF divergence (wave-4 draft §2.3; S1 obligation)
+# --------------------------------------------------------------------------- #
+def _fit_dict(mu, kappa):
+    mu = np.asarray(mu, float)
+    return {"mu_hat": mu.tolist(), "kappa": float(kappa)}
+
+
+def test_kl_sym_zero_on_identical_fits():
+    from elephant.vmf import kl_sym
+    a = _fit_dict(np.eye(7)[0], 30.0)
+    assert kl_sym(a, a) == pytest.approx(0.0, abs=1e-9)
+
+
+def test_kl_sym_symmetric_and_positive():
+    from elephant.vmf import kl_sym
+    rng = np.random.default_rng(11)
+    mu1, mu2 = rng.normal(size=7), rng.normal(size=7)
+    mu1, mu2 = mu1 / np.linalg.norm(mu1), mu2 / np.linalg.norm(mu2)
+    a, b = _fit_dict(mu1, 24.0), _fit_dict(mu2, 13.0)
+    assert kl_sym(a, b) > 0.0
+    assert kl_sym(a, b) == pytest.approx(kl_sym(b, a), rel=1e-12)
+
+
+def test_kl_sym_fires_on_pure_concentration_change():
+    """The REG-3 rigidity blind spot: same mu_hat, kappa moves — d_mu = 0
+    but kl_sym > 0 (the edge object gains a real component)."""
+    from elephant.vmf import kl_sym
+    a = _fit_dict(np.eye(7)[0], 30.0)
+    b = _fit_dict(np.eye(7)[0], 12.0)
+    d_mu = float(np.linalg.norm(np.asarray(a["mu_hat"])
+                                - np.asarray(b["mu_hat"])))
+    assert d_mu == pytest.approx(0.0)
+    assert kl_sym(a, b) > 0.1
+
+
+def test_kl_sym_monotone_in_angular_separation():
+    from elephant.vmf import WARM, kl_sym
+    base = WARM
+    o = np.zeros(7); o[1] = 1.0
+    vals = []
+    for x in (0.9, 0.6, 0.3, 0.0):   # x = cos to base: separation grows
+        mu = x * base + np.sqrt(max(1e-12, 1 - x * x)) * o
+        vals.append(kl_sym(_fit_dict(base, 20.0), _fit_dict(mu, 20.0)))
+    assert all(v2 > v1 for v1, v2 in zip(vals, vals[1:]))
