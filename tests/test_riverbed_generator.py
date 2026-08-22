@@ -8,11 +8,14 @@ generation goes to pytest tmp dirs; data/ corpus files are never written.
 """
 
 import json
+import math
 import os
 import shutil
 
 import numpy as np
 import pytest
+
+from elephant.vmf import CENTER, HI, LO, SCALE
 
 from scripts.e2_instrument import W2_NIGHTS
 from scripts.e2_nights import ATTENDANCE
@@ -22,16 +25,18 @@ from scripts.riverbed_adapter import (NightFromFile, build_measurement,
                                       wave_cold)
 from scripts.riverbed_generator import (BRANCHES, ENTRANT_NAME,
                                         ENTRANT_SPEAKS, ENTRY_DWARMTH,
-                                        E_SEG, KAPPA_COLD,
-                                        KAPPA_ENTRY_FACTOR, KAPPA_WARM,
+                                        E_SEG, FIELD_ANCHOR_NORM,
+                                        KAPPA_COLD, KAPPA_ENTRY_FACTOR,
+                                        KAPPA_R_DEFAULT, KAPPA_WARM,
                                         NIGHT_FAMILIES, NIGHT_ORDER,
-                                        SEALED_FIELDS, Z_ENTRY, Z_FLIP,
-                                        Z_WARM_DEV, generate_night,
-                                        generate_wave, load_personas,
-                                        persona_deviations,
+                                        OU_PHI, SEALED_FIELDS, Z_ENTRY,
+                                        Z_FLIP, Z_WARM_DEV, _clamp, _unit,
+                                        generate_night, generate_wave,
+                                        load_personas, persona_deviations,
+                                        persona_pool_vibe,
                                         expected_logged_warmth_path,
                                         room_path, room_schedule,
-                                        seg_schedule, unblind)
+                                        seg_schedule, unblind, zlib_crc)
 from scripts.riverbed_wave_gate import run_gate
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -691,3 +696,189 @@ class TestG6NoiseModel:
         w = load_wave(os.path.join(d, "riverbed-manifest.json"))
         icc, _ = w["measurement"].icc()
         assert icc < 0.667, f"noise-branch ICC {icc:.4f} must collapse"
+
+
+# --------------------------------------------------------------------------- #
+# WAVE-4 — fiber v4 (docs/wave4-registration-draft-2026-08-22.md §1):
+# α re-pointed from the static anchor (v3's ONLY entry, the line-845
+# provenance) into the charisma pull's within-night target trajectory
+#     target_R(t) = pool + (1−α)·dev_R + α·room(t),
+#     room(t) = FIELD_ANCHOR_NORM · w_ar(t)/‖w_ar(t)‖
+# (§1.2 option (i) amplitude match — direction-only carrier at anchor
+# scale). Pull: eff = clamp(raw + s·(target_R(t) − raw)); roster
+# vibe/vibe_start carry target_R(0); acclimation unchanged; per-t target
+# logged as lens_now.target_now (replay-parity v2 input). v3 default is
+# byte-identical to the frozen wave-3 generator.
+# --------------------------------------------------------------------------- #
+class TestFiberV4:
+    ROSTER = ["writer", "poet", "engineer", "critic", "captain",
+              "essayist"]
+
+    def _pilot(self, tmp_path, branch, fiber, tag="fib-T1", family="T1"):
+        """Same tag across fibers => same session/rng => identical rooms."""
+        personas = load_personas()
+        anchors = persona_deviations(self.ROSTER + [ENTRANT_NAME], personas)
+        d = tmp_path / f"{tag}-{fiber}-{family}"
+        d.mkdir()
+        return generate_night(tag, NIGHT_FAMILIES[family], self.ROSTER,
+                              personas, anchors, {}, branch, 7, str(d),
+                              fam=family, fiber=fiber)
+
+    def test_alpha0_structural_identity_with_v3(self, tmp_path):
+        """§1.1: α=0 — 'identical to wave-3 instrument on every leg'.
+        Structural byte-identity: same seed+tag ⇒ same room channel,
+        authors, fits/edges, roster anchors (target_R(0) == the v3
+        anchor) and acclimation state; only the pull target moves."""
+        p3, _ = self._pilot(tmp_path, BRANCHES["instrument"], "v3")
+        p4, _ = self._pilot(tmp_path, BRANCHES["instrument"], "v4")
+        r3, r4 = _rows(p3), _rows(p4)
+        s3, s4 = _speaks(p3), _speaks(p4)
+        assert r3[0]["session_id"] == r4[0]["session_id"]
+        assert r3[0]["roster"] == r4[0]["roster"]
+        assert all(a["field_raw_after"] == b["field_raw_after"]
+                   and a["author"] == b["author"]
+                   and a["fit"] == b["fit"] and a["edge"] == b["edge"]
+                   for a, b in zip(s3, s4))
+        for a, b in zip(s3, s4):
+            for n in a["readers"]:
+                assert (a["readers"][n]["lens_now"]["vibe_now"]
+                        == b["readers"][n]["lens_now"]["vibe_now"])
+                assert set(b["readers"][n]["lens_now"]) == \
+                    set(a["readers"][n]["lens_now"]) | {"target_now"}
+        # α=0: static reader-carried target == target_R(0)
+        for n in r4[0]["roster"]:
+            vs = r4[0]["roster"][n]["vibe_start"]
+            assert all(b["readers"][n]["lens_now"]["target_now"] == vs
+                       for b in s4 if n in b["readers"])
+        # the semantic change is live: the pull rides the target, not the
+        # acclimating vibe
+        assert any(a["readers"][n]["field_eff_to_reader"]
+                   != b["readers"][n]["field_eff_to_reader"]
+                   for a, b in zip(s3, s4) for n in a["readers"])
+
+    def test_alpha0_replay_v2_from_logged_target(self, tmp_path):
+        """§1.3.1: logging target_R(t) per speak makes replay parity
+        re-registrable as v2 — logged rows + target_now reconstruct every
+        field_eff_to_reader bit-for-bit."""
+        p4, _ = self._pilot(tmp_path, BRANCHES["instrument"], "v4")
+        for b in _speaks(p4):
+            raw = np.asarray(b["field_raw_after"], float)
+            for n, blk in b["readers"].items():
+                s = 1.0 - math.exp(-blk["charisma"]
+                                   * b["interactions_after"].get(n, 0))
+                tgt = np.asarray(blk["lens_now"]["target_now"], float)
+                eff = np.minimum(HI, np.maximum(LO, raw + s * (tgt - raw)))
+                assert np.array_equal(
+                    eff, np.asarray(blk["field_eff_to_reader"], float)), n
+
+    def test_alpha1_common_moving_target_from_room_stream(self, tmp_path):
+        """§1.1: α=1 — target tracks the moving room (offsets room-carried
+        AND time-varying); the carrier is the amplitude-matched w_ar from
+        the room rng stream, bit-exact."""
+        p1, _ = self._pilot(tmp_path, BRANCHES["collapse"], "v4")
+        r1, s1 = _rows(p1), _speaks(p1)
+        for b in s1:
+            tgts = {tuple(blk["lens_now"]["target_now"])
+                    for blk in b["readers"].values()}
+            assert len(tgts) == 1, "α=1 target must be common (room-carried)"
+        anchors1 = {tuple(e["vibe_start"]) for e in r1[0]["roster"].values()}
+        assert len(anchors1) == 1
+        assert anchors1.pop() == tuple(
+            s1[0]["readers"][self.ROSTER[0]]["lens_now"]["target_now"])
+        t0 = np.asarray(s1[0]["readers"][self.ROSTER[0]]["lens_now"]
+                        ["target_now"])
+        move = max(float(np.linalg.norm(np.asarray(
+            b["readers"][self.ROSTER[0]]["lens_now"]["target_now"]) - t0))
+            for b in s1)
+        assert move > 0.02, f"α=1 target barely moves ({move:.4f})"
+        # exact carrier: room(t) from the tag-keyed room rng
+        personas = load_personas()
+        pool = persona_pool_vibe(sorted(personas), personas)
+        rp = room_path(NIGHT_FAMILIES["T1"], False,
+                       np.random.default_rng((7, zlib_crc("fib-T1"))))
+        for b in s1:
+            rc = FIELD_ANCHOR_NORM * _unit(rp["w_ar"][b["seq"]])
+            exp = _clamp(CENTER + (pool + rc) / SCALE)
+            got = np.asarray(next(iter(b["readers"].values()))
+                             ["lens_now"]["target_now"], float)
+            assert np.array_equal(got, exp), b["seq"]
+
+    def test_intermediate_alpha_mixed_carriers_staged(self, tmp_path):
+        """α=0.5 mixes a static reader-carried offset with a moving
+        room-carried one (the §1.1 gradient); the staged entrant's
+        target_now appears exactly from his entry seq."""
+        p5, _ = self._pilot(tmp_path, (0.5, OU_PHI, KAPPA_R_DEFAULT, False),
+                            "v4", family="T4a")
+        s5 = _speaks(p5)
+        e = NIGHT_FAMILIES["T4a"][3][0]
+        assert not any(ENTRANT_NAME in b["readers"] for b in s5[:e])
+        assert all("target_now" in b["readers"][n]["lens_now"]
+                   for b in s5[e:] for n in b["readers"])
+        n0 = self.ROSTER[0]
+        tgts = [np.asarray(b["readers"][n0]["lens_now"]["target_now"])
+                for b in s5]
+        assert max(float(np.linalg.norm(t - tgts[0])) for t in tgts) > 0.01
+        # reader-carried component live: targets differ across readers
+        assert any(not np.array_equal(
+            np.asarray(b["readers"][self.ROSTER[0]]["lens_now"]["target_now"]),
+            np.asarray(b["readers"][self.ROSTER[1]]["lens_now"]["target_now"]))
+            for b in s5)
+
+    def test_pair_isolation_under_v4(self, tmp_path):
+        """Pair members share the room path (w_ar from the room stream,
+        keyed (pair_seed, fam, 1)) and dev (branch-free stream 2) — the
+        targets differ ONLY through α."""
+        personas = load_personas()
+        anchors = persona_deviations(self.ROSTER + [ENTRANT_NAME], personas)
+        kw = dict(family=NIGHT_FAMILIES["T1"], roster_names=self.ROSTER,
+                  personas=personas, dev_anchors=anchors, seed=7,
+                  outdir=str(tmp_path), fam="T1", fiber="v4")
+        q0, _ = generate_night("v4p0-T1", branch=BRANCHES["instrument"],
+                               ou_state={}, pair_seed=4242, **kw)
+        q1, _ = generate_night("v4p1-T1", branch=BRANCHES["collapse"],
+                               ou_state={}, pair_seed=4242, **kw)
+        w0, w1 = _speaks(q0), _speaks(q1)
+        assert all(a["field_raw_after"] == b["field_raw_after"]
+                   and a["author"] == b["author"]
+                   for a, b in zip(w0, w1))
+        pool = persona_pool_vibe(sorted(personas), personas)
+        rp = room_path(NIGHT_FAMILIES["T1"], False,
+                       np.random.default_rng((4242, zlib_crc("T1"), 1)))
+        for b in w1:
+            rc = FIELD_ANCHOR_NORM * _unit(rp["w_ar"][b["seq"]])
+            exp = _clamp(CENTER + (pool + rc) / SCALE)
+            got = np.asarray(next(iter(b["readers"].values()))
+                             ["lens_now"]["target_now"], float)
+            assert np.array_equal(got, exp), b["seq"]
+        r0 = _rows(q0)
+        for n in r0[0]["roster"]:
+            vs = r0[0]["roster"][n]["vibe_start"]
+            assert all(b["readers"][n]["lens_now"]["target_now"] == vs
+                       for b in w0 if n in b["readers"])
+        assert any(a["readers"]["writer"] != b["readers"]["writer"]
+                   for a, b in zip(w0, w1))
+
+    def test_v3_default_has_no_target_logging(self, tmp_path):
+        """The v3 default output is byte-shape-identical to the frozen
+        wave-3 generator: no target_now anywhere."""
+        p3, _ = self._pilot(tmp_path, BRANCHES["instrument"], "v3")
+        o = next(r for r in _rows(p3) if r["type"] == "session_open")
+        assert o["reader_schema"]["lens"] == ["vibe_now", "weights_now"]
+        for b in _speaks(p3):
+            for blk in b["readers"].values():
+                assert "target_now" not in blk["lens_now"]
+
+    def test_manifest_carries_fiber_default_v3(self, wave, tmp_path_factory):
+        """generate_wave threads --fiber; the manifest records it as a
+        design fact (NOT sealed — SEALED_FIELDS unchanged); default v3."""
+        d, man = wave
+        assert man["fiber"] == "v3"
+        d4 = tmp_path_factory.mktemp("rb-fiber-v4-wave")
+        m4 = generate_wave(str(d4), alpha=0.5, seed=20260821, fiber="v4",
+                           tag_prefix="fib4")
+        assert m4["fiber"] == "v4"
+        assert all(m["deterministic_replay_identical"]
+                   for m in m4["nights"].values())
+        assert set(SEALED_FIELDS) == {
+            "branch", "alpha", "ou_phi", "kappa_R",
+            "redraw_dev_per_night", "null_mode", "seed", "pair_seed"}

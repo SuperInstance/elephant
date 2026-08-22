@@ -63,6 +63,29 @@ SKEW-PRODUCT READER FIBER (Agenda Problem 3; ideation §1.1/§2.1; G6
   Reader baselines are constant WITHIN a night (P ≈ 0.994 persistence by
   construction) and OU-drifted BETWEEN nights (the ICC knob).
 
+FIBER VERSIONS (--fiber, wave-4 draft §1.2, 2026-08-22 — docs/
+wave4-registration-draft-2026-08-22.md):
+  v3 (DEFAULT — the frozen wave-3 instrument): α lives ONLY in the static
+    per-night persona anchor (the line-845 provenance the wave-3 S5
+    verdict verified: vibe0 = pool + (1−α)·dev) and the charisma pull
+    rides the acclimating vibe state. Every wave-3 corpus stays
+    bit-reproducible under this default.
+  v4: α re-pointed out of the static anchor into the pull's within-night
+    target trajectory —
+        target_R(t) = pool + (1−α)·dev_R + α·room(t)
+        room(t)     = FIELD_ANCHOR_NORM · w_ar(t)/‖w_ar(t)‖
+    (direction-only AR(1) wobble carrier at anchor scale — the §1.2
+    option (i) amplitude match: the α contrast is purely WHO carries the
+    offset, never how big it is; w_ar comes from the room rng stream and
+    dev from the branch-free fiber stream, so pair members' targets
+    differ only through α). The pull becomes
+    eff = clamp(raw + s·(target_R(t) − raw)); the roster's vibe/vibe_start
+    carry target_R(0); the acclimation line is unchanged (vibe becomes
+    α-free state, still logged as vibe_now); target_R(t) is logged per
+    speak as lens_now.target_now so replay parity can be re-registered
+    as v2 — the wave-3 replay from vibe_start alone no longer
+    reconstructs v4 fibers (§1.3.1, expected).
+
 NULL MODE (--null-mode): no warmth structure — every segment of every
 night sits at the night's base warmth (no flips, μ constant within a
 night) and the ONLY scheduled variation is a common κ(t) shift shared by
@@ -565,7 +588,7 @@ def room_path(family, null_mode, rng, flip_size=FLIP_SIZE, e_state=None,
     else:
         e = rng.normal(size=D)
         e = _unit(e - (e @ WARM) * WARM)
-    mus, s_lat = [], []
+    mus, s_lat, w_ar_path = [], [], []   # w_ar_path: wave-4 §1.2 carrier
     w_ar = None    # AR(1) tangent-wobble state (per night; harness family)
     for t in range(n):
         xi = rng.normal(size=D)
@@ -589,6 +612,7 @@ def room_path(family, null_mode, rng, flip_size=FLIP_SIZE, e_state=None,
         eps = eps - (eps @ mu) * mu
         w_ar = AR_PHI * w_ar + c_ar * eps
         w_ar = w_ar - (w_ar @ mu) * mu
+        w_ar_path.append(w_ar.copy())   # wave-4 §1.2: latent carrier exposed
         s_lat.append(WARMTH_SCALE * (a7 * mu) + w_ar)   # NOT re-normalized (G6 part ii)
     if e_state is not None:
         e_state["e"] = e
@@ -620,7 +644,7 @@ def room_path(family, null_mode, rng, flip_size=FLIP_SIZE, e_state=None,
     # measured 2026-08-21: T5/T5c strata residuals −0.24/−0.34 unclamped)
     obs_fit = [SCALE * (_clamp(CENTER + z / SCALE) - CENTER) for z in obs]
     return {"w": w, "kappa": kappa, "mu": mus, "seg": seg, "obs": obs,
-            "obs_fit": obs_fit,
+            "obs_fit": obs_fit, "w_ar": w_ar_path,
             "baseline": baseline, "dial_noise": dial_noise}
 
 
@@ -759,7 +783,7 @@ def persona_pool_vibe(names, personas):
 def generate_night(tag, family, roster_names, personas, dev_anchors,
                    ou_state, branch, seed, outdir, null_mode=False,
                    flip_size=FLIP_SIZE, pair_seed=None, fam=None, e_state=None,
-                   pool_vibe_z=None):
+                   pool_vibe_z=None, fiber="v3"):
     """Emit data path outdir/night-<tag>.jsonl. Returns (path, ou_state)
     with the OU state advanced for every APPEARING reader (roster + staged
     entrant; the between-night step happens once per night appeared, in
@@ -780,6 +804,15 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
     vibe, interactions) — engine-faithful: the engine's per-reader
     readings are a deterministic function of the logged room channel and
     the reader's persona state.
+
+    FIBER v4 (wave-4 draft §1.2, fiber="v4"): α leaves the static anchor
+    and rides the pull's within-night target trajectory
+    target_R(t) = pool + (1−α)·dev + α·room(t) (room(t) the
+    amplitude-matched w_ar carrier — direction-only at anchor scale).
+    vibe0 == target_R(0) at roster entry; the acclimation line is
+    unchanged (vibe becomes α-free state); lens_now gains target_now per
+    speak (replay-parity v2 input). fiber="v3" (default) is byte-identical
+    to the frozen wave-3 generator.
     """
     alpha, ou_phi, kappa_r, redraw = branch
     fam = fam if fam is not None else tag
@@ -842,8 +875,34 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
     # (assert_replay_matches_log, self-test 14).
     if pool_vibe_z is None:   # direct single-night callers: personas-mean pool
         pool_vibe_z = persona_pool_vibe(sorted(personas), personas)
-    vibe0 = {name: _clamp(CENTER + (pool_vibe_z + (1.0 - alpha) * dev_now[name])
-                          / SCALE) for name in present}
+    if fiber == "v4":
+        # WAVE-4 (docs/wave4-registration-draft-2026-08-22.md §1.2): α
+        # exits the static anchor and enters the pull's within-night
+        # target trajectory —
+        #     target_R(t) = pool + (1−α)·dev_R + α·room(t)
+        # with room(t) the amplitude-matched AR(1) wobble carrier (§1.2
+        # option (i)): direction-only at anchor scale,
+        #     room(t) := FIELD_ANCHOR_NORM · w_ar(t)/‖w_ar(t)‖.
+        # w_ar rides the ROOM stream (pair-shared bit-for-bit), dev the
+        # branch-free fiber stream — pair members' targets differ ONLY
+        # through α; the coordinate firewall holds (α stays in
+        # persona/target space, never in the room path or κ(t)). No new
+        # rng number is drawn here, so every shared draw is untouched.
+        room_c = [FIELD_ANCHOR_NORM * _unit(w) for w in room["w_ar"]]
+
+        def _target_dial(name, t):
+            z = pool_vibe_z + (1.0 - alpha) * dev_now[name]
+            if alpha > 0.0:   # α=0 keeps the exact v3 expression (static
+                z = z + alpha * room_c[t]   # target; no ±0.0 addend)
+            return _clamp(CENTER + z / SCALE)
+
+        target_path = {name: [_target_dial(name, t) for t in range(n)]
+                       for name in present}
+        vibe0 = {name: target_path[name][0] for name in present}
+    else:
+        vibe0 = {name: _clamp(CENTER + (pool_vibe_z + (1.0 - alpha) * dev_now[name])
+                              / SCALE) for name in present}
+        target_path = None
     vibe = {name: np.asarray(vibe0[name], float).copy() for name in present}
     charisma = {name: float(fiber_personas[name]["charisma"]) for name in present}
     acclim = {name: 1.0 - math.exp(-float(fiber_personas[name]["acclimation_rate"]))
@@ -881,7 +940,9 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
         the engine's exact 6-key shape — verified on night-T4a.jsonl). The
         vibe/vibe_start fields carry the reader's PER-NIGHT drifted
         persona anchor (the G6 fiber's branch channel — engine replays
-        start from the logged vibe_start, so replay parity holds)."""
+        start from the logged vibe_start, so replay parity holds). Under
+        --fiber v4 they carry target_R(0) — the t=0 pull target (wave-4
+        §1.3.3: "target at t=0", not a static anchor; α stays sealed)."""
         return {"name": name,
                 "dial_weights": [float(x) for x in fiber_personas[name]["dial_weights"]],
                 "acclimation_rate": float(personas[name]["acclimation_rate"]),
@@ -898,7 +959,9 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
                    "estimator": "vmf-mle-newton-v1", "kappa_max": 500},
         "roster": {name: _entry(name) for name in roster_names},
         "reader_schema": {"version": 2, "field": "field_eff_to_reader",
-                          "lens": ["vibe_now", "weights_now"],
+                          "lens": (["vibe_now", "weights_now", "target_now"]
+                                   if fiber == "v4"
+                                   else ["vibe_now", "weights_now"]),
                           "fit": "vmf-mle-newton-v1", "gate": "roster"},
     }
     if entrant is not None:  # G1: staged, exactly like the engine
@@ -931,7 +994,11 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
                 continue  # G1: no readings/vibe evolution before entry
             n_int = interactions.get(name, 0)
             s = 1.0 - math.exp(-charisma[name] * n_int)
-            eff = _clamp(raw + s * (vibe[name] - raw))
+            # wave-4 v4: the pull rides the within-night target
+            # trajectory; v3 (and the engine replay) rides the
+            # acclimating vibe state
+            pull = target_path[name][t] if fiber == "v4" else vibe[name]
+            eff = _clamp(raw + s * (pull - raw))
             eff_reader[name][t] = eff
             effs[name] = eff
         # acclimation: every present reader's vibe warms toward the room
@@ -944,14 +1011,17 @@ def generate_night(tag, family, roster_names, personas, dev_anchors,
             vibe_now[name][t] = vibe[name]   # engine logs the updated vibe
         readers = {}
         for name in effs:
+            lens = {
+                "vibe_now": vibe_now[name][t].tolist(),
+                "weights_now": [float(x_) for x_ in fiber_personas[name]["dial_weights"]],
+            }
+            if fiber == "v4":   # wave-4 §1.3.1: per-t target logging —
+                lens["target_now"] = target_path[name][t].tolist()
             readers[name] = {
                 "reader_known": True,
                 "charisma": charisma[name],
                 "field_eff_to_reader": effs[name].tolist(),
-                "lens_now": {
-                    "vibe_now": vibe_now[name][t].tolist(),
-                    "weights_now": [float(x_) for x_ in fiber_personas[name]["dial_weights"]],
-                },
+                "lens_now": lens,
                 "reader_fit": _reader_fit_light(
                     [SCALE * g[name] * (eff_reader[name][q] - CENTER)
                      for q in range(max(0, t - W_WIN + 1), t + 1)
@@ -1054,7 +1124,7 @@ SEALED_FIELDS = ("branch", "alpha", "ou_phi", "kappa_R",
 
 def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
                   null_mode=False, tag_prefix=None, flip_size=FLIP_SIZE,
-                  pair_seed=None, blind=False, corpus_id=None):
+                  pair_seed=None, blind=False, corpus_id=None, fiber="v3"):
     os.makedirs(outdir, exist_ok=True)
     if branch_name in BRANCHES and alpha is None:
         branch = BRANCHES[branch_name]
@@ -1094,7 +1164,7 @@ def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
             dev_anchors, ou_state, branch, seed, outdir,
             null_mode=null_mode, flip_size=flip_size,
             pair_seed=pair_seed, fam=fam, e_state=e_state,
-            pool_vibe_z=pool_vibe_z)
+            pool_vibe_z=pool_vibe_z, fiber=fiber)
         paths[fam] = path
 
     manifest = {"generated_by": "scripts/riverbed_generator.py",
@@ -1105,6 +1175,8 @@ def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
                 "null_mode": null_mode, "flip_size": flip_size,
                 "entry_dwarmth": ENTRY_DWARMTH,
                 "pair_seed": pair_seed, "reader_schema": 2,
+                "fiber": fiber,   # wave-4 design fact (NOT sealed — the
+                                  # instrument version, not a branch param)
                 # G6 noise model — branch-free DESIGN FACTS (safe for the
                 # redacted manifest; the analysis side reads them for
                 # expected-path reconstruction, never as targets)
@@ -1164,7 +1236,8 @@ def generate_wave(outdir, branch_name="instrument", alpha=None, seed=20260821,
                                      null_mode=null_mode,
                                      flip_size=flip_size,
                                      pair_seed=pair_seed, fam=fam,
-                                     e_state=e2, pool_vibe_z=pool_vibe_z)
+                                     e_state=e2, pool_vibe_z=pool_vibe_z,
+                                     fiber=fiber)
             assert stripped_md5(p2) == manifest["nights"][tags[fam]]["stripped_md5"], tags[fam]
             manifest["nights"][tags[fam]]["deterministic_replay_identical"] = True
 
@@ -1598,6 +1671,183 @@ def self_test():
           "(logged-kappa band + warmth residuals re-verified in the G6 "
           "registration addendum)")
 
+    # --- 16. WAVE-4: --fiber v4 — α in the pull's target trajectory ---- #
+    # (docs/wave4-registration-draft-2026-08-22.md §1.2; every test above
+    # ran the v3 default — the frozen wave-3 instrument.)
+    d3 = os.path.join(tmp, "fiber-v3"); os.makedirs(d3)
+    d4 = os.path.join(tmp, "fiber-v4"); os.makedirs(d4)
+    p3, _ = generate_night("st-fib-T1", fam["T1"], roster, personas,
+                           anchors, {}, BRANCHES["instrument"], 7, d3,
+                           fam="T1")
+    p4, _ = generate_night("st-fib-T1", fam["T1"], roster, personas,
+                           anchors, {}, BRANCHES["instrument"], 7, d4,
+                           fam="T1", fiber="v4")
+    r3 = [json.loads(l) for l in open(p3) if l.strip()]
+    r4 = [json.loads(l) for l in open(p4) if l.strip()]
+    s3 = [r for r in r3 if r["type"] == "speak"]
+    s4 = [r for r in r4 if r["type"] == "speak"]
+    # (a) α=0 "identical on every leg", structurally: same seed+tag ⇒
+    # same session/rng ⇒ the room channel, author schedule, fits/edges,
+    # roster anchors (target_R(0) == the v3 anchor), staged semantics and
+    # the acclimation state (vibe_now) are all bit-identical; only the
+    # pull target (and its eff-derived logging) moves
+    assert r3[0]["session_id"] == r4[0]["session_id"]
+    assert r3[0]["roster"] == r4[0]["roster"], \
+        "α=0: target_R(0) must equal the v3 anchor bit-for-bit"
+    assert all(a["field_raw_after"] == b["field_raw_after"]
+               and a["field_eff_after"] == b["field_eff_after"]
+               and a["author"] == b["author"]
+               and a["fit"] == b["fit"] and a["edge"] == b["edge"]
+               and a["presence_mask"] == b["presence_mask"]
+               and a["interactions_after"] == b["interactions_after"]
+               for a, b in zip(s3, s4)), "v4 must not touch the room channel"
+    for a, b in zip(s3, s4):
+        assert set(a["readers"]) == set(b["readers"])
+        for n in a["readers"]:
+            assert a["readers"][n]["lens_now"]["vibe_now"] == \
+                b["readers"][n]["lens_now"]["vibe_now"], \
+                "acclimation must stay unchanged (α-free state)"
+            assert set(b["readers"][n]["lens_now"]) == \
+                set(a["readers"][n]["lens_now"]) | {"target_now"}
+    assert any(a["readers"][n]["field_eff_to_reader"]
+               != b["readers"][n]["field_eff_to_reader"]
+               for a, b in zip(s3, s4) for n in a["readers"]), \
+        "v4 pull must ride the target trajectory, not the acclimating vibe"
+    # α=0: offsets reader-carried and STATIC — every logged target equals
+    # the roster's target_R(0)
+    for n in r4[0]["roster"]:
+        vs = r4[0]["roster"][n]["vibe_start"]
+        assert all(b["readers"][n]["lens_now"]["target_now"] == vs
+                   for b in s4 if n in b["readers"]), \
+            "α=0 target must be static in t (reader-carried offset)"
+    print("[self-test] 16a. fiber v4 α=0 pilot: room/authors/fits/roster/"
+          "acclimation bit-identical to v3 (identical-on-every-leg "
+          "structure); targets static == target_R(0); pull rides target")
+
+    # (b) replay-parity v2 SUFFICIENCY: the logged rows + logged
+    # target_now reconstruct every field_eff_to_reader bit-for-bit (the
+    # §1.3.1 fix — the wave-3 replay from vibe_start alone cannot)
+    for a, b in zip(s3, s4):
+        raw = np.asarray(b["field_raw_after"], float)
+        for n in b["readers"]:
+            blk = b["readers"][n]
+            s_ = 1.0 - math.exp(-blk["charisma"]
+                                * b["interactions_after"].get(n, 0))
+            tgt = np.asarray(blk["lens_now"]["target_now"], float)
+            eff = np.minimum(HI, np.maximum(LO, raw + s_ * (tgt - raw)))
+            assert np.array_equal(eff, np.asarray(
+                blk["field_eff_to_reader"], float)), \
+                "logged target_now must replay the v4 fiber exactly"
+    print("[self-test] 16b. replay v2: logged target_now + rows reproduce "
+          "every v4 field_eff_to_reader bit-for-bit (parity re-"
+          "registrable as v2; the v3 replay from vibe_start cannot — "
+          "§1.3.1 by design)")
+
+    # (c) α=1 unsealed pilot (the design-gate arm): generates OK, per-t
+    # targets logged, room-carried AND time-varying — the common moving
+    # target that makes the collapse signature reachable
+    d1 = os.path.join(tmp, "fiber-v4-a1"); os.makedirs(d1)
+    p1, _ = generate_night("st-fib-T1", fam["T1"], roster, personas,
+                           anchors, {}, BRANCHES["collapse"], 7, d1,
+                           fam="T1", fiber="v4")
+    r1 = [json.loads(l) for l in open(p1) if l.strip()]
+    s1_ = [r for r in r1 if r["type"] == "speak"]
+    assert len(s1_) == fam["T1"][1] and s1_  # generated successfully
+    for b in s1_:
+        tgts = {n: blk["lens_now"]["target_now"]
+                for n, blk in b["readers"].items()}
+        assert len(set(map(tuple, tgts.values()))) == 1, \
+            "α=1 target must be COMMON across readers (room-carried)"
+    t0 = np.asarray(s1_[0]["readers"][roster[0]]["lens_now"]["target_now"])
+    move = max(float(np.linalg.norm(
+        np.asarray(b["readers"][roster[0]]["lens_now"]["target_now"]) - t0))
+        for b in s1_)
+    assert move > 0.02, f"α=1 target barely moves ({move:.4f}) — dead carrier"
+    # all readers share the roster anchor target_R(0)
+    vs1 = {n: tuple(e["vibe_start"]) for n, e in r1[0]["roster"].items()}
+    assert len(set(vs1.values())) == 1, "α=1 anchors must coincide (pool+room0)"
+    assert list(vs1.values())[0] == tuple(
+        s1_[0]["readers"][roster[0]]["lens_now"]["target_now"])
+    # amplitude-matched carrier from the ROOM stream, exactly: rebuild
+    # room(t) = FIELD_ANCHOR_NORM·w_ar(t)/‖w_ar(t)‖ from the re-seeded
+    # room rng (tag-keyed: (seed, crc(tag))) and match the logged targets
+    pool = persona_pool_vibe(sorted(personas), personas)
+    rp = room_path(fam["T1"], False, np.random.default_rng(
+        (7, zlib_crc("st-fib-T1"))))
+    for b in s1_:
+        t = b["seq"]
+        rc = FIELD_ANCHOR_NORM * _unit(rp["w_ar"][t])
+        exp = _clamp(CENTER + (pool + rc) / SCALE)
+        got = np.asarray(next(iter(b["readers"].values()))
+                         ["lens_now"]["target_now"], float)
+        assert np.array_equal(got, exp), \
+            f"α=1 target at t={t} is not pool+room(t) from the room stream"
+    # amplitude match: the carrier rides at anchor scale (direction-only)
+    norms = [float(np.linalg.norm(FIELD_ANCHOR_NORM * _unit(w)))
+             for w in rp["w_ar"]]
+    assert max(abs(nm - FIELD_ANCHOR_NORM) for nm in norms) < 1e-12
+    print(f"[self-test] 16c. fiber v4 α=1 pilot: generated OK; targets "
+          f"COMMON across readers, time-varying (max |Δ| from t=0: "
+          f"{move:.3f} z-units); carrier == FIELD_ANCHOR_NORM·w_ar/‖w_ar‖ "
+          "from the room stream, bit-exact")
+
+    # (d) pair isolation under v4: w_ar from the room stream (stream 1),
+    # dev from the branch-free fiber stream (stream 2) — pair members'
+    # targets differ ONLY through α
+    tmp3 = tempfile.mkdtemp(prefix="riverbed-v4pair-", dir=tmp)
+    kw4 = dict(family=fam["T1"], roster_names=roster, personas=personas,
+               dev_anchors=anchors, seed=7, outdir=tmp3, fam="T1",
+               fiber="v4")
+    q0, _ = generate_night("st-v4p0-T1", branch=BRANCHES["instrument"],
+                           ou_state={}, pair_seed=4242, **kw4)
+    q1, _ = generate_night("st-v4p1-T1", branch=BRANCHES["collapse"],
+                           ou_state={}, pair_seed=4242, **kw4)
+    v0 = [json.loads(l) for l in open(q0) if l.strip()]
+    v1 = [json.loads(l) for l in open(q1) if l.strip()]
+    w0 = [r for r in v0 if r["type"] == "speak"]
+    w1 = [r for r in v1 if r["type"] == "speak"]
+    assert all(a["field_raw_after"] == b["field_raw_after"]
+               and a["author"] == b["author"]
+               for a, b in zip(w0, w1)), "v4 pair: room/authors differ"
+    # α=1 member: target == pool + room(t) with room(t) from the PAIR
+    # room stream (pair_seed, crc(fam), 1) — shared bit-for-bit
+    rp2 = room_path(fam["T1"], False, np.random.default_rng(
+        (4242, zlib_crc("T1"), 1)))
+    for b in w1:
+        t = b["seq"]
+        rc = FIELD_ANCHOR_NORM * _unit(rp2["w_ar"][t])
+        exp = _clamp(CENTER + (pool + rc) / SCALE)
+        got = np.asarray(next(iter(b["readers"].values()))
+                         ["lens_now"]["target_now"], float)
+        assert np.array_equal(got, exp), \
+            f"pair α=1 target at t={t} not from the pair room stream"
+    # α=0 member: static targets (reader-carried) — no room component
+    for n in v0[0]["roster"]:
+        vs = v0[0]["roster"][n]["vibe_start"]
+        assert all(b["readers"][n]["lens_now"]["target_now"] == vs
+                   for b in w0 if n in b["readers"])
+    assert any(a["readers"]["writer"] != b["readers"]["writer"]
+               for a, b in zip(w0, w1)), "v4 pair: fibers did not diverge"
+    print("[self-test] 16d. v4 pair (pair_seed=4242): room/authors shared; "
+          "α=1 target == pool+room(t) from the pair room stream "
+          "bit-exact; α=0 target static — targets differ only through α")
+
+    # (e) v4 determinism + wave-level threading; v3 default at wave level
+    p4b, _ = generate_night("st-fib-T1", fam["T1"], roster, personas,
+                            anchors, {}, BRANCHES["instrument"], 7, d4,
+                            fam="T1", fiber="v4")
+    assert stripped_md5(p4b) == stripped_md5(p4)
+    w4dir = os.path.join(tmp, "fiber-v4-wave")
+    mv4 = generate_wave(w4dir, alpha=0.5, seed=20260821, fiber="v4",
+                        tag_prefix="stv4")
+    assert mv4["fiber"] == "v4" and all(
+        m["deterministic_replay_identical"] for m in mv4["nights"].values())
+    m3w = json.load(open(os.path.join(icc_dir, "riverbed-manifest.json")))
+    assert m3w["fiber"] == "v3", "default wave must record fiber=v3"
+    print("[self-test] 16e. v4 night deterministic (stripped-md5); v4 wave "
+          "threads --fiber (manifest fiber=v4, determinism re-run "
+          "identical); default wave manifest fiber=v3 (legacy preserved)")
+
     print("[self-test] ALL CHECKS PASSED")
 
 
@@ -1615,6 +1865,14 @@ def main():
     ap.add_argument("--pair-seed", type=int, default=None,
                     help="G13: branch-invariant room/fiber streams keyed "
                          "(pair_seed, family) — 2AFC adversarial pairs")
+    ap.add_argument("--fiber", default="v3", choices=["v3", "v4"],
+                    help="fiber version: v3 (default) = frozen wave-3 "
+                         "instrument, α in the static anchor (line-845 "
+                         "provenance — wave-3 corpora stay bit-"
+                         "reproducible); v4 = wave-4 target-in-pull, α "
+                         "rides the within-night target trajectory "
+                         "(amplitude-matched wobble carrier, per-t "
+                         "target logging)")
     ap.add_argument("--blind", nargs="?", const="auto", default=None,
                     metavar="CORPUS-ID",
                     help="G3: redacted manifest (branch params withheld, "
@@ -1652,7 +1910,8 @@ def main():
     generate_wave(outdir, branch_name=branch_name, alpha=args.alpha,
                   seed=args.seed, null_mode=args.null_mode,
                   tag_prefix=args.tag_prefix, flip_size=args.flip_size,
-                  pair_seed=args.pair_seed, blind=blind, corpus_id=corpus_id)
+                  pair_seed=args.pair_seed, blind=blind, corpus_id=corpus_id,
+                  fiber=args.fiber)
 
 
 if __name__ == "__main__":
