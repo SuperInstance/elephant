@@ -12,7 +12,8 @@ served here is the truth; terrain's POSTed deltas are its shadow.
 
 Usage:
     python3 -m elephant.roomd --map map.json --events events.jsonl \
-        [--port 4073] [--inbox ~/.hermes/cns_inbox]
+        [--port 4073] [--inbox ~/.hermes/cns_inbox] \
+        [--relay http://127.0.0.1:8787]
 """
 from __future__ import annotations
 
@@ -24,10 +25,11 @@ import tempfile
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from .dial import DialBank
 from .dials import DEFAULT_DIALS
+from .cell_ledger import CellLedgerProducer
 from .field import read_field
 from .room import Message, Room
 from .terrain import Deadband, Terrain
@@ -80,7 +82,7 @@ class RoomDaemon:
     """Holds rooms, ingests events, serves the field, rings the deadband."""
 
     def __init__(self, map_path: Optional[str] = None, inbox: Optional[str] = None,
-                 field_log: Optional[str] = None):
+                 field_log: Optional[str] = None, relay: Any = None):
         self.bank = DialBank(DEFAULT_DIALS)
         self.rooms: Dict[str, Room] = {}
         self.terrains: Dict[str, Terrain] = {}
@@ -93,6 +95,8 @@ class RoomDaemon:
         self.field_log_lines = 0                    # bounded rotation counter
         self.map_temperature: Optional[float] = None
         self._ledger = None                        # CellLedgerProducer (quilt seam); set via enable_ledger()
+        self._relay = relay                        # CrabTrapRelay (crab-traps seam); the limb
+        self._last_reading: Dict[str, Dict] = {}   # per-room prior — the relay's `before`
         if map_path:
             self.load_map(map_path)
 
@@ -157,6 +161,7 @@ class RoomDaemon:
             "kappa": round(field.concentration(), 4),
             "dials": {k: round(v, 4) for k, v in field.readings.items()},
             "messages": len(room.messages),
+            "ts": time.time(),
         }
         # Cell-ledger bridge (quilt seam): seal every field read into the
         # shared chain so the grid can consume the elephant's readings.
@@ -169,6 +174,13 @@ class RoomDaemon:
             })
             reading["ledger"] = {"seq": sealed["seq"], "hash": sealed["hash"],
                                  "prev_hash": sealed["prev_hash"]}
+        # Crab-traps seam: push the sealed pair to the shared D1 ledger
+        # (fire-and-forget — the limb never blocks the truth-holder).
+        if self._relay is not None:
+            wire = {k: v for k, v in reading.items() if k != "ledger"}
+            self._relay.submit(f"room.field.{name}", self._last_reading.get(name),
+                               wire, ts=reading.get("ts", time.time()))
+            self._last_reading[name] = wire
         return reading
 
     def recompute(self) -> Dict:
@@ -300,6 +312,9 @@ class _Handler(BaseHTTPRequestHandler):
             return self._json({"error": "unknown room"}, 404)
         if self.path == "/health":
             return self._json({"ok": True, "rooms": list(d.rooms)})
+        if self.path == "/relay":
+            return self._json(d._relay.status() if d._relay is not None
+                              else {"relay": None, "note": "roomd started without --relay"})
         if self.path == "/rings":
             return self._json({"rings": d.ring_log[-20:]})
         return self._json({"error": "not found"}, 404)
@@ -334,11 +349,22 @@ def main(argv: Optional[List[str]] = None) -> int:
                     help="USCP inbox for deadband rings (empty string disables)")
     ap.add_argument("--field-log", default=None,
                     help="append field snapshots to this jsonl (the v3 training corpus)")
+    ap.add_argument("--relay", default="",
+                    help="crab-traps edge-ledger base URL (e.g. http://127.0.0.1:8787) — "
+                         "pushes every sealed field read to the shared D1 ledger "
+                         "(empty string disables; GET /relay shows limb status)")
     args = ap.parse_args(argv)
 
+    relay = None
+    if args.relay:
+        from .relay import CrabTrapRelay
+        relay = CrabTrapRelay(args.relay).start()
     daemon = RoomDaemon(map_path=args.map,
                         inbox=args.inbox or None,
-                        field_log=args.field_log or None)
+                        field_log=args.field_log or None,
+                        relay=relay)
+    if args.relay:
+        daemon.enable_ledger(CellLedgerProducer("roomd.field"))
     if args.events:
         n = daemon.ingest_file(args.events)
         print(f"roomd: ingested {n} events", flush=True)
