@@ -149,7 +149,7 @@ names the elephant's field-edge as one zoom of the same fractal edge.
 The elephant's half of the seam is documented in
 [docs/quilt-bridge.md](docs/quilt-bridge.md).
 
-### The modules (all 31 `.py` files — count corrected 2026-09-03; the table below still lists the original 21 v0 modules, see docs/ for the newer wave additions)
+### The modules (31 top-level `.py` files + 10 under `elephant/dials/` = 41 total — recounted 2026-09-03; the table below still lists the original 21 v0 modules, see docs/ for the newer wave additions)
 
 | Module | One-line engineering description |
 |--------|----------------------------------|
@@ -157,7 +157,7 @@ The elephant's half of the seam is documented in
 | `elephant/room.py` | `Room` / `Message` — rooms as message streams with **gravity**, **reverberation**, **ripple**, and windowed **density** (the room's pulse). |
 | `elephant/dial.py` | `Dial` (abstract JEPA sense) + `DialBank` (the perceiving ensemble, one scalar per dimension). |
 | `elephant/field.py` | `RoomField` — the temperature vector: `warmth()`, `concentration()` (κ), `distance()`, `sauna_plunge_gap()`, plus `acclimation_curve()` and `charisma_pull()`. |
-| `elephant/dials/__init__.py` | `DEFAULT_DIALS` — the eight-dial bank that ships out of the box. |
+| `elephant/dials/__init__.py` | `DEFAULT_DIALS` — the nine-dial bank that ships out of the box (eight text dials + `vision`; count verified 2026-09-03). |
 | `elephant/dials/mood.py` | `MoodDial` — warm/cold valence, `[-1 cold, +1 warm]`. |
 | `elephant/dials/volume.py` | `VolumeDial` — how loud the room is talking, `[0 quiet, 1 shouting]`. |
 | `elephant/dials/earnestness.py` | `EarnestnessDial` — how much the room means it, `[0 ironic, 1 sincere]`. |
@@ -423,6 +423,17 @@ is the worked example.
 | [`docs/reviews-elephant-sense-v3.md`](docs/reviews-elephant-sense-v3.md) | The four wider-view reviewer transcripts (deepseek_pro, hermes405, seed2pro, qwen36) on the v3 design. |
 | [`docs/reviews-wide-view-2026-08-17.md`](docs/reviews-wide-view-2026-08-17.md) | The v0 code critique sweep — five models, the P0/P1/P2 fix list and what was applied. |
 | [`docs/plato-vision-crosspollination.md`](docs/plato-vision-crosspollination.md) | The vision dial — what plato-vision-jepa taught the elephant (the deadband, the 16-dim layout) and what the elephant's field gives back (anomaly context). |
+
+### Cross-pollination — quilt-verilog doc disciplines (added by audit, 2026-09-03)
+
+Three doc disciplines borrowed from the quilt-verilog spike lane (marked additions only — no history rewritten):
+
+- **Honest-boundary booking.** Headline claims carry their evidence status:
+  **PROVEN** — 393/393 tests re-run 2026-09-03; quickstart field numbers exact; tapnight divergence `0.389 → 0.859` re-run exact.
+  **MODELED** — the 30-day fleet-sim arc: deterministic demo, test-covered, but simulated not field data.
+  **SPECULATED** — v1 dial training and the v3 contrast design: the registered held-out eval **FAILED 1/3 seeds** (see `CONTRAST-HELDOUT-ROOM-2026-08-19.md`); "JEPA" remains the aspiration, not yet an implementation.
+- **Tapestry (failures as first-class).** The held-out FAIL, the re-registration addendum ruling, and `DIAGNOSIS-2026-08-26.md` stay linked here rather than buried — an honest failed test is a result, booked with its numbers.
+- **Archive by rename.** Superseded counts/tables get dated correction notes (like the module-table recount above) instead of silent rewrites; the retired text stays visible in git history and the dated note points at it.
 
 ---
 

@@ -202,6 +202,15 @@ port of code that already works (the pragmatic v0 survived every audit; vMF
 gate 1 closed 2026-08-19). Zero game-repo changes, zero privacy surface,
 reversible.
 
+> **Audit note (2026-09-03, round 7):** "gate 1" has no numbered referent
+> in the repo's own gate chain — the gates named in the 2026-08-19
+> registration docs are **gate-2** (the `data/nights/` measurement corpus)
+> and **gate 3** (registered eval: text-tier PASS in-sample, 3/3 seeds;
+> held-out follow-up **FAIL 1/3 seeds**, booked in
+> `CONTRAST-HELDOUT-ROOM-2026-08-19.md`). If the intended referent is the
+> vMF-side no-tradeaway gate (coarse ≥ frozen baseline 0.095507), book it by
+> that name, not by number.
+
 **Season-two (game side, convergence lane's call):** wiring `readField()` into
 the captain console and Logbook footer. It's data-only (~a day) *but* the
 game-lay spine (16–23 dev-days) must land first — RADARSOUND dials decorate a
