@@ -149,7 +149,7 @@ names the elephant's field-edge as one zoom of the same fractal edge.
 The elephant's half of the seam is documented in
 [docs/quilt-bridge.md](docs/quilt-bridge.md).
 
-### The modules (all 21 `.py` files)
+### The modules (all 31 `.py` files — count corrected 2026-09-03; the table below still lists the original 21 v0 modules, see docs/ for the newer wave additions)
 
 | Module | One-line engineering description |
 |--------|----------------------------------|
@@ -429,10 +429,10 @@ is the worked example.
 ## Tests
 
 ```bash
-python3 -m pytest tests/ -q      # 277 tests
+python3 -m pytest tests/ -q      # 393 tests (re-verified 2026-09-03: 393 passed in ~35s)
 ```
 
-277 tests across 25 files. **Coverage note (2026-08-21):** the premise-band-movers pipeline (`scripts/premise_band_movers.py` — the source of the headline A/P/D/S leg statistics) is covered by asserts inside `main()` only, not by pytest; see `tests/test_premise_band_movers.py` for the new regression tests.
+393 tests across 31 files (README previously said 277/25 — stale as of the wave-3/4 additions). **Coverage note (2026-08-21):** the premise-band-movers pipeline (`scripts/premise_band_movers.py` — the source of the headline A/P/D/S leg statistics) is covered by asserts inside `main()` only, not by pytest; see `tests/test_premise_band_movers.py` for the new regression tests.
 
 `test_elephant.py` (room physics, field,
 dials, acclimation/charisma), `test_fleetmath.py` (kinematics, vMF κ,
