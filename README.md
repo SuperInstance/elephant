@@ -149,7 +149,7 @@ names the elephant's field-edge as one zoom of the same fractal edge.
 The elephant's half of the seam is documented in
 [docs/quilt-bridge.md](docs/quilt-bridge.md).
 
-### The modules (31 top-level `.py` files + 10 under `elephant/dials/` = 41 total — recounted 2026-09-03; the table below still lists the original 21 v0 modules, see docs/ for the newer wave additions)
+### The modules (31 `.py` files directly under `elephant/` (incl. `__init__.py`; the repo root has no `.py` files) + 10 under `elephant/dials/` = 41 total — recounted 2026-09-03, phrasing clarified 2026-09-04; the table below still lists the original 21 v0 modules, see docs/ for the newer wave additions)
 
 | Module | One-line engineering description |
 |--------|----------------------------------|
@@ -429,7 +429,7 @@ is the worked example.
 Three doc disciplines borrowed from the quilt-verilog spike lane (marked additions only — no history rewritten):
 
 - **Honest-boundary booking.** Headline claims carry their evidence status:
-  **PROVEN** — 393/393 tests re-run 2026-09-03; quickstart field numbers exact; tapnight divergence `0.389 → 0.859` re-run exact.
+  **PROVEN** — 393/393 tests re-run 2026-09-03; quickstart field numbers exact; tapnight divergence `0.389 → 0.859` re-run exact. (Re-verified again 2026-09-04, audit round 17: 393 passed in ~37s; DEFAULT_DIALS = 9 confirmed; all doc/sibling links live.)
   **MODELED** — the 30-day fleet-sim arc: deterministic demo, test-covered, but simulated not field data.
   **SPECULATED** — v1 dial training and the v3 contrast design: the registered held-out eval **FAILED 1/3 seeds** (see `CONTRAST-HELDOUT-ROOM-2026-08-19.md`); "JEPA" remains the aspiration, not yet an implementation.
 - **Tapestry (failures as first-class).** The held-out FAIL, the re-registration addendum ruling, and `DIAGNOSIS-2026-08-26.md` stay linked here rather than buried — an honest failed test is a result, booked with its numbers.
