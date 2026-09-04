@@ -429,7 +429,7 @@ is the worked example.
 Three doc disciplines borrowed from the quilt-verilog spike lane (marked additions only — no history rewritten):
 
 - **Honest-boundary booking.** Headline claims carry their evidence status:
-  **PROVEN** — 393/393 tests re-run 2026-09-03; quickstart field numbers exact; tapnight divergence `0.389 → 0.859` re-run exact. (Re-verified again 2026-09-04, audit round 17: 393 passed in ~37s; DEFAULT_DIALS = 9 confirmed; all doc/sibling links live.)
+  **PROVEN** — 393/393 tests re-run 2026-09-03; quickstart field numbers exact; tapnight divergence `0.389 → 0.859` re-run exact. (Re-verified 2026-09-04 by two independent round-17 lanes: fresh-clone 393 passed, ~34–37s; quickstart warmth +0.29/κ2.04, −0.05/κ1.96, distance 0.829, gap +0.339; tapnight 0.389→0.859; DEFAULT_DIALS = 9; all doc/sibling links live.)
   **MODELED** — the 30-day fleet-sim arc: deterministic demo, test-covered, but simulated not field data.
   **SPECULATED** — v1 dial training and the v3 contrast design: the registered held-out eval **FAILED 1/3 seeds** (see `CONTRAST-HELDOUT-ROOM-2026-08-19.md`); "JEPA" remains the aspiration, not yet an implementation.
 - **Tapestry (failures as first-class).** The held-out FAIL, the re-registration addendum ruling, and `DIAGNOSIS-2026-08-26.md` stay linked here rather than buried — an honest failed test is a result, booked with its numbers.
@@ -440,7 +440,7 @@ Three doc disciplines borrowed from the quilt-verilog spike lane (marked additio
 ## Tests
 
 ```bash
-python3 -m pytest tests/ -q      # 393 tests (re-verified 2026-09-03: 393 passed in ~35s)
+python3 -m pytest tests/ -q      # 393 tests (re-verified 2026-09-03: 393 passed in ~35s; r17 fresh-clone re-run 2026-09-04: 393 passed in ~34s)
 ```
 
 393 tests across 31 files (README previously said 277/25 — stale as of the wave-3/4 additions). **Coverage note (2026-08-21):** the premise-band-movers pipeline (`scripts/premise_band_movers.py` — the source of the headline A/P/D/S leg statistics) is covered by asserts inside `main()` only, not by pytest; see `tests/test_premise_band_movers.py` for the new regression tests.
