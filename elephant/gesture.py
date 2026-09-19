@@ -128,6 +128,62 @@ class VibeTrajectory:
         turns = max(0, s.shape[0] - 1)
         return self.bending_energy() / turns if turns else 0.0
 
+    def twist_energy(self) -> float:
+        """Total **twist** of the gesture — its third-order structure: the
+        turning that leaves the *osculating plane*.
+
+        ``bending_energy`` is curvature — how much the vibe turns *within* a
+        plane of mood-space. Twist is torsion — how much it turns *out* of that
+        plane, into a fresh mood dimension. A room whose mood keeps swinging in
+        one plane (mood up as panic falls, back and forth) has high bending but
+        **zero twist**; a room whose swing keeps recruiting a *new* dial each
+        turn has positive twist.
+
+        Per interior vertex the contribution is ``sin θ``, where θ is the angle
+        between the next step and the osculating plane of the previous two, so
+        each vertex contributes in ``[0, 1]`` and a straight or planar drift
+        contributes 0. Needs ≥4 readings to be non-zero.
+
+        This is the fleet's *the property is in the twist* (see
+        SuperInstance/twist-engine, musician-soul's ``AbstractionSpline.
+        twist_energy``): new structure lives in the offset that leaves the
+        current plane, not in more turning within it.
+        """
+        s = self.steps()
+        if s.shape[0] < 3:
+            return 0.0
+        energy = 0.0
+        for i in range(1, s.shape[0] - 1):
+            s1, s2, s3 = s[i - 1], s[i], s[i + 1]
+            n1 = float(np.linalg.norm(s1))
+            if n1 < 1e-12:
+                continue
+            e1 = s1 / n1
+            perp = s2 - np.dot(s2, e1) * e1  # s2 orthogonal to e1
+            npn = float(np.linalg.norm(perp))
+            if npn < 1e-12:
+                continue  # s1 ∥ s2: no plane to leave
+            e2 = perp / npn
+            n3 = float(np.linalg.norm(s3))
+            if n3 < 1e-12:
+                continue
+            d3 = s3 / n3
+            out = d3 - np.dot(d3, e1) * e1 - np.dot(d3, e2) * e2
+            energy += min(float(np.linalg.norm(out)), 1.0)
+        return energy
+
+    def planarity(self) -> float:
+        """How flat the gesture stays, in ``[0, 1]``: ``1.0`` for a vibe whose
+        whole motion lives in one plane (all bending, no twist), falling toward
+        ``0.0`` as more of its turning leaves the plane. ``1.0`` for a
+        trajectory too short to twist. The scale-free inverse of
+        ``twist_energy``."""
+        s = self.steps()
+        vertices = max(0, s.shape[0] - 2)
+        if vertices == 0:
+            return 1.0
+        return float(np.clip(1.0 - self.twist_energy() / vertices, 0.0, 1.0))
+
 
 def heading_alignment(a: VibeTrajectory, b: VibeTrajectory) -> float:
     """Do two rooms trend the same way? Cosine of their d_mu headings, in

@@ -20,11 +20,27 @@ snapshot cannot hold:
 | `arc_length()` | total travel through dial-space | a placid hour vs. a wild one |
 | `bending_energy()` | summed turning (`1 − cos`) | steady warming vs. a room that lurches between moods |
 | `restlessness()` | turning per step | scale-free "how much does this room keep changing its mind" |
+| `twist_energy()` | turning that leaves the plane (`sin θ`) | a mood swinging in one plane vs. a room recruiting a *new* dial each turn |
+| `planarity()` | scale-free inverse of twist | how flat the vibe's motion stays |
 | `speed()` | magnitude of the latest step | how fast the vibe is moving now |
 | `heading()` | unit direction of the latest step | **d_mu** — where the vibe is going *now* |
 
 Plus `heading_alignment(a, b)` — do two rooms *trend* the same way? (the cosine of
 their d_mu headings).
+
+### The three orders
+
+`bending_energy` and `twist_energy` are different animals. Bending is **curvature** —
+how much the vibe turns *within* a plane of mood-space (mood up as panic falls, and
+back). Twist is **torsion** — how much it turns *out* of that plane, into a mood
+dimension the last two moves did not touch. A room can swing violently and still be
+planar (`twist ≈ 0`); it only twists when each swing recruits a genuinely new dial.
+That is the fleet's *the property is in the twist*
+([twist-engine](https://github.com/SuperInstance/twist-engine)): new structure lives
+in the offset that leaves the current plane, not in more turning within it. The same
+`twist_energy` now reads over notes in
+[musician-soul](https://github.com/SuperInstance/musician-soul)'s `AbstractionSpline`
+and over rooms here.
 
 ## Why this belongs here
 

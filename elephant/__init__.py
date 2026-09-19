@@ -19,7 +19,7 @@ from .room import Message, Room
 from .field import RoomField, acclimation_curve, charisma_pull
 from .gesture import VibeTrajectory, heading_alignment
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = [
     "Message",
     "Room",
