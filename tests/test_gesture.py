@@ -63,6 +63,35 @@ def test_heading_alignment_same_vs_opposite():
     assert heading_alignment(up_a, down) < -0.99
 
 
+def test_planar_swing_has_no_twist_but_a_recruiting_room_does():
+    # A vibe swinging in the (dial0, dial1) plane: bends hard, never leaves the
+    # plane → zero torsion, however much it turns.
+    planar = VibeTrajectory(
+        _vecs([[np.cos(a), np.sin(a)] for a in np.linspace(0, 4.2, 8)])
+    )
+    # A "helix": the same swing, but steadily recruiting a third dial each turn.
+    helix = VibeTrajectory(
+        _vecs([[np.cos(a), np.sin(a), 0.5 * a] for a in np.linspace(0, 4.2, 8)])
+    )
+    tp = planar.twist_energy()
+    th = helix.twist_energy()
+    assert tp < 1e-6, f"a planar swing should not twist: {tp}"
+    assert th > tp, f"a room recruiting a new dial twists more: {th} vs {tp}"
+    assert np.isfinite(th)
+
+
+def test_planarity_bounded_and_high_for_flat_swings():
+    planar = VibeTrajectory(
+        _vecs([[np.cos(a), np.sin(a)] for a in np.linspace(0, 4.2, 8)])
+    )
+    pl = planar.planarity()
+    assert 0.0 <= pl <= 1.0
+    assert pl > 0.95, f"a planar swing reads as planar: {pl}"
+    # Too-short trajectories are trivially planar.
+    assert VibeTrajectory(_vecs([[0.0, 0.0], [1.0, 0.0]])).planarity() == 1.0
+    assert VibeTrajectory([]).twist_energy() == 0.0
+
+
 def test_integrates_with_roomfield():
     # A room warming: mood rising, panic falling, over three readings.
     fields = [
