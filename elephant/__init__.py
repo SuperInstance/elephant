@@ -18,6 +18,7 @@ Core pieces:
 from .room import Message, Room
 from .field import RoomField, acclimation_curve, charisma_pull
 from .gesture import VibeTrajectory, heading_alignment
+from .relaxation import Box, Potential, dial_box, attractor, two_well_potential, relax, run_shove
 
 __version__ = "0.2.0"
 __all__ = [
@@ -28,4 +29,12 @@ __all__ = [
     "charisma_pull",
     "VibeTrajectory",
     "heading_alignment",
+    # relaxation rig — a physics of constrained state (experimental)
+    "Box",
+    "Potential",
+    "dial_box",
+    "attractor",
+    "two_well_potential",
+    "relax",
+    "run_shove",
 ]
