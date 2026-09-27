@@ -1,0 +1,119 @@
+{
+  "title": "gpu: room-state embedding v0 (synthetic prototype)",
+  "honesty": "ALL DATA IS SYNTHETIC. This proves the training machinery and metric battery on known ground truth; it proves NOTHING about real fleet rooms yet.",
+  "seed": 2718,
+  "config": {
+    "epochs": 80,
+    "lr": 0.003,
+    "rooms_per_batch": 3,
+    "n_train_rooms": 36,
+    "n_eval_rooms": 12,
+    "n_clips": 48,
+    "emb_dim": 64,
+    "obs_dim": 48
+  },
+  "environment": {
+    "torch": "2.14.0+cu126",
+    "device": "cuda",
+    "cuda_used": true,
+    "gpu_name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "cuda_version_runtime": "12.6",
+    "train_wall_seconds": 11.30013377200521,
+    "steps_per_epoch": 12,
+    "smi_during_training": [
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 3 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 6 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 14 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 14 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 12 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 10 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 12 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 9 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 13 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 11 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 13 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 17 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 19 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 14 %"
+      },
+      {
+        "sample": "NVIDIA GeForce RTX 4050 Laptop GPU, 135 MiB, 22 %"
+      }
+    ]
+  },
+  "loss_trace": {
+    "first": 4.4845707813898725,
+    "last": 4.027968128522237
+  },
+  "baseline_untrained": {
+    "n_eval_clips": 576.0,
+    "n_eval_rooms": 12.0,
+    "chance_knn": 0.08333333333333333,
+    "room_discrimination_knn": 0.9774305555555556,
+    "sauna_plunge_gap": 0.02786475419998169,
+    "silhouette": 0.463089221635932,
+    "coldwarm_probe_embedding": 0.84375,
+    "coldwarm_probe_raw_baseline": 0.9296875,
+    "kappa_correlation": 0.8982848436125423,
+    "acclimation": {
+      "n_fitted": 16.0,
+      "mean_fit_r2": 0.7219339308487943,
+      "mean_rank_gain": 0.20703125,
+      "log_tau_correlation": 0.7647994293734863
+    },
+    "charisma": {
+      "charisma_displacement_mean": 0.09593487220505874,
+      "control_displacement_mean": 0.04463220170388619,
+      "cohens_d": 1.9091965941508746
+    }
+  },
+  "trained": {
+    "n_eval_clips": 576.0,
+    "n_eval_rooms": 12.0,
+    "chance_knn": 0.08333333333333333,
+    "room_discrimination_knn": 0.9114583333333334,
+    "sauna_plunge_gap": 0.3857938051223755,
+    "silhouette": 0.5182766287939558,
+    "coldwarm_probe_embedding": 0.84375,
+    "coldwarm_probe_raw_baseline": 0.9296875,
+    "kappa_correlation": 0.470196454443542,
+    "acclimation": {
+      "n_fitted": 16.0,
+      "mean_fit_r2": 0.7351276212887179,
+      "mean_rank_gain": 0.20247395833333331,
+      "log_tau_correlation": 0.8941826875562678
+    },
+    "charisma": {
+      "charisma_displacement_mean": 0.3485323563218117,
+      "control_displacement_mean": 0.07480561236540477,
+      "cohens_d": 2.340724419763963
+    }
+  }
+}
